@@ -1,7 +1,6 @@
 
 <template>
   <div id="app">
-    <!-- <Map/> -->
     <router-view/>
   </div>
 </template>
@@ -52,4 +51,7 @@ a:hover {
 ul li {
   list-style: none;
 }
+
+
+
 </style>

@@ -1,123 +1,116 @@
 
+import func from './vue-temp/vue-editor-bridge';
 
 
 <template>
   <div id="map">
-    <router-link to="/address">上海</router-link>
+    <router-link to="/Address">上海</router-link>
     <div class="baidumap" id="allmap"></div>
+    <div class="mate">个性找房</div>
+    <Mate/>
   </div>
 </template>
 
 
 <script>
+  import Mate from '@/components/Mate.vue'
+  export default {
+    name: 'Map',
+    components:{Mate},
+    props: {
+      msg: String
+    },
+    mounted : function () {
+      this.$nextTick(function(){
+        this.baiduMap();
+      })
+    },
+    methods : {
+      baiduMap: function () {
+        var map = new BMap.Map("allmap");
+        // 创建地图实例  
+        var point = new BMap.Point(116.3964,39.9093);
+        // 创建点坐标  
+        map.centerAndZoom(point, 15);
+        // 初始化地图，设置中心点坐标和地图级别 
+        map.enableScrollWheelZoom(true);
+        map.addControl(new BMap.GeolocationControl());   
+        //定位图标
+        var marker = new BMap.Marker(point);  // 创建标注
+        map.addOverlay(marker);               // 将标注添加到地图中
+        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-export default {
-  name: 'Map',
-  props: {
-    msg: String
-  },
-  mounted : function () {
-    this.$nextTick(function(){
-      this.baiduMap();
-    })
-  },
-  methods : {
-    baiduMap: function () {
-      var map = new BMap.Map("allmap");
-      // 创建地图实例  
-      var point = new BMap.Point(116.3964,39.9093);
-      // 创建点坐标  
-      map.centerAndZoom(point, 15);
-      // 初始化地图，设置中心点坐标和地图级别 
-      map.enableScrollWheelZoom(true);
-      map.addControl(new BMap.GeolocationControl());   
 
+        // 复杂的自定义覆盖物
+        function ComplexCustomOverlay(point, text, mouseoverText){
+          this._point = point;
+          this._text = text;
+          this._overText = mouseoverText;
+          console.log(this)
+        }
+        ComplexCustomOverlay.prototype = new BMap.Overlay();
+        ComplexCustomOverlay.prototype.initialize = function(map){ 
+          this._map = map;
+          var div = this._div = document.createElement("div");
+          div.className = "location_label";
+          div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+          div.style.width = "14vw";
+          div.style.height = "8vw";
 
-// 复杂的自定义覆盖物
-    function ComplexCustomOverlay(point, text, mouseoverText){
-      this._point = point;
-      this._text = text;
-      this._overText = mouseoverText;
-    }
-    ComplexCustomOverlay.prototype = new BMap.Overlay();
-    ComplexCustomOverlay.prototype.initialize = function(map){ 
-      this._map = map;
-      var div = this._div = document.createElement("div");
-      div.style.position = "absolute";
-      div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-      div.style.backgroundColor = "#0fb896";
-      div.style.color = "white";
-      div.style.width = "60px";
-      div.style.height = "18px";
-      div.style.padding = "2px";
-      div.style.lineHeight = "18px";
-      div.style.whiteSpace = "nowrap";
-      div.style.MozUserSelect = "none";
-      div.style.fontSize = "12px"
-      var span = this._span = document.createElement("span");
-      div.appendChild(span);
-      span.appendChild(document.createTextNode(this._text));      
-      var that = this;
+          var p = this._p = document.createElement("p");
+          p.style.margin = "0px";
+          div.appendChild(p);
+          p.appendChild(document.createTextNode("¥1500+"));
+          var p2 = this._p = document.createElement("p");
+          p2.style.margin = "0px";
+          div.appendChild(p2);
+          p2.appendChild(document.createTextNode("1000间"));
 
-      var arrow = this._arrow = document.createElement("div");
-      arrow.style.background = "url(http://map.baidu.com/fwmap/upload/r/map/fwmap/static/house/images/label.png) no-repeat";
-      arrow.style.position = "absolute";
-      arrow.style.width = "0px";
-      arrow.style.height = "0px";
-      arrow.style.border = "30px solid transparent";
-      arrow.style.borderTop = "15px solid #0fb896";
-      arrow.style.top = "22px";
-      arrow.style.left = "0px";
-      arrow.style.overflow = "hidden";
-      div.appendChild(arrow);
-     
-      div.onmouseover = function(){
-        this.style.backgroundColor = "#6BADCA";
-        this.style.borderColor = "#0000ff";
-        this.getElementsByTagName("span")[0].innerHTML = that._overText;
-        arrow.style.backgroundPosition = "0px -20px";
-      }
+          var arrow = this._arrow = document.createElement("div");
+          arrow.className = "label_arrow";
+          arrow.style.border = "8vw solid transparent";
+          arrow.style.borderTop = "3vw solid #0fb896";
+          div.appendChild(arrow);
 
-      div.onmouseout = function(){
-        this.style.backgroundColor = "#EE5D5B";
-        this.style.borderColor = "#BC3B3A";
-        this.getElementsByTagName("span")[0].innerHTML = that._text;
-        arrow.style.backgroundPosition = "0px 0px";
-      }
-
-      map.getPanes().labelPane.appendChild(div);
-      
-      return div;
-    }
-    ComplexCustomOverlay.prototype.draw = function(){
-      var map = this._map;
-      var pixel = map.pointToOverlayPixel(this._point);
-      this._div.style.left = pixel.x - parseInt(this._arrow.style.left) + "px";
-      this._div.style.top  = pixel.y - 30 + "px";
-    }
-    var txt = "银湖海岸城", mouseoverTxt = txt + " " + parseInt(Math.random() * 1000,10) + "套" ;
+          var p3 = this.p3 = document.createElement("p");
+          p3.className = "label_area_name";
+          div.appendChild(p3);
+          p3.appendChild(document.createTextNode("银湖海岸城"));
         
-    var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城",mouseoverTxt);
 
-    map.addOverlay(myCompOverlay);
+          map.getPanes().labelPane.appendChild(div);
+          
+          return div;
+        }
+        ComplexCustomOverlay.prototype.draw = function(){
+          var map = this._map;
+          var pixel = map.pointToOverlayPixel(this._point);
+          this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
+          this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
+        }
+        var txt = "银湖海岸城", mouseoverTxt = txt + " " + parseInt(Math.random() * 1000,10) + "套" ;
+            
+        var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城",mouseoverTxt);
 
-        //定位
-      // var geolocation = new BMap.Geolocation();
-      // geolocation.enableSDKLocation();
-      // geolocation.getCurrentPosition(function(r){
-      //   if(this.getStatus() == BMAP_STATUS_SUCCESS){
-      //     var mk = new BMap.Marker(r.point);
-      //     map.addOverlay(mk);
-      //     map.panTo(r.point);
-      //     alert('您的位置：'+r.point.lng+','+r.point.lat);
-      //   }
-      //   else {
-      //     alert('failed'+this.getStatus());
-      //   }        
-      // });
+        map.addOverlay(myCompOverlay);
+
+          //定位
+        // var geolocation = new BMap.Geolocation();
+        // geolocation.enableSDKLocation();
+        // geolocation.getCurrentPosition(function(r){
+        //   if(this.getStatus() == BMAP_STATUS_SUCCESS){
+        //     var mk = new BMap.Marker(r.point);
+        //     map.addOverlay(mk);
+        //     map.panTo(r.point);
+        //     alert('您的位置：'+r.point.lng+','+r.point.lat);
+        //   }
+        //   else {
+        //     alert('failed'+this.getStatus());
+        //   }        
+        // });
+      }
     }
   }
-}
 </script>
 
 
@@ -143,7 +136,69 @@ a {
 
 
 .baidumap{
-  height: 600px;
+  height: 100vh;
   width: 100%;
 }
+
+.mate{
+  position: fixed;
+  right: -5vw;
+  bottom: 20vw;
+  width: 24vw;
+  height: 9vw;
+  line-height: 9vw;
+  padding-left: 5vw;
+	background-color: #ff9900;
+  border-radius: 5vw;
+  
+  font-size: 4vw;
+	letter-spacing: 0vw;
+	color: #ffffff;
+}
+
+.location_label{
+
+}
+
+
 </style>
+
+<style>
+.location_label{
+    position : absolute;
+    background : #0fb896;
+    color : white;
+    padding : 1vw;
+    line-height : 4vw;
+    white-space : nowrap;
+    -moz-user-select : none;
+    font-size : 4vw;
+}
+
+.label_arrow{
+    position : absolute;
+    width : 0px;
+    height : 0px;
+    top : 10vw;
+    left : 0px;
+    overflow : hidden;
+}
+
+.label_area_name{
+  position : absolute;
+  margin : 0px;
+  height : 5vw;
+  line-height : 5vw;
+  padding : 0vw 2vw;
+  background : #ff9900;
+  border-radius : 1vw;
+  margin-left : -5vw;
+  margin-top : 4vw;
+  text-align : center;
+}
+  .BMap_noprint.anchorBL{
+    left: auto !important;
+    right: 10px !important;
+  }
+</style>
+
