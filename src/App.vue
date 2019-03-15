@@ -1,12 +1,13 @@
 
 <template>
   <div id="app">
-    <Map/>
+    <!-- <Map/> -->
+    <router-view/>
   </div>
 </template>
 
 <script>
-import Map from "./views/Map.vue";
+// import Map from "./views/Map.vue";
 
 export default {
   name: "app",
