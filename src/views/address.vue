@@ -82,7 +82,7 @@ export default {
   methods: {
     handleCurrentClick() {
       if (this.positioning) return;
-      this.localCity ? this.pageJump() : this.getLocation();
+      this.localCity!=-1 ? this.pageJump() : this.getLocation();
     },
     //获取当前城市
     getLocation() {

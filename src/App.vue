@@ -51,6 +51,9 @@ a:hover {
 ul li {
   list-style: none;
 }
+input{
+  outline:none;
+}
 
 
 
