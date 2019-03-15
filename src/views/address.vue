@@ -2,9 +2,11 @@
   <div>
     <router-link to="/" class="close"></router-link>
     <p class="tit">当前定位城市</p>
-    <div class="location">
-      <i class="refresh refresh-rotate"></i>
-      <p>正在获取当前定位城市</p>
+    <div class="location" @click="handleCurrentClick">
+      <i :class="{'refresh-rotate' : positionState==1}" class="refresh"></i>
+      <p v-if="positionState==1">正在获取当前定位城市</p>
+      <p v-if="positionState==0 && localCity==-1">定位失败 点击重试</p>
+      <p v-if="positionState==0 && localCity!=-1">{{cityList[localCity].cityName}}</p>
     </div>
     <p class="tit">选择城市</p>
     <ul class="city-list">
@@ -24,48 +26,79 @@ export default {
           cityId: 2,
           cityName: "上海",
           latitude: "31.2363429624",
-          longitude: "121.4803295328"
+          longitude: "121.4803295328",
+          baiduCode: 289
         },
         {
           cityId: 28,
           cityName: "苏州",
           cityPinyin: "su",
           latitude: "31.3045865027",
-          longitude: "120.5896123397"
+          longitude: "120.5896123397",
+          baiduCode: 224
         },
         {
           cityId: 44,
           cityName: "杭州",
           cityPinyin: "hz",
           latitude: "30.2799186759",
-          longitude: "120.1617445782"
+          longitude: "120.1617445782",
+          baiduCode: 44
         },
         {
           cityId: 62,
           cityName: "北京",
           cityPinyin: "bj",
           latitude: "39.9110666857",
-          longitude: "116.4136103013"
+          longitude: "116.4136103013",
+          baiduCode: 131
         },
         {
           cityId: 125,
           cityName: "南京",
           cityPinyin: "nj",
           latitude: "32.0647517242",
-          longitude: "118.8029140176"
+          longitude: "118.8029140176",
+          baiduCode: 315
         },
         {
           cityId: 154,
           cityName: "武汉",
           cityPinyin: "wh",
           latitude: "30.5984342798",
-          longitude: "114.3118287971"
+          longitude: "114.3118287971",
+          baiduCode: 154
         }
-      ]
+      ],
+      localCity: -1,
+      positionState: 1 //定位状态，1：正在定位，0：定位完成
     };
   },
+  mounted() {
+    console.log("mounted");
+    console.log(typeof this.cityList[1]);
+    this.getLocation();
+  },
   methods: {
-    
+    handleCurrentClick() {
+      if (this.positioning) return;
+      this.localCity ? this.pageJump() : this.getLocation();
+    },
+    //获取当前城市
+    getLocation() {
+      this.positionState=1;
+      let _this = this;
+      var myCity = new BMap.LocalCity();
+      myCity.get(res => {
+        this.localCity = _this.cityList.findIndex(city => {
+          return city.baiduCode == res.code;
+        });
+        this.positionState=0;
+      });
+    },
+    pageJump() {
+      console.log("pageJump");
+    }
   }
 };
 </script>
@@ -105,7 +138,7 @@ export default {
   position: relative;
   height: 12vw;
 }
-.location p{
+.location p {
   height: 12vw;
   line-height: 12vw;
   margin-left: 13.3vw;
