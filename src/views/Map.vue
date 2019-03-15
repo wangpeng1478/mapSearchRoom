@@ -3,6 +3,7 @@
 
 <template>
   <div id="map">
+    <router-link to="/address">上海</router-link>
     <div class="baidumap" id="allmap"></div>
   </div>
 </template>

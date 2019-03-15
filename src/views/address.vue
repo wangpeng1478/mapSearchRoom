@@ -1,9 +1,9 @@
 <template>
-    <div>component: Map</div>
+    <div>component: address</div>
 </template>
 <script>
 export default {
-    name: 'address',
+    name: 'Address'
 }
 </script>
 <style scoped>

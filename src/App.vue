@@ -7,13 +7,9 @@
 </template>
 
 <script>
-// import Map from "./views/Map.vue";
 
 export default {
-  name: "app",
-  components: {
-    Map
-  }
+  name: "app"
 };
 </script>
 
