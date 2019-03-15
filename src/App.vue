@@ -6,25 +6,53 @@
 </template>
 
 <script>
-
-import Map from './components/Map.vue'
-
+import Map from "./components/Map.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Map
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body,
+ul,
+ol,
+li,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+form,
+fieldset,
+table,
+td,
+img,
+div,
+dt,
+dl,
+dd,
+blockquote {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-family: "Microsoft Yahei", Arial, Helvetica, sans-serif;
+  word-break: break-all;
+}
+a {
+  color: #000;
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: none;
+  outline: none;
+}
+ul li {
+  list-style: none;
 }
 </style>
