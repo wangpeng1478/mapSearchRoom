@@ -76,7 +76,6 @@ export default {
   },
   mounted() {
     console.log("mounted");
-    console.log(typeof this.cityList[1]);
     this.getLocation();
   },
   methods: {
