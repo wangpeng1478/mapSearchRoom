@@ -97,7 +97,6 @@ export default {
       });
     },
     pageJump() {
-      console.log("pageJump");
     }
   }
 };
