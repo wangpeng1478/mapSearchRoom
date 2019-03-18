@@ -5,12 +5,14 @@
     <div class="baidumap" id="allmap"></div>
     <div class="mate" v-if="!showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
+    <RoomList/>
   </div>
 </template>
 
 
 <script>
   import Mate from '@/components/Mate.vue'
+  import RoomList from '@/components/RoomList'
   export default {
     name: 'Map',
     data () {
@@ -18,7 +20,7 @@
         showMate: false,
       }
     },
-    components:{Mate},
+    components:{Mate,RoomList},
     props: {
       msg: String,
     },
