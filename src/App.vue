@@ -55,6 +55,8 @@ input{
   outline:none;
 }
 
-
+.bottom48{
+  bottom:48vw !important;
+}
 
 </style>
