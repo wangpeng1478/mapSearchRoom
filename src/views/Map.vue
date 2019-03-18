@@ -1,13 +1,10 @@
 
-import func from './vue-temp/vue-editor-bridge';
-
-
 <template>
   <div id="map">
     <router-link to="/Address">上海</router-link>
     <div class="baidumap" id="allmap"></div>
-    <div class="mate">个性找房</div>
-    <Mate/>
+    <div class="mate" v-if="!showMate" @click="showMateFun">个性找房</div>
+    <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
   </div>
 </template>
 
@@ -16,9 +13,14 @@ import func from './vue-temp/vue-editor-bridge';
   import Mate from '@/components/Mate.vue'
   export default {
     name: 'Map',
+    data () {
+      return{
+        showMate: false,
+      }
+    },
     components:{Mate},
     props: {
-      msg: String
+      msg: String,
     },
     mounted : function () {
       this.$nextTick(function(){
@@ -26,6 +28,15 @@ import func from './vue-temp/vue-editor-bridge';
       })
     },
     methods : {
+
+      showMateFun:function(){
+        this.showMate = true;
+        var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
+        elements.className = "BMap_noprint anchorBL bottom48"; 
+      },
+      hiddenMateFun: function(msg){
+        this.showMate = msg;
+      },
       baiduMap: function () {
         var map = new BMap.Map("allmap");
         // 创建地图实例  
@@ -156,9 +167,6 @@ a {
 	color: #ffffff;
 }
 
-.location_label{
-
-}
 
 
 </style>
