@@ -6,6 +6,7 @@
     <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
     <!-- <RoomList/> -->
     <!-- <Screen/> -->
+    <!-- <RegionAndMetro/> -->
   </div>
 </template>
 
@@ -14,6 +15,7 @@
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
+  import RegionAndMetro from '@/components/RegionAndMetro'
   export default {
     name: 'Map',
     data () {
@@ -21,7 +23,7 @@
         showMate: false,
       }
     },
-    components:{Mate,RoomList,Screen},
+    components:{Mate,RoomList,Screen,RegionAndMetro},
     props: {
       msg: String,
     },
