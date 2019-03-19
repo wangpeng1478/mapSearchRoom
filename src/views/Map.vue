@@ -2,6 +2,7 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
+    <router-link class="currentcity" to="/address"><i class="iconfont icon-dingwei"/>上海</router-link>
     <div class="mate" v-if="!showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
     <!-- <RoomList/> -->
@@ -146,9 +147,9 @@ li {
   display: inline-block;
   margin: 0 10px;
 }
-a {
+/* a {
   color: #42b983;
-}
+} */
 
 
 .baidumap{
@@ -171,7 +172,27 @@ a {
 	letter-spacing: 0vw;
 	color: #ffffff;
 }
-
+.currentcity{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 18vw;
+  margin: auto;
+  height: 8vw;
+  background-color:rgba(255, 255, 255, 0.8);
+  border-radius: 0 0 1vw 1vw;
+  font-size: 3.733vw;
+  text-indent: 7vw;
+  line-height: 8vw;
+}
+.currentcity i{
+  color: #00ac84;
+  font-size: 4.5vw;
+  display: block;
+  position: absolute;
+  left: -4.5vw;
+}
 
 
 </style>
