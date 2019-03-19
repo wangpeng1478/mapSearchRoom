@@ -1,22 +1,23 @@
 <template>
     <div id="iMate">
         <div class="back" @click="hiddenMateFun"></div>
+        <div class="mapShadow"></div>
         <div class="imate"></div>
         <div class="individuality_mate">
             <div class="mate_icon">
-                <span class="iconfont icon-gongjiao" :class="isActive == 1?'active':''" @click="choose(1)"></span>
-                <span class="iconfont icon-chuzuche" :class="isActive == 2?'active':''" @click="choose(2)"></span>
-                <span class="iconfont icon-paobuqihang" :class="isActive == 3?'active':''" @click="choose(3)"></span>
-                <span class="iconfont icon-buhang" :class="isActive == 4?'active':''" @click="choose(4)"></span>
+                <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
+                <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
+                <span class="iconfont icon-paobuqihang" :class="mapData.type == 3?'active':''" @click="choose(3)"></span>
+                <span class="iconfont icon-buhang" :class="mapData.type == 4?'active':''" @click="choose(4)"></span>
             </div>
             
             <slider-component
                 sliderMin='0'  
                 sliderMax='4' 
-                step='1'
+                step='4'
             ></slider-component>
             <div class="mate_time">
-                <span>15分</span>
+                <span>20分</span>
                 <span>30分</span>
                 <span>40分</span>
                 <span>50分</span>
@@ -29,15 +30,85 @@
 <script>
 
 import sliderComponent from '@/components/sliderComponent.vue'
+import store from '@/store'
+import {mapState,mapMutations,mapGetters} from 'vuex'
 export default {
     name: 'iMate',
     data () {
         return{
-            isActive:1
+            // type:1
         }
     },
+    store,
     components:{sliderComponent},
     props: ['showMate'],
+    computed:{
+        // ...mapGetters(["getMap"]),
+        // ...mapState(['mapData']),
+        mapData(){
+            this.$store.state.mapData.type;
+             return this.$store.state.mapData;
+        }
+    },
+    created: function (){
+    },
+    watch:{
+        mapData:(newQuestion, oldQuestion)=>{
+            
+            var mp = store.state.map;
+            let point = new BMap.Point(116.3964,39.9093);
+            let type = newQuestion.type;
+            switch (type) {
+                case 1:
+                    // let circle = new BMap.Circle(point,1000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3,enableEditing:true});
+                    mp.centerAndZoom(point, 13);
+                    break;
+                case 2:
+                    mp.centerAndZoom(point, 14);
+                    break;
+                case 3:
+                    mp.centerAndZoom(point, 15);
+                    break;
+                case 4:
+                   
+                    // mp.centerAndZoom(point, 17);
+                    // mp.enableScrollWheelZoom(true);
+                     var circle1 = new BMap.Circle(point,500);
+                    mp.addOverlay(circle1); //增加圆
+                    break;
+                default:
+                    break;
+            }
+            
+
+            // var canvasLayer = new BMap.CanvasLayer({
+            //     update: update
+            // });
+
+            // function update() {
+            //     var ctx = this.canvas.getContext("2d");
+
+            //     if (!ctx) {
+            //         return;
+            //     }
+
+            //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+            //     var temp = {};
+            //     ctx.fillStyle = "rgba(50, 50, 255, 0.7)";
+            //     ctx.beginPath();
+            //     var data = [
+            //         new BMap.Point(116.3964,39.9093),
+            //     ];
+
+            //     for (var i = 0, len = data.length; i < len; i++) {
+            //         var pixel = mp.pointToPixel(data[i]);
+            //         ctx.fillRect(pixel.x, pixel.y, 30, 30);
+            //     }
+            // }
+            // mp.addOverlay(canvasLayer);
+        }
+    },
     methods:{
         hiddenMateFun : function (){
             var hiddenMate = false;
@@ -46,7 +117,8 @@ export default {
             this.$emit("hiddenMate",hiddenMate)
         },
         choose :function (res) {
-            this.isActive = res;
+            this.type = res;
+            this.$store.state.mapData.type = res;
         }
     }
 }
@@ -117,6 +189,7 @@ export default {
     font-size: 3vw;
 	letter-spacing: 0vw;
 	color: #000000;
+    margin-left: -2.5vw;
 }
 </style>
 

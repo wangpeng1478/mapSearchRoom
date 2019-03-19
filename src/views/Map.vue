@@ -17,6 +17,8 @@
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
+  import store from '@/store'
+  import {mapState,mapMutations,mapGetters} from 'vuex'
   export default {
     name: 'Map',
     data () {
@@ -39,24 +41,31 @@
         this.showMate = true;
         var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         elements.className = "BMap_noprint anchorBL bottom48"; 
+
+        let map = store.state.map;
+        let point = new BMap.Point(116.3964,39.9093);
+        map.centerAndZoom(point, 15);
+        let circle = new BMap.Circle(point,1000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3,enableEditing:true});
+        
+        map.addOverlay(circle); //增加圆
       },
       hiddenMateFun: function(msg){
         this.showMate = msg;
       },
       baiduMap: function () {
-        var map = new BMap.Map("allmap");
+        let map = new BMap.Map("allmap");
+        this.$store.state.map = map;
         // 创建地图实例  
-        var point = new BMap.Point(116.3964,39.9093);
+        let point = new BMap.Point(116.3964,39.9093);
         // 创建点坐标  
         map.centerAndZoom(point, 15);
         // 初始化地图，设置中心点坐标和地图级别 
         map.enableScrollWheelZoom(true);
         map.addControl(new BMap.GeolocationControl());   
         //定位图标
-        var marker = new BMap.Marker(point);  // 创建标注
+        let marker = new BMap.Marker(point);  // 创建标注
         map.addOverlay(marker);               // 将标注添加到地图中
         marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
-
 
         // 复杂的自定义覆盖物
         function ComplexCustomOverlay(point, text, mouseoverText){
@@ -109,6 +118,36 @@
             
         var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城",mouseoverTxt);
 
+        
+        // showOver();
+        // var canvasLayer = new BMap.CanvasLayer({
+        //         update: update
+        //     });
+        // function update() {
+        //         var ctx = this.canvas.getContext("2d");
+
+        //         if (!ctx) {
+        //             return;
+        //         }
+
+        //         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+        //         var temp = {};
+        //         ctx.fillStyle = "rgba(50, 50, 255, 0.7)";
+        //         ctx.beginPath();
+        //         var data = [
+        //             new BMap.Point(116.3964,39.9093),
+        //         ];
+
+        //         for (var i = 0, len = data.length; i < len; i++) {
+        //             var pixel = map.pointToPixel(data[i]);
+        //             ctx.fillRect(pixel.x, pixel.y, 30, 30);
+        //         }
+        //     }
+
+        // mp.addOverlay(canvasLayer);
+
+        // var overlay=[canvasLayer,myCompOverlay];
         map.addOverlay(myCompOverlay);
 
           //定位
