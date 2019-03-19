@@ -1,16 +1,17 @@
 <template>
-  <div
-    class="roomlist-wrap"
-    @touchstart="handleRoomlistStart"
-    @touchend="handleRoomlistEnd"
-    @touchmove="handleRoomlistScroll"
-    :style="{transform: 'translateY('+translateY+'px)'}"
-  >
-    <button class="retract iconfont icon-xiala"></button>
-    <div class="village-info">
-      <p>梦蝶苑（5间）</p>
-      <span>距龙华中路站约1000米</span>
+  <div class="roomlist-wrap" :style="{transform: 'translateY('+translateY+'px)'}">
+    <div
+      @touchstart="handleRoomlistStart"
+      @touchend="handleRoomlistEnd"
+      @touchmove="handleRoomlistScroll"
+    >
+      <button class="retract iconfont icon-xiala"></button>
+      <div class="village-info">
+        <p>梦蝶苑（5间）</p>
+        <span>距龙华中路站约1000米</span>
+      </div>
     </div>
+
     <div class="roomlist">
       <a href="javascript:;">
         <div class="roomlist-img">
@@ -163,7 +164,7 @@ export default {
       touchStartY: 0,
       translateY: 0,
       vh: 0,
-      roomlistOverflow:'auto'
+      roomlistOverflow: "auto"
     };
   },
   mounted() {
@@ -207,11 +208,16 @@ export default {
   text-align: center;
   line-height: 7vw;
   color: #999999;
+  position: absolute;
 }
 .village-info {
+  position: absolute;
   overflow: hidden;
   border-bottom: 1.333vw solid #f4f4f4;
-  padding: 4vw 4.1vw;
+  height: 6vw;
+  padding: 4vw 4vw;
+  top: 7vw;
+  width: 92vw;
 }
 .village-info p {
   color: #101010;
@@ -229,6 +235,10 @@ export default {
 .roomlist {
   width: 100%;
   overflow: hidden;
+  height: 80vh;
+  box-sizing: border-box;
+  padding-top: 21vw;
+  overflow: auto;
 }
 .roomlist a {
   display: block;
