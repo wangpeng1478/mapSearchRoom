@@ -3,7 +3,7 @@
     <div class="screen-list">
       <div class="region">
         <h4>入住区域</h4>
-        <p>
+        <p @click="selectionArea">
           <i class="iconfont icon-dingwei"></i>上海市-徐汇区-龙华
           <i class="iconfont icon-you"></i>
         </p>
@@ -184,6 +184,9 @@ export default {
     };
   },
   methods: {
+    selectionArea(){
+      this.$emit("selectionArea")
+    },
     handleReset() {
       this.query = {
         roomFeatureIdList: [],

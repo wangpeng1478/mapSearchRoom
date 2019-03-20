@@ -1,4 +1,6 @@
 <template>
+<div class="region-wrap">
+  <div class="region-mask" @click="hiddenRegion"></div>
   <div class="region">
     <ul class="u1">
       <li :class="selected[0]==0 ? 'selected' : ''">不限</li>
@@ -39,6 +41,7 @@
         >{{metro.simpleName}}</li>
       </template>
     </ul>
+  </div>
   </div>
 </template>
 <script>
@@ -5820,10 +5823,24 @@ export default {
       ],
       selected: [1, 0, 0]
     };
+  },
+ methods:{
+    hiddenRegion(){
+    console.log('hiddenRegion')
+    this.$emit("hiddenRegion")
   }
+ }
 };
 </script>
 <style scoped>
+.region-wrap{
+    position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 15;
+}
 .region {
   position: fixed;
   top: 0;
@@ -5832,6 +5849,15 @@ export default {
   width: 84vw;
   overflow: hidden;
   background: #fff;
+  z-index: 10;
+}
+.region-mask{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9;
 }
 .region ul {
   overflow: auto;

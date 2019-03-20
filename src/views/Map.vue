@@ -15,9 +15,11 @@
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
     <RoomList v-if="showView.showRoomList"/>
     <transition name="screen">
-      <Screen v-if="showView.showScreen"/>
+      <Screen v-if="showView.showScreen" @selectionArea="selectionArea"/>
     </transition>
-    <RegionAndMetro v-if="showView.showRegionAndMetro"/>
+    <transition name="screen">
+    <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
+    </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
 </template>
@@ -203,6 +205,13 @@
           showTopBar:true,
           showMask:false
         }
+      },
+      selectionArea(){
+        this.showView.showRegionAndMetro=true;
+      },
+      hiddenRegion(){
+        console.log("hiddenRegion")
+        this.showView.showRegionAndMetro=false;
       }
     }
   }
