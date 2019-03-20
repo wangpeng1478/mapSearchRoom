@@ -11,39 +11,30 @@
       <div class="screen-item">
         <h4>房间特色</h4>
         <ul>
-          <li>整租</li>
-          <li>独卫</li>
-          <li>单间</li>
-          <li>近地铁</li>
-          <li>特价房</li>
-          <li>精装修</li>
-          <li>飘窗</li>
-          <li>阳台</li>
-          <li>房东原装</li>
+          <li
+            v-for="roomFeature in roomFeatureList"
+            :key="roomFeature.roomFeatureId"
+            :class="query.roomFeatureIdList.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
+            @click="handleRoomFeature(roomFeature.roomFeatureId)"
+          >{{roomFeature.roomFeatureName}}</li>
         </ul>
       </div>
       <div class="screen-item">
         <h4>房间价格（元）</h4>
         <!-- slider -->
         <ul>
-          <li>500以下</li>
-          <li>500-700</li>
-          <li>700-1000</li>
-          <li>1000-1500</li>
-          <li>1500-2000</li>
-          <li>2000-3000</li>
-          <li>2000-3000</li>
-          <li>3000以上</li>
+          <li v-for="price in priceList" :key="price.id">{{price.name}}</li>
         </ul>
       </div>
       <div class="screen-item">
         <h4>可租日期</h4>
         <ul>
-          <li>立即</li>
-          <li>一周内</li>
-          <li>两周内</li>
-          <li>一月内</li>
-          <li>两月内</li>
+          <li
+            v-for="roomRent in roomRentList"
+            :key="roomRent.roomRentDays"
+            @click="handleRoomRent(roomRent.roomRentDays)"
+            :class="query.roomRentDays==roomRent.roomRentDays ? 'select' : ''"
+          >{{roomRent.roomRentName}}</li>
         </ul>
       </div>
       <div class="screen-item">
@@ -58,13 +49,162 @@
       </div>
     </div>
     <div class="bottom-button">
-      <button class="reset">重置</button>
+      <button class="reset" @click="handleReset">重置</button>
       <button class="confirm">确定（100+）</button>
     </div>
   </div>
 </template>
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      query: {
+        roomFeatureIdList: [],
+        roomRentDays: null
+      },
+      roomRentList: [
+        {
+          roomRentName: "立即可租",
+          roomRentDays: 0
+        },
+        {
+          roomRentName: "一周内可租",
+          roomRentDays: 7
+        },
+        {
+          roomRentName: "二周内可租",
+          roomRentDays: 15
+        },
+        {
+          roomRentName: "一月内可租",
+          roomRentDays: 30
+        },
+        {
+          roomRentName: "二月内可租",
+          roomRentDays: 60
+        }
+      ],
+      roomTypeList: [
+        {
+          roomTypeId: 1,
+          roomTypeName: "独卫"
+        },
+        {
+          roomTypeId: 2,
+          roomTypeName: "单间"
+        },
+        {
+          roomTypeId: 3,
+          roomTypeName: "整租"
+        }
+      ],
+      roomFeatureList: [
+        {
+          roomFeatureId: 1,
+          roomFeatureName: "特价房"
+        },
+        {
+          roomFeatureId: 2,
+          roomFeatureName: "近地铁"
+        },
+        {
+          roomFeatureId: 3,
+          roomFeatureName: "阳台"
+        },
+        {
+          roomFeatureId: 4,
+          roomFeatureName: "朝南"
+        },
+        {
+          roomFeatureId: 5,
+          roomFeatureName: "主卧"
+        },
+        {
+          roomFeatureId: 6,
+          roomFeatureName: "飘窗"
+        }
+      ],
+      priceList: [
+        {
+          name: "500元以下",
+          content: "500",
+          id: 76,
+          type: 11,
+          no: "110"
+        },
+        {
+          name: "500-700元",
+          content: "500-700",
+          id: 27,
+          type: 11,
+          no: "111"
+        },
+        {
+          name: "700-1000元",
+          content: "700-1000",
+          id: 28,
+          type: 11,
+          no: "112"
+        },
+        {
+          name: "1000-1500元",
+          content: "1000-1500",
+          id: 29,
+          type: 11,
+          no: "113"
+        },
+        {
+          name: "1500-2000元",
+          content: "1500-2000",
+          id: 30,
+          type: 11,
+          no: "114"
+        },
+        {
+          name: "2000-3000元",
+          content: "2000-3000",
+          id: 73,
+          type: 11,
+          no: "115"
+        },
+        {
+          name: "3000元以上",
+          content: "3000-",
+          id: 31,
+          type: 11,
+          no: "116"
+        }
+      ]
+    };
+  },
+  methods: {
+    handleReset(){
+      this.query={
+        roomFeatureIdList: [],
+        roomRentDays: null
+      }
+    },
+    handleRoomFeature(selectRroomFeatureId) {
+      let roomFeatureIdList = this.query.roomFeatureIdList;
+      let roomFeatureIdIndex = roomFeatureIdList.indexOf(selectRroomFeatureId);
+      if (roomFeatureIdIndex == -1) {
+        roomFeatureIdList.push(selectRroomFeatureId);
+      } else {
+        roomFeatureIdList.splice(roomFeatureIdIndex, 1);
+      }
+      this.query.roomFeatureIdList = roomFeatureIdList;
+    },
+    handleRoomRent(selectRoomRentDays) {
+      let roomRentDays = this.query.roomRentDays;
+      if(selectRoomRentDays==roomRentDays){
+        roomRentDays=null;
+      }else{
+        roomRentDays=selectRoomRentDays;
+      }
+      this.query.roomRentDays = roomRentDays;
+    }
+  }
+};
 </script>
 <style scoped>
 .screen {
@@ -137,8 +277,8 @@ export default {};
   transform: translateY(0.5vw);
 }
 .icon-you {
-    color: #000;
-    display: block;
+  color: #000;
+  display: block;
 }
 .region,
 .screen-item h4 {
@@ -149,22 +289,27 @@ export default {};
 .screen-item:last-of-type {
   border: none;
 }
-.screen-item ul{
-    overflow: hidden;
+.screen-item ul {
+  overflow: hidden;
 }
-.screen-item ul li{
-    width: 22.66vw;
-    box-sizing: border-box;
-    border: 1px solid #a8a8a8;
-    text-align: center;
-    margin-right: 4vw;
-    float: left;
-    font-size: 3.733vw;
-    margin-bottom: 3.8vw;
-    line-height: 8vw;
-    height: 8.1vw;
+.screen-item ul li {
+  width: 22.66vw;
+  box-sizing: border-box;
+  border: 1px solid #a8a8a8;
+  text-align: center;
+  margin-right: 4vw;
+  float: left;
+  font-size: 3.4vw;
+  margin-bottom: 3.8vw;
+  line-height: 8vw;
+  height: 8.1vw;
 }
-.screen-item ul li:nth-of-type(3n){
-    margin-right: 0;
+.screen-item ul li:nth-of-type(3n) {
+  margin-right: 0;
+}
+.screen-item .select {
+  background: #ff9900;
+  color: #fff;
+  border-color: #ff9900;
 }
 </style>
