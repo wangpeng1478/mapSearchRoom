@@ -3,15 +3,19 @@
   <div id="map">
     <div class="baidumap" id="allmap"></div>
     <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
-    <div class="top-bar">
+    <transition name="top-bar">
+    <div class="top-bar" v-if="showView.showTopBar">
       <router-link to="/" target="_blank" class="iconfont icon-liebiao list">列表</router-link>
       <p class="search">请输入小区/区域/地铁<i class="iconfont icon-guanbi"></i></p>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
+    </transition>
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
     <RoomList v-if="showView.showRoomList"/>
-    <Screen v-if="showView.showScreen"/>
+    <transition name="screen">
+      <Screen v-if="showView.showScreen"/>
+    </transition>
     <RegionAndMetro v-if="showView.showRegionAndMetro"/>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
@@ -182,6 +186,7 @@
           showScreen:false,
           showRoomList:false,
           showRegionAndMetro:false,
+          showTopBar:true,
           showMask:false
         }
       }
@@ -248,7 +253,7 @@ li {
 }
   .top-bar{
     position: fixed;
-    top:0;
+    top:10vw;
     left: 0;
     right: 0;
     width: 92vw;
@@ -257,7 +262,7 @@ li {
     border-radius: 1.067vw;
     box-shadow: 0.28vw 0.28vw 0.667vw 0vw 
 		rgba(0, 11, 10, 0.2);
-    margin: 10vw auto 0;
+    margin:auto;
   }
   .top-bar .search{
     width: 56.2vw;
@@ -322,6 +327,22 @@ li {
     z-index: 5;
     background: rgba(0, 0, 0, 0.5);
   }
+
+  /*过渡动画*/
+  .screen-enter-active,.screen-leave-active {
+  transition: all .3s linear;
+}
+.screen-enter, .screen-leave-to{
+  transform: translateX(40vw);
+  opacity: 0;
+}
+.top-bar-enter-active,.top-bar-leave-active {
+  transition: all .3s linear;
+}
+.top-bar-enter, .top-bar-leave-to{
+  transform: translateY(-10vw);
+  opacity: 0;
+}
 </style>
 
 <style>
