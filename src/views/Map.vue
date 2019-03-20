@@ -47,16 +47,22 @@
       })
     },
     methods : {
-
+      aa(){
+        alert("aa")
+      },
       showMateFun:function(){
         this.showView.showMate = true;
         var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         elements.className = "BMap_noprint anchorBL bottom48"; 
-
+        let _state = store.state.mapData;
         let map = store.state.map;
-        let point = new BMap.Point(116.3964,39.9093);
-        map.centerAndZoom(point, 15);
-        let circle = new BMap.Circle(point,1000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3,enableEditing:true});
+        let point = new BMap.Point(_state.site.lng,_state.site.lat);
+        // let marker = new BMap.Marker(_state.site.lng,_state.site.lat);
+        // map.panTo(_state.site.lng,_state.site.lat)
+        // console.log(_state.site.lat,_state.site.lng)
+        // map.addOverlay(marker);
+        map.centerAndZoom(point, store.state.mapData.scale);
+        let circle = new BMap.Circle(point,store.state.mapData.distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         
         map.addOverlay(circle); //增加圆
       },
@@ -65,27 +71,33 @@
       },
       baiduMap: function () {
         let map = new BMap.Map("allmap");
-        this.$store.state.map = map;
-        // 创建地图实例  
-        let point = new BMap.Point(116.3964,39.9093);
+        let _state = this.$store.state;
+        _state.map = map;
+        // 创建地图实例 
+        let point = new BMap.Point(_state.mapData.site.lng,_state.mapData.site.lat);
         // 创建点坐标  
-        map.centerAndZoom(point, 15);
+        map.centerAndZoom(point,_state.mapData.scale);
         // 初始化地图，设置中心点坐标和地图级别 
         map.enableScrollWheelZoom(true);
-        map.addControl(new BMap.GeolocationControl());   
+        let geolocationControl = new BMap.GeolocationControl();
+        map.addControl(geolocationControl); 
+
+        //监听定位控件
+        this.$.locationSuccess(geolocationControl);
+
         //定位图标
-        let marker = new BMap.Marker(point);  // 创建标注
-        map.addOverlay(marker);               // 将标注添加到地图中
-        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+        // let marker = new BMap.Marker(point);  // 创建标注
+        // marker.disableMassClear();
+        // map.addOverlay(marker);               // 将标注添加到地图中
+        // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
         // 复杂的自定义覆盖物
         function ComplexCustomOverlay(point, text, mouseoverText){
           this._point = point;
           this._text = text;
           this._overText = mouseoverText;
-          console.log(this)
         }
-        ComplexCustomOverlay.prototype = new BMap.Overlay();
+        ComplexCustomOverlay.prototype = new BMap.Marker();
         ComplexCustomOverlay.prototype.initialize = function(map){ 
           this._map = map;
           var div = this._div = document.createElement("div");
@@ -127,9 +139,9 @@
         }
         var txt = "银湖海岸城", mouseoverTxt = txt + " " + parseInt(Math.random() * 1000,10) + "套" ;
             
-        var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城",mouseoverTxt);
+        var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城");
 
-        
+        myCompOverlay.disableMassClear();
         // showOver();
         // var canvasLayer = new BMap.CanvasLayer({
         //         update: update
@@ -165,14 +177,15 @@
         // var geolocation = new BMap.Geolocation();
         // geolocation.enableSDKLocation();
         // geolocation.getCurrentPosition(function(r){
+        //   console.log(r)
         //   if(this.getStatus() == BMAP_STATUS_SUCCESS){
         //     var mk = new BMap.Marker(r.point);
         //     map.addOverlay(mk);
         //     map.panTo(r.point);
-        //     alert('您的位置：'+r.point.lng+','+r.point.lat);
+        //     // alert('您的位置：'+r.point.lng+','+r.point.lat);
         //   }
         //   else {
-        //     alert('failed'+this.getStatus());
+        //     // alert('failed'+this.getStatus());
         //   }        
         // });
       },

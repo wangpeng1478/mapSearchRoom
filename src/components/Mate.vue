@@ -1,6 +1,6 @@
 <template>
     <div id="iMate">
-        <div class="back" @click="hiddenMateFun"></div>
+        <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate"></div>
         <div class="individuality_mate">
@@ -47,6 +47,7 @@ export default {
         // ...mapState(['mapData']),
         mapData(){
             this.$store.state.mapData.type;
+            this.$store.state.mapData.site;
              return this.$store.state.mapData;
         }
     },
@@ -56,29 +57,35 @@ export default {
         mapData:(newQuestion, oldQuestion)=>{
             
             var mp = store.state.map;
-            let point = new BMap.Point(116.3964,39.9093);
+            var _state = store.state.mapData
+            let point = new BMap.Point(_state.site.lng,_state.site.lat);
             let type = newQuestion.type;
+            let distance = 1000;
             switch (type) {
                 case 1:
-                    // let circle = new BMap.Circle(point,1000,{fillColor:"blue", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3,enableEditing:true});
-                    mp.centerAndZoom(point, 13);
+                    distance = 2000;
                     break;
                 case 2:
-                    mp.centerAndZoom(point, 14);
+                    distance = 1500;
                     break;
                 case 3:
-                    mp.centerAndZoom(point, 15);
+                    distance = 1000;
                     break;
                 case 4:
-                   
-                    // mp.centerAndZoom(point, 17);
-                    // mp.enableScrollWheelZoom(true);
-                     var circle1 = new BMap.Circle(point,500);
-                    mp.addOverlay(circle1); //增加圆
+                    distance = 500;
                     break;
                 default:
                     break;
             }
+            store.state.mapData.distance = distance;
+            
+            let scale = Math.round(Math.log(80000000 / distance) / Math.log(2)) - 1;
+            store.state.mapData.scale = scale;
+            mp.centerAndZoom(point, scale);
+            var circle1 = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+            mp.clearOverlays();
+            mp.addOverlay(circle1); //增加圆
+            
             
 
             // var canvasLayer = new BMap.CanvasLayer({
@@ -110,10 +117,12 @@ export default {
         }
     },
     methods:{
-        hiddenMateFun : function (){
+        backFun : function (){
+            var mp = store.state.map;
             var hiddenMate = false;
             var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
                 elements.className = "BMap_noprint anchorBL "; 
+            mp.clearOverlays();
             this.$emit("hiddenMate",hiddenMate)
         },
         choose :function (res) {
