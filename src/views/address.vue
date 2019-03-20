@@ -4,9 +4,9 @@
     <p class="tit">当前定位城市</p>
     <div class="location" @click="handleCurrentClick">
       <i :class="{'refresh-rotate' : positionState==1}" class="refresh"></i>
-      <p v-if="positionState==1">正在获取当前定位城市</p>
-      <p v-if="positionState==0 && localCity==-1">定位失败 点击重试</p>
-      <p v-if="positionState==0 && localCity!=-1">{{cityList[localCity].cityName}}</p>
+      <p v-show="positionState==1">正在获取当前定位城市</p>
+      <p v-show="positionState==0 && localCity==-1">定位失败 点击重试</p>
+      <p v-show="positionState==0 && localCity!=-1">{{cityList[localCity].cityName}}</p>
     </div>
     <p class="tit">选择城市</p>
     <ul class="city-list">

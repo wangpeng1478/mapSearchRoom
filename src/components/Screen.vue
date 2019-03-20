@@ -23,7 +23,12 @@
         <h4>房间价格（元）</h4>
         <!-- slider -->
         <ul>
-          <li v-for="price in priceList" :key="price.id">{{price.name}}</li>
+          <li
+            v-for="price in priceList"
+            :key="price.id"
+            @click="handlePriceRecomm(price.content)"
+            :class="query.priceRecomm==price.content? 'select':''"
+          >{{price.name}}</li>
         </ul>
       </div>
       <div class="screen-item">
@@ -50,7 +55,7 @@
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
-      <button class="confirm">确定（100+）</button>
+      <button class="confirm" @click="handelQuery">确定（100+）</button>
     </div>
   </div>
 </template>
@@ -60,7 +65,8 @@ export default {
     return {
       query: {
         roomFeatureIdList: [],
-        roomRentDays: null
+        roomRentDays: null,
+        priceRecomm: null
       },
       roomRentList: [
         {
@@ -178,30 +184,33 @@ export default {
     };
   },
   methods: {
-    handleReset(){
-      this.query={
+    handleReset() {
+      this.query = {
         roomFeatureIdList: [],
-        roomRentDays: null
-      }
+        roomRentDays: null,
+        priceRecomm: null
+      };
     },
     handleRoomFeature(selectRroomFeatureId) {
       let roomFeatureIdList = this.query.roomFeatureIdList;
       let roomFeatureIdIndex = roomFeatureIdList.indexOf(selectRroomFeatureId);
-      if (roomFeatureIdIndex == -1) {
-        roomFeatureIdList.push(selectRroomFeatureId);
-      } else {
-        roomFeatureIdList.splice(roomFeatureIdIndex, 1);
-      }
+      roomFeatureIdIndex == -1
+        ? roomFeatureIdList.push(selectRroomFeatureId)
+        : roomFeatureIdList.splice(roomFeatureIdIndex, 1);
       this.query.roomFeatureIdList = roomFeatureIdList;
     },
     handleRoomRent(selectRoomRentDays) {
       let roomRentDays = this.query.roomRentDays;
-      if(selectRoomRentDays==roomRentDays){
-        roomRentDays=null;
-      }else{
-        roomRentDays=selectRoomRentDays;
-      }
-      this.query.roomRentDays = roomRentDays;
+      this.query.roomRentDays =
+        selectRoomRentDays == roomRentDays ? null : selectRoomRentDays;
+    },
+    handlePriceRecomm(priceContent) {
+      let priceRecomm = this.query.priceRecomm;
+      this.query.priceRecomm =
+        priceRecomm == priceContent ? null : priceContent;
+    },
+    handelQuery(){
+      console.log('点击确定')
     }
   }
 };
