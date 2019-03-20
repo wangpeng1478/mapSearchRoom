@@ -50,9 +50,6 @@
       })
     },
     methods : {
-      aa(){
-        alert("aa")
-      },
       showMateFun:function(){
         this.showView.showMate = true;
         var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
