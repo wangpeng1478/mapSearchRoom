@@ -5,8 +5,9 @@
     <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
-      <router-link to="/" target="_blank" class="iconfont icon-liebiao list">列表</router-link>
-      <p class="search">请输入小区/区域/地铁<i class="iconfont icon-guanbi"></i></p>
+      <a href="#" target="_blank" class="iconfont icon-liebiao list">列表</a>
+      <router-link to="/search" class="search">请输入小区/区域/地铁</router-link>
+      <i class="iconfont icon-guanbi"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     </transition>
@@ -278,6 +279,7 @@ li {
     margin:auto;
   }
   .top-bar .search{
+    display: block;
     width: 56.2vw;
     height: 12vw;
     display: block;
@@ -289,17 +291,18 @@ li {
     font-size: 3.2vw;
     position: relative;
   }
-  .top-bar .search i{
+  .top-bar .icon-guanbi{
     display: block;
     position: absolute;
     color: #666;
     width: 8vw;
     height: 12vw;
-    right: 0;
+    right: 17vw;
     top: 0;
     font-size: 3vw;
     line-height: 12vw;
     font-weight: bold;
+    text-align: center;
   }
   .top-bar .search::before,.top-bar .search::after{
     content: '';
@@ -330,6 +333,7 @@ li {
     line-height: 12vw;
     text-align: center;
     color: #303030;
+    font-size: 4vw;
   }
   .mask{
     position: fixed;
