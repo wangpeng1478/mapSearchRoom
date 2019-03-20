@@ -6,14 +6,13 @@
     <div class="top-bar">
       <router-link to="/" target="_blank" class="iconfont icon-liebiao list">列表</router-link>
       <p class="search">请输入小区/区域/地铁<i class="iconfont icon-guanbi"></i></p>
-      
-      <button class="screen-btn">筛选</button>
+      <button class="screen-btn" @click="handleScreenBtn">筛选</button>
     </div>
-    <div class="mate" v-if="!showMate" @click="showMateFun">个性找房</div>
-    <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
-    <!-- <RoomList/> -->
-    <!-- <Screen/> -->
-    <!-- <RegionAndMetro/> -->
+    <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
+    <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
+    <RoomList v-if="showView.showRoomList"/>
+    <Screen v-if="showView.showScreen"/>
+    <RegionAndMetro v-if="showView.showRegionAndMetro"/>
   </div>
 </template>
 
@@ -29,7 +28,13 @@
     name: 'Map',
     data () {
       return{
-        showMate: false,
+        defaultShowView:{
+          showMate: false,
+          showScreen:false,
+          showRoomList:false,
+          showRegionAndMetro:false
+        },
+        showView:{}
       }
     },
     components:{Mate,RoomList,Screen,RegionAndMetro},
@@ -37,6 +42,7 @@
       msg: String,
     },
     mounted : function () {
+      this.showView = this.defaultShowView;
       this.$nextTick(function(){
         this.baiduMap();
       })
@@ -44,7 +50,7 @@
     methods : {
 
       showMateFun:function(){
-        this.showMate = true;
+        this.showView.showMate = true;
         var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         elements.className = "BMap_noprint anchorBL bottom48"; 
 
@@ -56,7 +62,7 @@
         map.addOverlay(circle); //增加圆
       },
       hiddenMateFun: function(msg){
-        this.showMate = msg;
+        this.showView.showMate = msg;
       },
       baiduMap: function () {
         let map = new BMap.Map("allmap");
@@ -170,6 +176,9 @@
         //     alert('failed'+this.getStatus());
         //   }        
         // });
+      },
+      handleScreenBtn(){
+        this.showView.showScreen = true;
       }
     }
   }
