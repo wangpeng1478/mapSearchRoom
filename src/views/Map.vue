@@ -2,7 +2,13 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
-    <router-link class="currentcity" to="/address"><i class="iconfont icon-dingwei"/>上海</router-link>
+    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
+    <div class="top-bar">
+      <router-link to="/" target="_blank" class="iconfont icon-liebiao list">列表</router-link>
+      <p class="search">请输入小区/区域/地铁<i class="iconfont icon-guanbi"></i></p>
+      
+      <button class="screen-btn">筛选</button>
+    </div>
     <div class="mate" v-if="!showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showMate" :showMate="showMate" @hiddenMate="hiddenMateFun"/>
     <!-- <RoomList/> -->
@@ -222,18 +228,77 @@ li {
   background-color:rgba(255, 255, 255, 0.8);
   border-radius: 0 0 1vw 1vw;
   font-size: 3.733vw;
-  text-indent: 7vw;
+  text-align: center;
   line-height: 8vw;
-}
-.currentcity i{
   color: #00ac84;
-  font-size: 4.5vw;
-  display: block;
-  position: absolute;
-  left: -4.5vw;
 }
-
-
+  .top-bar{
+    position: fixed;
+    top:0;
+    left: 0;
+    right: 0;
+    width: 92vw;
+    height: 12vw;
+    background: #ffffff;
+    border-radius: 1.067vw;
+    box-shadow: 0.28vw 0.28vw 0.667vw 0vw 
+		rgba(0, 11, 10, 0.2);
+    margin: 10vw auto 0;
+  }
+  .top-bar .search{
+    width: 56.2vw;
+    height: 12vw;
+    display: block;
+    overflow: hidden;
+    line-height: 12vw;
+    text-indent: 2.6vw;
+    float: left;
+    color: #666;
+    font-size: 3.2vw;
+    position: relative;
+  }
+  .top-bar .search i{
+    display: block;
+    position: absolute;
+    color: #666;
+    width: 8vw;
+    height: 12vw;
+    right: 0;
+    top: 0;
+    font-size: 3vw;
+    line-height: 12vw;
+    font-weight: bold;
+  }
+  .top-bar .search::before,.top-bar .search::after{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 6.1vw;
+    top: 3vw;
+    background: #bfbfbf;
+  }
+  .top-bar .search::before{
+    left: 0;
+  }
+  .top-bar .search::after{
+    right: 0;
+  }
+  .screen-btn{
+    width: 16vw;
+    height: 12vw;
+    float: right;
+    text-align: center;
+    font-size: 4vw;
+    line-height: 4vw;
+  }
+  .list{
+    float: left;
+    width: 19vw;
+    line-height: 12vw;
+    text-align: center;
+    color: #303030;
+  }
 </style>
 
 <style>
