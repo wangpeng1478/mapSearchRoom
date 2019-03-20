@@ -9,6 +9,12 @@ export default new Vuex.Store({
     mapData:{
       type:2,
       sliderLeft:0,
+      scale:16,
+      distance:1000,
+      site:{
+        lat: 39.9093,
+        lng: 116.3964
+      },
     },
     map:"",
   },

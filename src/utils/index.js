@@ -1,3 +1,4 @@
+import store from '@/store'
 export default{ //很关键
     hasClass:(ele, cls) =>  {
         return ele.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
@@ -20,5 +21,12 @@ export default{ //很关键
         }else{ 
             this.addClass(ele, cls); 
         } 
+    },
+    locationSuccess:(obj)=>{
+        obj.addEventListener("locationSuccess", function(e){
+            // 定位成功事件
+            store.state.mapData.site.lat = e.point.lat;
+            store.state.mapData.site.lng = e.point.lng;
+        });
     }
 }
