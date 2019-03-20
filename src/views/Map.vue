@@ -6,13 +6,14 @@
     <div class="top-bar">
       <router-link to="/" target="_blank" class="iconfont icon-liebiao list">列表</router-link>
       <p class="search">请输入小区/区域/地铁<i class="iconfont icon-guanbi"></i></p>
-      <button class="screen-btn" @click="handleScreenBtn">筛选</button>
+      <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
     <RoomList v-if="showView.showRoomList"/>
     <Screen v-if="showView.showScreen"/>
     <RegionAndMetro v-if="showView.showRegionAndMetro"/>
+    <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
 </template>
 
@@ -28,12 +29,6 @@
     name: 'Map',
     data () {
       return{
-        defaultShowView:{
-          showMate: false,
-          showScreen:false,
-          showRoomList:false,
-          showRegionAndMetro:false
-        },
         showView:{}
       }
     },
@@ -42,7 +37,7 @@
       msg: String,
     },
     mounted : function () {
-      this.showView = this.defaultShowView;
+      this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
       })
@@ -177,8 +172,18 @@
         //   }        
         // });
       },
-      handleScreenBtn(){
-        this.showView.showScreen = true;
+      handleComponentView(component){
+        this.showView[component] = true;
+        this.showView.showMask=true;
+      },
+      viewSetDefault(){
+        this.showView = {
+          showMate: false,
+          showScreen:false,
+          showRoomList:false,
+          showRegionAndMetro:false,
+          showMask:false
+        }
       }
     }
   }
@@ -307,6 +312,15 @@ li {
     line-height: 12vw;
     text-align: center;
     color: #303030;
+  }
+  .mask{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 5;
+    background: rgba(0, 0, 0, 0.5);
   }
 </style>
 

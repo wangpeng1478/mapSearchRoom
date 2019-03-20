@@ -222,6 +222,7 @@ export default {
   top: 0;
   bottom: 0;
   right: 0;
+  z-index: 10;
   background: #fff;
   box-sizing: border-box;
   height: 100vh;
