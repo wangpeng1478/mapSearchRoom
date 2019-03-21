@@ -8,7 +8,7 @@
         v-model="searchValue"
         @input="handleInput"
       >
-      <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''"></i>
+      <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
       <router-link to="/">取消</router-link>
     </div>
     <div class="search-tag" v-show="searchValue==''">
@@ -27,6 +27,11 @@
             :key="historyTag.id"
           >{{historyTag.keyWords}}</li>
         </ul>
+        <div v-else class="nolist">
+          <img src="../assets/images/none.png">
+          <p>暂无搜索历史</p>
+        </div>
+        
       </div>
       <div class="search-tag-list">
         <div class="tag-top">
@@ -39,6 +44,10 @@
             :key="hotTag.id"
           >{{hotTag.keyWords}}</li>
         </ul>
+        <div v-else class="nolist">
+          <img src="../assets/images/none.png">
+          <p>暂无热门搜索</p>
+        </div>
       </div>
     </div>
 
@@ -198,6 +207,9 @@ export default {
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem("searchTagHistory", searchTagHistory);
+    },
+    handleClearinput(){
+      this.searchValue="";
     }
   }
 };
@@ -344,6 +356,17 @@ export default {
   text-align: center;
   font-weight: bold;
 }
+
+.nolist img{
+  display: block;
+  width: 8vw;
+  margin: 10vw auto 1vw;
+}
+.nolist p{
+  text-align: center;
+  font-size: 4vw;
+  color: #888;
+  }
 </style>
 <style>
 .search-result li p span {

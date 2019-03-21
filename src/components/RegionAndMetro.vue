@@ -5834,6 +5834,10 @@ export default {
     selected.splice(category+1,2-category,-1,-1);
     selected=selected.slice(0,3);
     this.selected=selected;
+    if(category==2){
+      //返回数据
+      this.$emit("hiddenRegion")
+    }
   }
  }
 };
