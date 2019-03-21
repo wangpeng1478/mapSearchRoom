@@ -44,7 +44,7 @@
 
     <ul class="search-result" v-show="searchValue!='' && isRegion">
       <li v-for="result in searchResult" :key="result.id">
-        <p>{{result.keyWords}}</p>
+        <p v-html="result.showKeyWords"></p>
         <span>{{result.typeName}}</span>
       </li>
     </ul>
@@ -80,7 +80,7 @@ export default {
   name: "Search",
   data() {
     return {
-      isRegion: false, //true为区域搜索，false为位置搜索
+      isRegion: true, //true为区域搜索，false为位置搜索
       searchValue: "",
       searchTagHistory: [],
       searchTagHot: [
@@ -176,9 +176,14 @@ export default {
       this.searchTagHistory = searchTagHistory
   },
   methods: {
-    clearHistory() {},
+    clearHistory() {
+      localStorage.removeItem('searchTagHistory');
+      this.searchTagHistory=[]
+    },
     handleInput() {
-      //搜索框输入
+      this.searchResult.map((result)=>{
+        result.showKeyWords = result.keyWords.replace(this.searchValue,"<span>"+ this.searchValue +"</span>");
+      })
     },
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
@@ -338,5 +343,10 @@ export default {
   line-height: 10.6vw;
   text-align: center;
   font-weight: bold;
+}
+</style>
+<style>
+.search-result li p span {
+  color: #ff0000;
 }
 </style>
