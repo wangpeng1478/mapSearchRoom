@@ -21,7 +21,7 @@
       </div>
       <div class="screen-item">
         <h4>房间价格（元）</h4>
-        <!-- slider -->
+        <Slider defaultValue='0,0' step="10" mode='double'/>
         <ul>
           <li
             v-for="price in priceList"
@@ -60,6 +60,7 @@
   </div>
 </template>
 <script>
+import Slider from "./Slider";
 export default {
   data() {
     return {
@@ -183,9 +184,12 @@ export default {
       ]
     };
   },
+  components: {
+    Slider
+  },
   methods: {
-    selectionArea(){
-      this.$emit("selectionArea")
+    selectionArea() {
+      this.$emit("selectionArea");
     },
     handleReset() {
       this.query = {
@@ -212,8 +216,8 @@ export default {
       this.query.priceRecomm =
         priceRecomm == priceContent ? null : priceContent;
     },
-    handelQuery(){
-      console.log('点击确定')
+    handelQuery() {
+      console.log("点击确定");
     }
   }
 };
