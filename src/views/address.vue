@@ -75,7 +75,6 @@ export default {
     };
   },
   mounted() {
-    console.log("mounted");
     this.getLocation();
   },
   methods: {
@@ -92,6 +91,7 @@ export default {
         this.localCity = _this.cityList.findIndex(city => {
           return city.baiduCode == res.code;
         });
+        
         this.positionState=0;
       });
     },

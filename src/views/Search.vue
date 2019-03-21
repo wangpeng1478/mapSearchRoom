@@ -15,7 +15,7 @@
       <div class="search-tag-list">
         <div class="tag-top">
           <p class="tag-tit">搜索历史</p>
-          <p class="clear">
+          <p class="clear" @click="clearHistory">
             清空记录
             <i class="iconfont icon-lajitong"></i>
           </p>
@@ -193,6 +193,9 @@ export default {
     };
   },
   methods: {
+    clearHistory() {
+      localStorage.setItem("key", "value");
+    },
     handleInput() {
       //发送请求
     },
@@ -278,7 +281,8 @@ export default {
 .search-tag-list:nth-of-type(1) {
   border-bottom: 4vw #f4f4f4 solid;
 }
-.search-result ,.local-result{
+.search-result,
+.local-result {
   margin-top: 2vw;
 }
 .search-result li {
@@ -314,22 +318,22 @@ export default {
   border-bottom: 1px solid #e5e5e5;
   padding: 4vw 6.5vw 0;
 }
-.local-result li p{
+.local-result li p {
   font-size: 4vw;
   color: #313131;
   letter-spacing: 1px;
   line-height: 1;
   margin-bottom: 1vw;
 }
-.local-result li span{
+.local-result li span {
   color: #a8a8a8;
   font-size: 3.733vw;
   line-height: 1;
 }
-.local-result li p span{
+.local-result li p span {
   color: #ff0000;
 }
-.clearinput{
+.clearinput {
   display: block;
   color: #666;
   width: 8vw;
