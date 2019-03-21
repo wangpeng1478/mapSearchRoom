@@ -24,40 +24,43 @@ export default {
     mounted: function (){
         this.lineLength = document.getElementsByClassName("mate_line")[0].offsetWidth;
         this.sliderLeft = store.state.mapData.sliderLeft ;
-        let s = document.getElementsByClassName("slider")[0];
+        let s = document.getElementsByClassName("slider")[0],
+            lineA = document.getElementsByClassName("mate_line_active")[0];
         s.style.left = this.sliderLeft + "px";
+        lineA.style.width = this.sliderLeft + "px";
     },
     methods:{
         touchSlider : function (e) {
-            // var e=e||event;
             let target= e.srcElement? e.srcElement: e.target;
             this.startX = e.changedTouches[0].clientX;
         },
         moveSlider:function (e) {
-            // var e=e||event;
             let target= e.srcElement? e.srcElement: e.target;
             let moveX = e.changedTouches[0].clientX;
             let _x = Math.abs(moveX - this.startX);       //滑动距离
-            let s = document.getElementsByClassName("slider")[0];
+            let s = document.getElementsByClassName("slider")[0],
+                lineA = document.getElementsByClassName("mate_line_active")[0];
             let sl = this.lineLength/this.step;     //步长
             let num = Math.round(_x / sl);
+            let lineLength = 0;
             if(this.sliderLeft + (moveX - this.startX)/_x*num*sl >= this.lineLength){
                 num = this.step;
-                s.style.left = this.lineLength + "px";
+                lineLength = this.lineLength + "px";
             }else if(this.sliderLeft + (moveX - this.startX)/_x*num*sl <= 0){
                 num = 0;
-                s.style.left = 0 + "px";
+                lineLength = 0 + "px";
             }else{
-                s.style.left = this.sliderLeft + (moveX - this.startX)/_x*num*sl + "px";
+                lineLength = this.sliderLeft + (moveX - this.startX)/_x*num*sl + "px";
             }
-            
+            s.style.left = lineLength;
+            lineA.style.width = lineLength;
+            this.$emit("moveStep",num)
             
         },
         endSlider : function () {
             let s = document.getElementsByClassName("slider")[0];
             this.sliderLeft = parseFloat(s.style.left);
-            store.state.mapData.sliderLeft = this.sliderLeft
-            console.log(store.state.mapData.sliderLeft)
+            store.state.mapData.sliderLeft = this.sliderLeft;
         }
     }
 }
@@ -88,7 +91,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    width: 76vw;
+    width: 0vw;
 	height: 3px;
     background-color: #f08b00;
 }

@@ -9,8 +9,9 @@ export default new Vuex.Store({
     mapData:{
       type:2,
       sliderLeft:0,
-      scale:16,
-      distance:1000,
+      scale:15,
+      speed:1000,
+      time:20,
       site:{
         lat: 39.9093,
         lng: 116.3964

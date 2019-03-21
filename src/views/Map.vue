@@ -2,7 +2,7 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
-    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
+    <router-link class="currentcity iconfont icon-dingwei" to="/Address"><i class=""/>上海</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
       <a href="#" target="_blank" class="iconfont icon-liebiao list">列表</a>
@@ -21,6 +21,10 @@
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
+    <div @click="findHouse" class="find-house" v-if="isFind">
+      <p class="">点我找房</p>
+      <div class="site-pin"></div>
+    </div>
   </div>
 </template>
 
@@ -36,7 +40,8 @@
     name: 'Map',
     data () {
       return{
-        showView:{}
+        showView:{},
+        isFind:true
       }
     },
     components:{Mate,RoomList,Screen,RegionAndMetro},
@@ -50,24 +55,40 @@
       })
     },
     methods : {
+      findHouse:function(){
+        let map = store.state.map;
+        let _state = store.state.mapData;
+        let center = map.getCenter();
+        map.clearOverlays();
+        let point = new BMap.Point(center.lng,center.lat);
+        let scale = 16;
+        let distance = 3000;
+        this.$store.state.mapData.site.lng = center.lng;
+        this.$store.state.mapData.site.lat = center.lat;
+        this.$store.state.mapData.scale = scale;
+        map.centerAndZoom(point, scale);
+        let circle = new BMap.Circle(point,500,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        
+        map.addOverlay(circle); //增加圆
+      },
       showMateFun:function(){
+        this.isFind = false;
         this.showView.showMate = true;
         var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         elements.className = "BMap_noprint anchorBL bottom48"; 
         let _state = store.state.mapData;
         let map = store.state.map;
+        
         let point = new BMap.Point(_state.site.lng,_state.site.lat);
-        // let marker = new BMap.Marker(_state.site.lng,_state.site.lat);
-        // map.panTo(_state.site.lng,_state.site.lat)
-        // console.log(_state.site.lat,_state.site.lng)
-        // map.addOverlay(marker);
-        map.centerAndZoom(point, store.state.mapData.scale);
-        let circle = new BMap.Circle(point,store.state.mapData.distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        let scale = Math.round(Math.log(80000000 / (store.state.mapData.speed*store.state.mapData.time)) / Math.log(2)) - 1;
+        map.centerAndZoom(point, scale);
+        let circle = new BMap.Circle(point,store.state.mapData.speed*store.state.mapData.time,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         
         map.addOverlay(circle); //增加圆
       },
       hiddenMateFun: function(msg){
         this.showView.showMate = msg;
+        this.isFind = true;
       },
       baiduMap: function () {
         let map = new BMap.Map("allmap");
@@ -351,6 +372,67 @@ li {
     background: rgba(0, 0, 0, 0.5);
   }
 
+
+  .shadow{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 95vw;
+    height: 95vw;
+    border-radius: 100%;
+    background-color: #78e9fe;
+	  opacity: 0.35;
+    z-index: 10;
+    margin: auto;
+  }
+
+  .find-house{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 24vw;
+    height: 21vw;
+    z-index: 20;
+    margin: auto;
+  }
+
+  .find-house p{
+    position: relative;
+    width: 24vw;
+    height: 7vw;
+    text-align: center;
+    line-height: 7vw;
+    background-color: #ffffff;
+    border-radius: 1vw;
+    font-size: 4vw;
+    letter-spacing: 0vw;
+    color: #272727;
+    box-shadow: 0vw 0vw 1vw 0vw 
+		rgba(0, 11, 10, 0.2);
+  }
+  .find-house p::before{
+    content: "";
+    position: absolute;
+    top:5.5vw;
+    left: 9.5vw;
+    border-width: 3vw;
+    border-style: solid;
+    border-color: #ffffff transparent transparent;
+  }
+
+  .site-pin{
+    width: 6vw;
+    height: 12vw;
+    background: url(../assets/images/icon/sitepin.png) no-repeat;
+    background-size: 100%;
+    margin-left: 9.5vw;
+    margin-top: 2vw;
+  }
+
   /*过渡动画*/
   .screen-enter-active,.screen-leave-active {
   transition: all .3s linear;
@@ -378,6 +460,7 @@ li {
     white-space : nowrap;
     -moz-user-select : none;
     font-size : 4vw;
+    z-index: 100;
 }
 
 .label_arrow{

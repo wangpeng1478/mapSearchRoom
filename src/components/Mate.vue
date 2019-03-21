@@ -15,6 +15,7 @@
                 sliderMin='0'  
                 sliderMax='4' 
                 step='4'
+                @moveStep = "checkTime"
             ></slider-component>
             <div class="mate_time">
                 <span>20分</span>
@@ -48,37 +49,38 @@ export default {
         mapData(){
             this.$store.state.mapData.type;
             this.$store.state.mapData.site;
-             return this.$store.state.mapData;
+            this.$store.state.mapData.speed;
+            this.$store.state.mapData.time;
+            return this.$store.state.mapData;
         }
     },
     created: function (){
     },
     watch:{
         mapData:(newQuestion, oldQuestion)=>{
-            
             var mp = store.state.map;
             var _state = store.state.mapData
             let point = new BMap.Point(_state.site.lng,_state.site.lat);
             let type = newQuestion.type;
-            let distance = 1000;
+            let speed = newQuestion.speed;
+            let time = newQuestion.time;
             switch (type) {
                 case 1:
-                    distance = 2000;
+                    speed = 1500;
                     break;
                 case 2:
-                    distance = 1500;
+                    speed = 1000;
                     break;
                 case 3:
-                    distance = 1000;
+                    speed = 500;
                     break;
                 case 4:
-                    distance = 500;
+                    speed = 100;
                     break;
                 default:
                     break;
             }
-            store.state.mapData.distance = distance;
-            
+            let distance = speed*time;
             let scale = Math.round(Math.log(80000000 / distance) / Math.log(2)) - 1;
             store.state.mapData.scale = scale;
             mp.centerAndZoom(point, scale);
@@ -117,6 +119,10 @@ export default {
         }
     },
     methods:{
+        checkTime : function (params) {
+            
+            this.$store.state.mapData.time = 20+10*params;
+        },
         backFun : function (){
             var mp = store.state.map;
             var hiddenMate = false;
