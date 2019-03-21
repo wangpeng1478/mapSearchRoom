@@ -8,12 +8,12 @@ export default new Vuex.Store({
     mapData:{
       type:2,
       sliderLeft:0,
-      scale:15,
+      scale:11,
       speed:1000,
       time:20,
       site:{
-        lat: 39.9093,
-        lng: 116.3964
+        lat: 31.2363429624,
+        lng: 121.4803295328
       },
     },
     map:"",

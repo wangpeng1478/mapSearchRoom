@@ -55,6 +55,15 @@
       })
     },
     methods : {
+      clickPrc:function(){
+        console.log("111")
+        let map = store.state.map;
+        
+        // map.enableMassClear();
+        map.clearOverlays();
+        let overlays = map.getOverlays();
+        console.log(overlays)
+      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
@@ -91,6 +100,10 @@
         this.isFind = true;
       },
       baiduMap: function () {
+        //模拟数据
+        let that = this;
+        let httpData = this.http.queryMapData.data;
+        console.log(httpData)
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
         _state.map = map;
@@ -100,6 +113,11 @@
         map.centerAndZoom(point,_state.mapData.scale);
         // 初始化地图，设置中心点坐标和地图级别 
         map.enableScrollWheelZoom(true);
+        map.addEventListener("touchmove", function () {
+          map.enableDragging();
+        });
+
+
         let geolocationControl = new BMap.GeolocationControl();
         map.addControl(geolocationControl); 
 
@@ -120,6 +138,7 @@
         }
         ComplexCustomOverlay.prototype = new BMap.Marker();
         ComplexCustomOverlay.prototype.initialize = function(map){ 
+          let _this = this;
           this._map = map;
           var div = this._div = document.createElement("div");
           div.className = "location_label";
@@ -133,8 +152,9 @@
           p.appendChild(document.createTextNode("¥1500+"));
           var p2 = this._p = document.createElement("p");
           p2.style.margin = "0px";
+          p2.style.textAlign = "center";
           div.appendChild(p2);
-          p2.appendChild(document.createTextNode("1000间"));
+          p2.appendChild(document.createTextNode(_this._overText));
 
           var arrow = this._arrow = document.createElement("div");
           arrow.className = "label_arrow";
@@ -145,7 +165,7 @@
           var p3 = this.p3 = document.createElement("p");
           p3.className = "label_area_name";
           div.appendChild(p3);
-          p3.appendChild(document.createTextNode("银湖海岸城"));
+          p3.appendChild(document.createTextNode(_this._text));
         
 
           map.getPanes().labelPane.appendChild(div);
@@ -158,11 +178,27 @@
           this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
           this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
         }
-        var txt = "银湖海岸城", mouseoverTxt = txt + " " + parseInt(Math.random() * 1000,10) + "套" ;
-            
-        var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(116.407845,39.914101), "银湖海岸城");
 
-        myCompOverlay.disableMassClear();
+
+        httpData.prcList.map((val,index)=>{
+          var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
+          var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(val.longitude,val.latitude), val.prcName,mouseoverTxt);
+          // myCompOverlay.disableMassClear();
+          map.addOverlay(myCompOverlay);
+          //覆盖物添加点击事件
+          myCompOverlay._div.addEventListener('touchstart',function(){
+           map.disableDragging();  //禁用地图拖拽功能
+          });
+          myCompOverlay._div.addEventListener("click", function () {
+            that.clickPrc();
+          });
+          // store.state.map= map
+          console.log(map.getOverlays())
+          return;
+        })
+
+        console.log(httpData.prcList)
+        
         // showOver();
         // var canvasLayer = new BMap.CanvasLayer({
         //         update: update
@@ -192,7 +228,7 @@
         // mp.addOverlay(canvasLayer);
 
         // var overlay=[canvasLayer,myCompOverlay];
-        map.addOverlay(myCompOverlay);
+        
 
           //定位
         // var geolocation = new BMap.Geolocation();
@@ -475,6 +511,7 @@ li {
 .label_area_name{
   position : absolute;
   margin : 0px;
+  width: 19vw;
   height : 5vw;
   line-height : 5vw;
   padding : 0vw 2vw;
