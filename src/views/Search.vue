@@ -6,7 +6,7 @@
         placeholder="请输入小区/区域/地图"
         maxlength="100"
         v-model="searchValue"
-        @input="LocalSearch"
+        @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''"></i>
       <router-link to="/">取消</router-link>
@@ -21,7 +21,11 @@
           </p>
         </div>
         <ul class="tag-list" v-if="searchTagHistory.length!=0">
-          <li v-for="historyTag in searchTagHistory" :key="historyTag.id">{{historyTag.keyWords}}</li>
+          <li
+            @click="handleSearchTag(index,'searchTagHistory')"
+            v-for="(historyTag,index) in searchTagHistory"
+            :key="historyTag.id"
+          >{{historyTag.keyWords}}</li>
         </ul>
       </div>
       <div class="search-tag-list">
@@ -29,7 +33,11 @@
           <p class="tag-tit">热门搜索</p>
         </div>
         <ul class="tag-list" v-if="searchTagHot.length!=0">
-          <li v-for="hotTag in searchTagHot" :key="hotTag.id">{{hotTag.keyWords}}</li>
+          <li
+            @click="handleSearchTag(index,'searchTagHot')"
+            v-for="(hotTag,index) in searchTagHot"
+            :key="hotTag.id"
+          >{{hotTag.keyWords}}</li>
         </ul>
       </div>
     </div>
@@ -74,41 +82,7 @@ export default {
     return {
       isRegion: false, //true为区域搜索，false为位置搜索
       searchValue: "",
-      searchTagHistory: [
-        {
-          id: 18,
-          keyWords: "徐汇区",
-          latitude: "31.1779920000",
-          longitude: "121.4399930000",
-          parentId: 0,
-          remark: "",
-          tableId: 4,
-          typeId: 7,
-          typeName: "行政区"
-        },
-        {
-          id: 337,
-          keyWords: "地铁7号线",
-          latitude: "",
-          longitude: "",
-          parentId: 0,
-          remark: "",
-          tableId: 7,
-          typeId: 3,
-          typeName: "地铁线路"
-        },
-        {
-          id: 3781,
-          keyWords: "地铁1号线",
-          latitude: "",
-          longitude: "",
-          parentId: 0,
-          remark: "",
-          tableId: 1,
-          typeId: 3,
-          typeName: "地铁线路"
-        }
-      ],
+      searchTagHistory: [],
       searchTagHot: [
         {
           id: 18,
@@ -192,14 +166,36 @@ export default {
       ]
     };
   },
+  mounted() {
+    let searchTagHistory;
+    if (localStorage.searchTagHistory) {
+        searchTagHistory = JSON.parse(localStorage.searchTagHistory);
+      } else {
+        searchTagHistory = [];
+      }
+      this.searchTagHistory = searchTagHistory
+  },
   methods: {
-    clearHistory() {
-      localStorage.setItem("key", "value");
-    },
+    clearHistory() {},
     handleInput() {
-      //发送请求
+      //搜索框输入
     },
-    LocalSearch() {}
+    handleSearchTag(idx, name) {
+      //点击历史或者热门的tag
+      let tag = this[name][idx];
+      let searchTagHistory =  JSON.parse(JSON.stringify(this.searchTagHistory));
+      let _index = searchTagHistory.findIndex(item => {
+        return item.id == tag.id;
+      });
+      console.log(_index);
+      if (_index != -1) {
+        searchTagHistory.splice(_index, 1);
+      }
+      searchTagHistory.unshift(tag);
+      searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
+      console.log(searchTagHistory);
+      localStorage.setItem("searchTagHistory", searchTagHistory);
+    }
   }
 };
 </script>
