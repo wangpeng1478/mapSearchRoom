@@ -4,7 +4,7 @@
       <input
         type="text"
         placeholder="请输入小区/区域/地图"
-        maxlength="100"
+        maxlength="50"
         v-model="searchValue"
         @input="handleInput"
       >
@@ -187,13 +187,11 @@ export default {
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;
       });
-      console.log(_index);
       if (_index != -1) {
         searchTagHistory.splice(_index, 1);
       }
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
-      console.log(searchTagHistory);
       localStorage.setItem("searchTagHistory", searchTagHistory);
     }
   }

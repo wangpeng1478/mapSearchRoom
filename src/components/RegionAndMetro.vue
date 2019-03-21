@@ -3,21 +3,21 @@
   <div class="region-mask" @click="hiddenRegion"></div>
   <div class="region">
     <ul class="u1">
-      <li :class="selected[0]==0 ? 'selected' : ''">不限</li>
-      <li :class="selected[0]==1 ? 'selected' : ''">区域</li>
-      <li :class="selected[0]==2 ? 'selected' : ''">地铁</li>
+      <li @click="handleSelect(0,0)" :class="selected[0]==0 ? 'selected' : ''">不限</li>
+      <li @click="handleSelect(0,1)" :class="selected[0]==1 ? 'selected' : ''">区域</li>
+      <li @click="handleSelect(0,2)" :class="selected[0]==2 ? 'selected' : ''">地铁</li>
     </ul>
     <ul class="u2">
-      <li>不限</li>
+      <li  @click="handleSelect(1,-1)" v-if="selected[0]!=0" :class="selected[1] == -1 ? 'selected' : ''">不限</li>
       <template v-if="selected[0]==1">
-        <li
+        <li @click="handleSelect(1,index)"
           v-for="(provincial,index) in provincialList"
           :key="provincial.prcId"
           :class="selected[1]==index ? 'selected' : ''"
         >{{provincial.prcName}}</li>
       </template>
       <template v-if="selected[0]==2">
-        <li
+        <li @click="handleSelect(1,index)"
           v-for="(metro,index) in metroList"
           :key="metro.metroId"
           :class="selected[1]==index ? 'selected' : ''"
@@ -25,20 +25,20 @@
       </template>
     </ul>
     <ul class="u3">
-      <li>不限</li>
-      <template v-if="selected[0]==1">
-        <li
-          v-for="(metro,index) in metroList"
-          :key="metro.metroId"
-          :class="selected[1]==index ? 'selected' : ''"
-        >{{metro.simpleName}}</li>
+      <li @click="handleSelect(2,-1)" v-if="selected[0]!=-1 && selected[1]!=-1" :class="selected[2] == -1 ? 'selected' : ''">不限</li>
+      <template v-if="selected[0]==1&& selected[1]!=-1">
+        <li @click="handleSelect(2,index)"
+          v-for="(area,index) in provincialList[selected[1]].areaList"
+          :key="area.ceaId"
+          :class="selected[2]==index ? 'selected' : ''"
+        >{{area.ceaName}}</li>
       </template>
-      <template v-if="selected[0]==2">
-        <li
-          v-for="(metro,index) in metroList"
-          :key="metro.metroId"
-          :class="selected[1]==index ? 'selected' : ''"
-        >{{metro.simpleName}}</li>
+      <template v-if="selected[0]==2 && selected[1]!=-1">
+        <li  @click="handleSelect(2,index)"
+          v-for="(station,index) in metroList[selected[1]].metroStationList"
+          :key="station.stationId"
+          :class="selected[2]==index ? 'selected' : ''"
+        >{{station.stationName}}</li>
       </template>
     </ul>
   </div>
@@ -5821,13 +5821,19 @@ export default {
           areaList: []
         }
       ],
-      selected: [1, 0, 0]
+      selected: [0, -1, -1]
     };
   },
  methods:{
     hiddenRegion(){
-    console.log('hiddenRegion')
     this.$emit("hiddenRegion")
+  },
+  handleSelect(category,index){
+    let selected = JSON.parse(JSON.stringify(this.selected));
+    selected[category]=index;
+    selected.splice(category+1,2-category,-1,-1);
+    selected=selected.slice(0,3);
+    this.selected=selected;
   }
  }
 };
@@ -5870,6 +5876,7 @@ export default {
   height: 12vw;
   line-height: 12vw;
   text-align: center;
+  overflow: hidden;
 }
 .u1 {
   width: 27vw;
