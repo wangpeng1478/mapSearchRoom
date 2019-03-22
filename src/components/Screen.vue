@@ -21,7 +21,7 @@
       </div>
       <div class="screen-item">
         <h4>房间价格（元）</h4>
-        <Slider defaultValue='0,0' step="10" mode='double'/>
+        <Slider defaultValue='0,5' step="10" @sliderChange="customPrice"/>
         <ul>
           <li
             v-for="price in priceList"
@@ -188,6 +188,9 @@ export default {
     Slider
   },
   methods: {
+    customPrice(e){
+      console.log('缺少自定义价格函数');
+    },
     selectionArea() {
       this.$emit("selectionArea");
     },

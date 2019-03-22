@@ -1,20 +1,17 @@
 <template>
   <div class="slider-wrap">
-    <div class="mate_line_active"></div>
+    <div class="mate_line_active" :style="activeLine"></div>
     <span
       class="slider"
-      @touchstart="touchSlider"
-      @touchmove="moveSlider"
-      @touchend="endSlider"
-      :style="sliderStyle.a"
+      @touchstart="touchSlider('a',$event)"
+      @touchmove="moveSlider('a',$event)"
+      :style="{left:sliderLeft.a+'px'}"
     ></span>
     <span
       class="slider"
-      v-if="mode=='double'"
-      @touchstart="touchSlider"
-      @touchmove="moveSlider"
-      @touchend="endSlider"
-      :style="sliderStyle.b"
+      @touchstart="touchSlider('b',$event)"
+      @touchmove="moveSlider('b',$event)"
+      :style="{left:sliderLeft.b+'px'}"
     ></span>
   </div>
 </template>
@@ -26,84 +23,64 @@ export default {
   name: "slider",
   data() {
     return {
-      value: [0,0],
-      sliderInfo: {
-        width: "70vw",
-        stepLength: ""
+      value:{
+        a:0,
+        b:10
       },
-      lineLength: 0,
-      startX: 0,
-      sliderLeft: 0,
-      sliderStyle: {
-        a: { left: "0vw" },
-        b: { left: "1vw" }
+      stepLength: 0,
+      temp:{
+        startX:0,
+        value:0
+      },
+      
+      sliderLeft: {
+        a: 0,
+        b: 0
+      },
+      activeLine: {
+        width: 0,
+        left: 0
       }
     };
   },
   store,
-  props: ["defaultValue", "step", "mode"],
+  props: ["step",'defaultValue'],
   mounted() {
-    this.sliderInfo = {
-      width: 70,
-      stepLength: 70/this.step
-    };
-    let value = this.defaultValue.split(',');
-    this.value = value;
-    this.sliderChange()
-    // this.lineLength = document.getElementsByClassName("mate_line")[0].offsetWidth;
-    // this.sliderLeft = store.state.mapData.sliderLeft;
-    // let s = document.getElementsByClassName("slider")[0],
-    //     lineA = document.getElementsByClassName("mate_line_active")[0];
-    // s.style.left = this.sliderLeft + "px";
-    // lineA.style.width = this.sliderLeft + "px";
+    let valueArr = this.defaultValue.split(',')
+    this.value = {
+      a:parseInt(valueArr[0]),
+      b:parseInt(valueArr[1])
+    }
+    this.stepLength = document.getElementsByClassName("slider-wrap")[0].offsetWidth / this.step;
+    this.sliderChange();
   },
   methods: {
-    touchSlider(e) {
-      // let target= e.srcElement? e.srcElement: e.target;
-      // this.startX = e.changedTouches[0].clientX;
-      
+    touchSlider: function(item, e) {
+      this.temp={
+        startX:e.changedTouches[0].clientX,
+        value:this.value[item]
+      }
     },
-    moveSlider: function(e) {
-      // let target= e.srcElement? e.srcElement: e.target;
-      // let moveX = e.changedTouches[0].clientX;
-      // let _x = Math.abs(moveX - this.startX);       //滑动距离
-      // let s = document.getElementsByClassName("slider")[0],
-      //     lineA = document.getElementsByClassName("mate_line_active")[0];
-      // let sl = this.lineLength/this.step;     //步长
-      // let num = Math.round(_x / sl);
-      // let lineLength = 0;
-      // if(this.sliderLeft + (moveX - this.startX)/_x*num*sl >= this.lineLength){
-      //     num = this.step;
-      //     lineLength = this.lineLength + "px";
-      // }else if(this.sliderLeft + (moveX - this.startX)/_x*num*sl <= 0){
-      //     num = 0;
-      //     lineLength = 0 + "px";
-      // }else{
-      //     lineLength = this.sliderLeft + (moveX - this.startX)/_x*num*sl + "px";
-      // }
-      // s.style.left = lineLength;
-      // lineA.style.width = lineLength;
-      // this.$emit("moveStep",num)
-
-    console.log(e)
-
-
-    },
-    endSlider() {
-      // let s = document.getElementsByClassName("slider")[0];
-      // this.sliderLeft = parseFloat(s.style.left);
-      // store.state.mapData.sliderLeft = this.sliderLeft;
+    moveSlider: function(item, e) {
+      let value = this.value
+      let offsetLeft = e.changedTouches[0].clientX-this.temp.startX;
+      let valueChange = Math.round(offsetLeft/this.stepLength)+this.temp.value;
+      if((item=='a' && value.b>valueChange && valueChange>=0) || (item=='b' && value.a<valueChange  && valueChange<=this.step)){
+        value[item]=valueChange;
+        this.sliderChange();
+      }      
     },
     sliderChange(){
-        let stepLength = this.sliderInfo.stepLength
-        this.sliderStyle = {
-            a:{
-                left:this.value[0]*stepLength
-            },
-            b:{
-                left:this.value[1]*stepLength
-            }
-        }
+      let value = this.value;
+      this.sliderLeft = {
+        a:this.value.a*this.stepLength,
+        b:this.value.b*this.stepLength
+      }
+      this.activeLine = {
+        left:this.sliderLeft.a+'px',
+        width:(this.sliderLeft.b-this.sliderLeft.a)+'px'
+      }
+      this.$emit('sliderChange',[value.a,value.b])
     }
   }
 };
@@ -111,18 +88,18 @@ export default {
 
 <style scoped>
 .slider-wrap {
-  height: 5vw;
+  height: 6vw;
   position: relative;
-  width: 75vw;
+  width: 70vw;
   margin: 0 2.5vw;
-  height: 5vw;
+  height: 6vw;
 }
 .slider-wrap::before {
   content: "";
   display: block;
   position: absolute;
   width: 100%;
-  top: 2.2vw;
+  top: 2.6vw;
   height: 0.6vw;
   background: #e4e4e4;
 }
@@ -133,18 +110,17 @@ export default {
   left: 0;
   margin-left: -2.5vw;
   display: inline-block;
-  width: 5vw;
-  height: 5vw;
+  width: 6vw;
+  height: 6vw;
   background: url(../assets/images/icon/slider.png) no-repeat;
   background-size: 100% 100%;
+  z-index: 1;
 }
 
 .mate_line_active {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 0vw;
-  height: 3px;
+  top: 2.6vw;
+  height: 0.6vw;
   background-color: #f08b00;
 }
 </style>
