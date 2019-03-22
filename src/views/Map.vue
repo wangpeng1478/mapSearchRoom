@@ -35,7 +35,8 @@
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
   import store from '@/store'
-  import {mapState,mapMutations,mapGetters} from 'vuex'
+  import { Promise } from 'q'
+  import  ComplexOverlay  from '@/utils/prototype.js'
   export default {
     name: 'Map',
     data () {
@@ -55,30 +56,88 @@
       })
     },
     methods : {
-      clickPrc:function(){
-        console.log("111")
-        let map = store.state.map;
+      clickPrc:function(data){
+        var that =this;
+        this.$store.state.mapData.scale = 14;
+        this.$.showPrcHouse(data)
+        // let map = store.state.map;
+        // let httpData = this.http.queryMapData.data;
+        // let that = this;
+        // // map.enableMassClear();
+        // map.getOverlays().map((val)=>{
+        //     if(val._type=="ComplexOverlay"){
+        //        map.removeOverlay(val)
+        //     }else{}
+        //     return;
+        // })
+        // let point = new BMap.Point(data.longitude,data.latitude);
+        // this.$store.state.mapData.site.lat = data.latitude;
+        // this.$store.state.mapData.site.lng = data.longitude;
+        // this.$store.state.mapData.scale += 1;
+        // // 创建点坐标  
+        // map.centerAndZoom(point,this.$store.state.mapData.scale);
+        // let overlays = map.getOverlays();
+        // httpData.ceaList.map((val,index)=>{
+        //   if(val.prcId == data.prcId){
+        //     var txt = val.ceaName, mouseoverTxt = val.roomCount + "间";
+        //     var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+        //     map.addOverlay(myCompOverlay);
+        //     //覆盖物添加点击事件+
+        //     myCompOverlay._div.addEventListener('touchstart',function(){
+        //     map.disableDragging();  //禁用地图拖拽功能
+        //     });
+        //     myCompOverlay._div.addEventListener("click", function () {
+        //       that.clickCea(val);
+        //     });
+        //   }
+        //   return;
+        // })
+      },
+      clickCea:function(data){
+        // let map = store.state.map;
+        // let httpData = this.http.queryMapData.data;
+        // map.getOverlays().map((val)=>{
+        //     if(val._type=="ComplexOverlay"){
+        //        map.removeOverlay(val)
+        //     }else{}
+        //     return;
+        // })
+        // let point = new BMap.Point(data.longitude,data.latitude);
+        // this.$store.state.mapData.site.lat = data.latitude;
+        // this.$store.state.mapData.site.lng = data.longitude;
+        // this.$store.state.mapData.scale += 1;
+        // // 创建点坐标  
+        // map.centerAndZoom(point,this.$store.state.mapData.scale);
         
-        // map.enableMassClear();
-        map.clearOverlays();
-        let overlays = map.getOverlays();
-        console.log(overlays)
+        // httpData.villageList.map((val,index)=>{
+        //   if(val.ceaId == data.ceaId){
+        //     var txt = val.villageName, mouseoverTxt = val.roomCount + "间";
+        //     var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+        //     map.addOverlay(myCompOverlay);
+        //     //覆盖物添加点击事件+
+        //     myCompOverlay._div.addEventListener('touchstart',function(){
+        //     map.disableDragging();  //禁用地图拖拽功能
+        //     });
+        //     myCompOverlay._div.addEventListener("click", function () {
+        //       // that.clickCea(val);
+        //       alert(val.villageId,val.villageName)
+        //     });
+        //   }
+        //   return;
+        // })
       },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
         let center = map.getCenter();
         map.clearOverlays();
-        let point = new BMap.Point(center.lng,center.lat);
-        let scale = 16;
-        let distance = 3000;
-        this.$store.state.mapData.site.lng = center.lng;
-        this.$store.state.mapData.site.lat = center.lat;
-        this.$store.state.mapData.scale = scale;
-        map.centerAndZoom(point, scale);
-        let circle = new BMap.Circle(point,500,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        let point = new BMap.Point(_state.longitude,_state.latitude);
+        let distance = _state.speed * _state.time;
+        map.centerAndZoom(point, _state.scale);
+        let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         
         map.addOverlay(circle); //增加圆
+        store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
         this.isFind = false;
@@ -87,13 +146,14 @@
         elements.className = "BMap_noprint anchorBL bottom48"; 
         let _state = store.state.mapData;
         let map = store.state.map;
-        
-        let point = new BMap.Point(_state.site.lng,_state.site.lat);
-        let scale = Math.round(Math.log(80000000 / (store.state.mapData.speed*store.state.mapData.time)) / Math.log(2)) - 1;
+        let distance = store.state.mapData.speed*store.state.mapData.time;
+        let point = new BMap.Point(_state.longitude,_state.latitude);
+        let scale = _state.scale;
         map.centerAndZoom(point, scale);
-        let circle = new BMap.Circle(point,store.state.mapData.speed*store.state.mapData.time,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         
         map.addOverlay(circle); //增加圆
+        store.state.mapData.isOverLay = true;
       },
       hiddenMateFun: function(msg){
         this.showView.showMate = msg;
@@ -102,13 +162,12 @@
       baiduMap: function () {
         //模拟数据
         let that = this;
-        let httpData = this.http.queryMapData.data;
-        console.log(httpData)
+        // let httpData = this.http.queryMapData.data;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
         _state.map = map;
         // 创建地图实例 
-        let point = new BMap.Point(_state.mapData.site.lng,_state.mapData.site.lat);
+        let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
         map.centerAndZoom(point,_state.mapData.scale);
         // 初始化地图，设置中心点坐标和地图级别 
@@ -123,81 +182,59 @@
 
         //监听定位控件
         this.$.locationSuccess(geolocationControl);
+        //监听拖拽事件
+        this.$.movingEvent(map);
+        //监听缩放事件
+        this.$.zoomendEvent(map);
 
         //定位图标
-        // let marker = new BMap.Marker(point);  // 创建标注
-        // marker.disableMassClear();
-        // map.addOverlay(marker);               // 将标注添加到地图中
+        let marker = new BMap.Marker(point);  // 创建标注
+        marker.disableMassClear();
+        map.addOverlay(marker);               // 将标注添加到地图中
         // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-        // 复杂的自定义覆盖物
-        function ComplexCustomOverlay(point, text, mouseoverText){
-          this._point = point;
-          this._text = text;
-          this._overText = mouseoverText;
-        }
-        ComplexCustomOverlay.prototype = new BMap.Marker();
-        ComplexCustomOverlay.prototype.initialize = function(map){ 
-          let _this = this;
-          this._map = map;
-          var div = this._div = document.createElement("div");
-          div.className = "location_label";
-          div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-          div.style.width = "14vw";
-          div.style.height = "8vw";
+        this.$.showHouse(_state.mapData);
+        
+        // httpData.prcList.map((val,index)=>{
+        //   var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
+        //   var myCompOverlay = new ComplexOverlay.ComplexPrcOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+        //   map.addOverlay(myCompOverlay);
+        //   //覆盖物添加点击事件+
+        //   myCompOverlay._div.addEventListener('touchstart',function(){
+        //    map.disableDragging();  //禁用地图拖拽功能
+        //   });
+        //   myCompOverlay._div.addEventListener("click", function () {
+        //     that.clickPrc(val);
+        //   });
+        //   return;
+        // })
 
-          var p = this._p = document.createElement("p");
-          p.style.margin = "0px";
-          div.appendChild(p);
-          p.appendChild(document.createTextNode("¥1500+"));
-          var p2 = this._p = document.createElement("p");
-          p2.style.margin = "0px";
-          p2.style.textAlign = "center";
-          div.appendChild(p2);
-          p2.appendChild(document.createTextNode(_this._overText));
 
-          var arrow = this._arrow = document.createElement("div");
-          arrow.className = "label_arrow";
-          arrow.style.border = "8vw solid transparent";
-          arrow.style.borderTop = "3vw solid #0fb896";
-          div.appendChild(arrow);
 
-          var p3 = this.p3 = document.createElement("p");
-          p3.className = "label_area_name";
-          div.appendChild(p3);
-          p3.appendChild(document.createTextNode(_this._text));
+        //地铁房源
         
 
-          map.getPanes().labelPane.appendChild(div);
+        // let httpMetroStationData = this.http.queryMetroStationMapData.data;
+        
+        // httpMetroStationData.metroStationList.map((val,index)=>{
+        //   var txt = val.stationName, mouseoverTxt = val.roomCount + "间";
+        //   var myCompOverlay = new MetroStationOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt);
+        //   myCompOverlay.disableMassClear();
+        //   map.addOverlay(myCompOverlay);
+        //   //覆盖物添加点击事件+
           
-          return div;
-        }
-        ComplexCustomOverlay.prototype.draw = function(){
-          var map = this._map;
-          var pixel = map.pointToOverlayPixel(this._point);
-          this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
-          this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
-        }
+        //   myCompOverlay._div.addEventListener('touchstart',function(){
+        //    map.disableDragging();  //禁用地图拖拽功能
+        //   });
+        //   myCompOverlay._div.addEventListener("click", function () {
+        //     that.clickPrc();
+        //   });
+        //   return;
+        // })
 
 
-        httpData.prcList.map((val,index)=>{
-          var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
-          var myCompOverlay = new ComplexCustomOverlay(new BMap.Point(val.longitude,val.latitude), val.prcName,mouseoverTxt);
-          // myCompOverlay.disableMassClear();
-          map.addOverlay(myCompOverlay);
-          //覆盖物添加点击事件
-          myCompOverlay._div.addEventListener('touchstart',function(){
-           map.disableDragging();  //禁用地图拖拽功能
-          });
-          myCompOverlay._div.addEventListener("click", function () {
-            that.clickPrc();
-          });
-          // store.state.map= map
-          console.log(map.getOverlays())
-          return;
-        })
 
-        console.log(httpData.prcList)
+
         
         // showOver();
         // var canvasLayer = new BMap.CanvasLayer({
@@ -264,7 +301,6 @@
         this.showView.showRegionAndMetro=true;
       },
       hiddenRegion(){
-        console.log("hiddenRegion")
         this.showView.showRegionAndMetro=false;
       }
     }
@@ -487,7 +523,7 @@ li {
 </style>
 
 <style>
-.location_label{
+.location_label,.location_cea_label{
     position : absolute;
     background : #0fb896;
     color : white;
@@ -496,10 +532,10 @@ li {
     white-space : nowrap;
     -moz-user-select : none;
     font-size : 4vw;
-    z-index: 100;
+    z-index: 10000;
 }
 
-.label_arrow{
+.label_arrow,.label_cea_arrow{
     position : absolute;
     width : 0px;
     height : 0px;
@@ -508,7 +544,7 @@ li {
     overflow : hidden;
 }
 
-.label_area_name{
+.label_area_name,.label_area_cea_name{
   position : absolute;
   margin : 0px;
   width: 19vw;
@@ -525,5 +561,28 @@ li {
     left: auto !important;
     right: 10px !important;
   }
+
+
+  .location_metro_label{
+    position : absolute;
+    background : #0fb896;
+    color : white;
+    padding : 1vw;
+    line-height : 4vw;
+    white-space : nowrap;
+    -moz-user-select : none;
+    font-size : 4vw;
+    z-index: 100;
+    border-radius: 1vw;
+  }
+
+  .label_metro_arrow{
+    position : absolute;
+    width : 0px;
+    height : 0px;
+    top : 5vw;
+    left : 5vw;
+    overflow : hidden;
+}
 </style>
 

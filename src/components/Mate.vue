@@ -32,7 +32,6 @@
 
 import sliderComponent from '@/components/sliderComponent.vue'
 import store from '@/store'
-import {mapState,mapMutations,mapGetters} from 'vuex'
 export default {
     name: 'iMate',
     data () {
@@ -47,8 +46,10 @@ export default {
         // ...mapGetters(["getMap"]),
         // ...mapState(['mapData']),
         mapData(){
+            // this.$store.state.mapData
             this.$store.state.mapData.type;
-            this.$store.state.mapData.site;
+            this.$store.state.mapData.latitude;
+            this.$store.state.mapData.longitude;
             this.$store.state.mapData.speed;
             this.$store.state.mapData.time;
             return this.$store.state.mapData;
@@ -57,39 +58,43 @@ export default {
     created: function (){
     },
     watch:{
-        mapData:(newQuestion, oldQuestion)=>{
+        mapData:function(newQuestion, oldQuestion){
             var mp = store.state.map;
-            var _state = store.state.mapData
-            let point = new BMap.Point(_state.site.lng,_state.site.lat);
+            var _state = store.state.mapData;
+            let point = new BMap.Point(_state.longitude,_state.latitude);
             let type = newQuestion.type;
-            let speed = newQuestion.speed;
+            let speed = 0;
             let time = newQuestion.time;
-            switch (type) {
-                case 1:
-                    speed = 1500;
-                    break;
-                case 2:
-                    speed = 1000;
-                    break;
-                case 3:
-                    speed = 500;
-                    break;
-                case 4:
-                    speed = 100;
-                    break;
-                default:
-                    break;
-            }
+            this.http.trafficSpeedList.map((val)=>{
+                if(val.type == type){
+                    speed = val.speed;
+                    
+                }
+                return;
+            })
+            store.state.mapData.speed = speed;
             let distance = speed*time;
-            let scale = Math.round(Math.log(80000000 / distance) / Math.log(2)) - 1;
+            let scale = store.state.mapData.scale;
+            if(this.$store.state.mapData.isInvFind){
+                scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
+            }
+            
             store.state.mapData.scale = scale;
             mp.centerAndZoom(point, scale);
             var circle1 = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-            mp.clearOverlays();
+            mp.getOverlays().map((val)=>{
+                if(val._type=="ComplexOverlay"){
+                }else{
+                    mp.removeOverlay(val)
+                }
+                return;
+            })
             mp.addOverlay(circle1); //增加圆
-            
-            
-
+            store.state.mapData.isOverLay = true;
+            let json = {};
+            json = _state;
+            this.$.showHouse(json);
+            this.$store.state.mapData.isInvFind = false;
             // var canvasLayer = new BMap.CanvasLayer({
             //     update: update
             // });
@@ -128,12 +133,22 @@ export default {
             var hiddenMate = false;
             var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
                 elements.className = "BMap_noprint anchorBL "; 
-            mp.clearOverlays();
+            mp.getOverlays().map((val)=>{
+                if(val._type=="ComplexOverlay"){
+                
+                }else{
+                    mp.removeOverlay(val)
+                }
+                return;
+            })
+            store.state.mapData.isOverLay = false;
             this.$emit("hiddenMate",hiddenMate)
         },
         choose :function (res) {
+            this.$store.state.mapData.isInvFind = true;
             this.type = res;
             this.$store.state.mapData.type = res;
+            
         }
     }
 }
