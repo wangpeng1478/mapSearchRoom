@@ -67,6 +67,7 @@ export default {
       let valueChange = Math.round(offsetLeft/this.stepLength)+this.temp.value;
       if((item=='a' && value.b>valueChange && valueChange>=0) || (item=='b' && value.a<valueChange  && valueChange<=this.step)){
         value[item]=valueChange;
+        this.$emit('sliderChange',[value.a,value.b])
         this.sliderChange();
       }      
     },
@@ -80,7 +81,6 @@ export default {
         left:this.sliderLeft.a+'px',
         width:(this.sliderLeft.b-this.sliderLeft.a)+'px'
       }
-      this.$emit('sliderChange',[value.a,value.b])
     }
   }
 };
