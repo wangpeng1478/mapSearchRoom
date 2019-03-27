@@ -61,7 +61,11 @@ export default {
             }
             s.style.left = lineLength;
             lineA.style.width = lineLength;
-            this.$emit("moveStep",num)
+            if(this.num!=num){
+                this.num = num;
+                this.$emit("moveStep",num)
+            }
+            
             
         },
         endSlider : function () {

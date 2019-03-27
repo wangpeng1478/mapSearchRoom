@@ -56,8 +56,6 @@ export default {
             return this.$store.state.mapData;
         }
     },
-    created: function (){
-    },
     watch:{
         mapData:function(newQuestion, oldQuestion){
             var mp = store.state.map;
@@ -126,7 +124,6 @@ export default {
     },
     methods:{
         checkTime : function (params) {
-            
             this.$store.state.mapData.time = 20+10*params;
         },
         backFun : function (){

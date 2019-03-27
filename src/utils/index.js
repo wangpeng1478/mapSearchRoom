@@ -152,7 +152,6 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         
-        let overlays = map.getOverlays();
         httpData.prcList.map((val,index)=>{
             var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
             var myCompOverlay = new ComplexOverlay.ComplexPrcOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
