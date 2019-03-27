@@ -2,7 +2,7 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
-    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
+    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>{{currentCity.cityName}}</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
       <a href="#" target="_blank" class="iconfont icon-liebiao list">列表</a>
@@ -38,7 +38,7 @@
   import RegionAndMetro from '@/components/RegionAndMetro'
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
-  import {mapState} from 'vuex'
+  import {mapState,mapMutations} from 'vuex'
   export default {
     name: 'Map',
     data () {
@@ -52,7 +52,7 @@
       msg: String,
     },
     computed:{
-      // ...mapState(['currentCity','cityList']),
+      ...mapState(['currentCity']),
       cityList(){
         return this.$store.state.cityList;
       }
