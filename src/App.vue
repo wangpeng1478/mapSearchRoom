@@ -6,9 +6,36 @@
 </template>
 
 <script>
-
+import axios from 'axios'
+import API from '@/utils/api'
+import store from '@/store'
 export default {
-  name: "app"
+  name: "app",
+  created:function(){
+    this.$nextTick(function(){
+      this.httpQueryCityList();
+      this.httpQueryMapBaseData();
+    })
+    
+  },
+  methods:{
+    httpQueryCityList:function(){
+        let that = this;
+        axios.post(API['queryCityList'],{}).then((res)=>{
+          if(res.data.code == 0){
+             store.state.queryCityList = res.data;
+          }
+        })
+    },
+    httpQueryMapBaseData:function(){
+        let that = this;
+        axios.post(API['queryMapBaseData'],{cityId:2}).then((res)=>{
+          if(res.data.code == 0){
+             store.state.queryMapBaseData = res.data;
+          }
+        })
+    },
+  }
 };
 </script>
 

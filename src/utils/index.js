@@ -136,7 +136,7 @@ export default{ //很关键
     },
     showPrcHouse:function(){
         let map = store.state.map;
-        let httpData = http.queryMapData.data;
+        let httpData = http.queryMapBaseData.data;
         let that = this;
         // map.enableMassClear();
         map.getOverlays().map((val)=>{
@@ -151,8 +151,9 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        
-        httpData.prcList.map((val,index)=>{
+        console.log("httpData.provincialList",httpData)
+        httpData.provincialList.map((val,index)=>{
+            
             var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
             var myCompOverlay = new ComplexOverlay.ComplexPrcOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
             map.addOverlay(myCompOverlay);
@@ -169,7 +170,7 @@ export default{ //很关键
     showCeaHouse:function(data){
         let map = store.state.map;
         let mapData = store.state.mapData;
-        let httpData = http.queryMapData.data;
+        let httpData = http.queryMapBaseData.data;
         let that = this;
         let bounds = map.getBounds();
         // map.enableMassClear();
@@ -229,7 +230,7 @@ export default{ //很关键
     showVillageHouse:function(data){
         let map = store.state.map;
         
-        let httpData = http.queryMapData.data;
+        let httpData = http.queryMapBaseData.data;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
