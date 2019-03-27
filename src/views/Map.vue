@@ -21,10 +21,10 @@
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
-    <div @click="findHouse" class="find-house" v-if="isFind">
+    <!-- <div @click="findHouse" class="find-house" v-if="isFind">
       <p class="">点我找房</p>
       <div class="site-pin"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -193,44 +193,11 @@
         map.addOverlay(marker);               // 将标注添加到地图中
         // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-        this.$.showHouse(_state.mapData);
+        // this.$.showHouse(_state.mapData);
         
-        // httpData.prcList.map((val,index)=>{
-        //   var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
-        //   var myCompOverlay = new ComplexOverlay.ComplexPrcOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-        //   map.addOverlay(myCompOverlay);
-        //   //覆盖物添加点击事件+
-        //   myCompOverlay._div.addEventListener('touchstart',function(){
-        //    map.disableDragging();  //禁用地图拖拽功能
-        //   });
-        //   myCompOverlay._div.addEventListener("click", function () {
-        //     that.clickPrc(val);
-        //   });
-        //   return;
-        // })
+        this.$.showMetroStationHouse(_state.mapData);
 
-
-
-        //地铁房源
         
-
-        // let httpMetroStationData = this.http.queryMetroStationMapData.data;
-        
-        // httpMetroStationData.metroStationList.map((val,index)=>{
-        //   var txt = val.stationName, mouseoverTxt = val.roomCount + "间";
-        //   var myCompOverlay = new MetroStationOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt);
-        //   myCompOverlay.disableMassClear();
-        //   map.addOverlay(myCompOverlay);
-        //   //覆盖物添加点击事件+
-          
-        //   myCompOverlay._div.addEventListener('touchstart',function(){
-        //    map.disableDragging();  //禁用地图拖拽功能
-        //   });
-        //   myCompOverlay._div.addEventListener("click", function () {
-        //     that.clickPrc();
-        //   });
-        //   return;
-        // })
 
 
 
@@ -300,7 +267,8 @@
       selectionArea(){
         this.showView.showRegionAndMetro=true;
       },
-      hiddenRegion(){
+      hiddenRegion(msg){
+        console.log(msg)
         this.showView.showRegionAndMetro=false;
       }
     }

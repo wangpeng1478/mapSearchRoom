@@ -61,36 +61,61 @@ export default{ //很关键
         });
     },
     showHouse:function(data){
-        switch (data.scale) {
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                this.showPrcHouse();
-                break;
-            case 10:
-            case 11:
-            case 12:
-                this.showPrcHouse();
-                break;
-            case 13:
-            case 14:
-                this.showCeaHouse(data);
-                break
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-                this.showVillageHouse(data)
-                break;
-        
-            default:
-                break;
+        if(data.findHouseRank == 1){
+            switch (data.scale) {
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    this.showPrcHouse();
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                    this.showPrcHouse();
+                    break;
+                case 13:
+                case 14:
+                    this.showCeaHouse(data);
+                    break
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                    this.showVillageHouse(data)
+                    break;
+            
+                default:
+                    break;
+            }
+        }else if(data.findHouseRank == 2){
+            switch (data.scale) {
+
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                    this.showMetroStationHouse(data);
+                    break
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                case 19:
+                    this.showVillageHouse(data)
+                    break;
+            
+                default:
+                    break;
+            }
         }
+        
+        
     },
     showPrcHouse:function(){
         let map = store.state.map;
@@ -234,5 +259,40 @@ export default{ //很关键
         }
         
         
+    },
+    showMetroStationHouse:function(data){
+        //地铁房源
+        let map = store.state.map;
+
+        let httpMetroStationData = http.queryMetroStationMapData.data;
+        let that = this;
+        map.getOverlays().map((val)=>{
+            if(val._type=="ComplexOverlay"){
+               map.removeOverlay(val)
+            }else{}
+            return;
+        })
+        let point = new BMap.Point(data.longitude,data.latitude);
+        store.state.mapData.latitude = data.latitude;
+        store.state.mapData.longitude = data.longitude;
+        store.state.mapData.scale = 12;
+        // 创建点坐标  
+        map.centerAndZoom(point,store.state.mapData.scale);
+        let bounds = map.getBounds();
+        httpMetroStationData.metroStationList.map((val,index)=>{
+          var txt = val.stationName, mouseoverTxt = val.roomCount + "间";
+          var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+        //   myCompOverlay.disableMassClear();
+          map.addOverlay(myCompOverlay);
+          //覆盖物添加点击事件+
+          
+          myCompOverlay._div.addEventListener('touchstart',function(){
+           map.disableDragging();  //禁用地图拖拽功能
+          });
+          myCompOverlay._div.addEventListener("click", function () {
+            that.showVillageHouse(val);
+          });
+          return;
+        })
     }
 }

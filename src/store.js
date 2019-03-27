@@ -16,8 +16,9 @@ export default new Vuex.Store({
       prcId:0,
       ceaId:0,
       villageId:0,
-      isOverLay:false,
-      isInvFind:false,
+      isOverLay:false,    //显示覆盖物里的房源
+      isInvFind:false,    //是否为个性找房
+      findHouseRank:1          //1  区域找房       2 地铁找房
     },
     map:"",
   },
