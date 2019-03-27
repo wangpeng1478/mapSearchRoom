@@ -38,6 +38,7 @@
   import RegionAndMetro from '@/components/RegionAndMetro'
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
+  import {mapState} from 'vuex'
   export default {
     name: 'Map',
     data () {
@@ -50,16 +51,30 @@
     props: {
       msg: String,
     },
+    computed:{
+      // ...mapState(['currentCity','cityList']),
+      cityList(){
+        return this.$store.state.cityList;
+      }
+    },
+    watch:{
+      cityList:function(newQuestion, oldQuestion){
+        // console.log('watch')
+        // console.log(newQuestion)
+        // console.log(oldQuestion)
+        if(oldQuestion==null){
+          this.baiduMap()
+        }
+          
+      }
+    },
     mounted : function () {
-      axios.post(API['queryCityList'])
-      .then(res=>{
-        console.log(res)
-      })
 
 
 
       this.viewSetDefault()
       this.$nextTick(function(){
+        // console.log("store.state.mapBaseData",mapBaseData)
         this.baiduMap();
       })
     },
@@ -169,6 +184,7 @@
         this.isFind = true;
       },
       baiduMap: function () {
+        console.log("store.state.cityList",store.state.cityList)
         //模拟数据
         let that = this;
         // let httpData = this.http.queryMapBaseData.data;

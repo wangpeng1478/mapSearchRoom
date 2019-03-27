@@ -19,27 +19,16 @@
 <script>
 import API from '@/utils/api'
 import axios from 'axios'
-import {mapState,mapMutations} from 'vuex'
+import {mapState} from 'vuex'
 export default {
   name: "Address",
   data() {
     return {
-      cityList: [],
       localCity: -1,
       positionState: 1 //定位状态，1：正在定位，0：定位完成
     };
   },
-  mounted() {
-    axios.post(API['queryCityList'])
-      .then(res=>{
-        console.log(res.data.data)
-        this.cityList = res.data.data;
-        this.getLocation();
-      })
-    
-  },
   methods: {
-    ...mapMutations([]),
     chooseCity(idx){
       console.log(idx)
 
@@ -58,7 +47,7 @@ export default {
       });
     }
   },
-  computed:mapState(['currentCity'])
+  computed:mapState(['currentCity','cityList'])
 };
 </script>
 <style scoped>

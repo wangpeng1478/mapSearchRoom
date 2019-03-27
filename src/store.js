@@ -28,8 +28,6 @@ export default new Vuex.Store({
   mutations: {
     //state赋值公共方法
     assign(state,data){
-      console.log('########')
-      console.log(data)
       state[data.key] = data.value
     }
   },
