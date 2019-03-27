@@ -22,17 +22,21 @@ export default new Vuex.Store({
       findHouseRank:1          //1  区域找房       2 地铁找房
     },
     map:"",
-    queryCityList:null,
-    queryMapBaseData:null
+    cityList:null,
+    mapBaseData:null
   },
   mutations: {
     //state赋值公共方法
-    assign(state,key,data){
-      state[key] = data
+    assign(state,data){
+      console.log('########')
+      console.log(data)
+      state[data.key] = data.value
     }
   },
   actions: {
-
+    assignAsync(context,key,data){
+      context.commit('assign',key,data)
+    }
   },
   getters: {
     getMap:state => {

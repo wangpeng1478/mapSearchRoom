@@ -6,36 +6,48 @@
 </template>
 
 <script>
-import axios from 'axios'
-import API from '@/utils/api'
-import store from '@/store'
+import axios from "axios";
+import API from "@/utils/api";
+import { mapState, mapMutations } from "vuex";
+import store from "@/store";
 export default {
   name: "app",
-  created:function(){
-    this.$nextTick(function(){
+  created: function() {
+    this.$nextTick(function() {
       this.httpQueryCityList();
       this.httpQueryMapBaseData();
-    })
+    });
+  },
+  mounted() {
     
   },
-  methods:{
-    httpQueryCityList:function(){
-        let that = this;
-        axios.post(API['queryCityList'],{}).then((res)=>{
-          if(res.data.code == 0){
-             store.state.queryCityList = res.data;
-          }
-        })
+  methods: {
+    ...mapMutations(["assign"]),
+
+    httpQueryCityList: function() {
+      let _this = this;
+      axios.post(API["queryCityList"]).then(res => {
+        if (res.data.code == 0) {
+          _this.assign({
+            key: "cityList",
+            value: res.data.data
+          });
+        }
+      });
     },
-    httpQueryMapBaseData:function(){
-        let that = this;
-        axios.post(API['queryMapBaseData'],{cityId:2}).then((res)=>{
-          if(res.data.code == 0){
-             store.state.queryMapBaseData = res.data;
-          }
-        })
-    },
-  }
+    httpQueryMapBaseData: function() {
+      let that = this;
+      axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
+        if (res.data.code == 0) {
+          _this.assign({
+            key: "mapBaseData",
+            value: res.data.data
+          });
+        }
+      });
+    }
+  },
+  store
 };
 </script>
 
@@ -78,17 +90,16 @@ a:hover {
 ul li {
   list-style: none;
 }
-input{
-  outline:none;
+input {
+  outline: none;
 }
-button{
+button {
   background: none;
   border: none;
-  outline:none;
+  outline: none;
 }
 
-.bottom48{
-  bottom:48vw !important;
+.bottom48 {
+  bottom: 48vw !important;
 }
-
 </style>
