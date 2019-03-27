@@ -22,6 +22,8 @@ export default new Vuex.Store({
       findHouseRank:1          //1  区域找房       2 地铁找房
     },
     map:"",
+    queryCityList:null,
+    queryMapBaseData:null
   },
   mutations: {
     //state赋值公共方法

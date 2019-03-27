@@ -64,12 +64,13 @@
       })
     },
     methods : {
+      
       clickPrc:function(data){
         var that =this;
         this.$store.state.mapData.scale = 14;
         this.$.showPrcHouse(data)
         // let map = store.state.map;
-        // let httpData = this.http.queryMapData.data;
+        // let httpData = this.http.queryMapBaseData.data;
         // let that = this;
         // // map.enableMassClear();
         // map.getOverlays().map((val)=>{
@@ -103,7 +104,7 @@
       },
       clickCea:function(data){
         // let map = store.state.map;
-        // let httpData = this.http.queryMapData.data;
+        // let httpData = this.http.queryMapBaseData.data;
         // map.getOverlays().map((val)=>{
         //     if(val._type=="ComplexOverlay"){
         //        map.removeOverlay(val)
@@ -170,7 +171,7 @@
       baiduMap: function () {
         //模拟数据
         let that = this;
-        // let httpData = this.http.queryMapData.data;
+        // let httpData = this.http.queryMapBaseData.data;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
         _state.map = map;
@@ -201,9 +202,10 @@
         map.addOverlay(marker);               // 将标注添加到地图中
         // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-        // this.$.showHouse(_state.mapData);
+        this.$.showHouse(_state.mapData);
+      
         
-        this.$.showMetroStationHouse(_state.mapData);
+        // this.$.showMetroStationHouse(_state.mapData);
 
         
 
