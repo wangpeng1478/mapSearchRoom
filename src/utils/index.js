@@ -39,25 +39,42 @@ export default{ //很关键
         var that = this;
         obj.addEventListener("moving", function(e){
             let map = store.state.map;
-            var cp = map.getCenter();
-            store.state.mapData.latitude = cp.lat;
-            store.state.mapData.longitude = cp.lng;
-            var json = {};
-            json = store.state.mapData;
-            that.showHouse(json)
+            let mapData = store.state.mapData;
+            if(mapData.isOverLay){
+                var json = {};
+                json = store.state.mapData;
+                that.showHouse(json)
+            }else{
+                var cp = map.getCenter();
+                store.state.mapData.latitude = cp.lat;
+                store.state.mapData.longitude = cp.lng;
+                var json = {};
+                json = store.state.mapData;
+                that.showHouse(json)
+            }
+            
         });
     },
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
-            let zoom = e.currentTarget.getZoom();
-            var cp = obj.getCenter();
-            store.state.mapData.latitude = cp.lat;
-            store.state.mapData.longitude = cp.lng;
-            store.state.mapData.scale =  zoom;
-            var json = {};
-            json = store.state.mapData;
-            that.showHouse(json)
+            let map = store.state.map;
+            let mapData = store.state.mapData;
+            if(mapData.isOverLay){
+                var json = {};
+                json = store.state.mapData;
+                that.showHouse(json)
+            }else{
+                let zoom = e.currentTarget.getZoom();
+                var cp = obj.getCenter();
+                store.state.mapData.latitude = cp.lat;
+                store.state.mapData.longitude = cp.lng;
+                store.state.mapData.scale =  zoom;
+                var json = {};
+                json = store.state.mapData;
+                that.showHouse(json)
+            }
+            
         });
     },
     showHouse:function(data){
@@ -129,8 +146,12 @@ export default{ //很关键
             return;
         })
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-        // 创建点坐标  
-        map.centerAndZoom(point,store.state.mapData.scale);
+        // 创建点坐标 
+        let mapData = store.state.mapData; 
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
+        }
+        
         let overlays = map.getOverlays();
         httpData.prcList.map((val,index)=>{
             var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
@@ -148,6 +169,7 @@ export default{ //很关键
     },
     showCeaHouse:function(data){
         let map = store.state.map;
+        let mapData = store.state.mapData;
         let httpData = http.queryMapData.data;
         let that = this;
         let bounds = map.getBounds();
@@ -163,7 +185,9 @@ export default{ //很关键
         store.state.mapData.longitude = data.longitude;
         store.state.mapData.scale = 14
         // 创建点坐标  
-        map.centerAndZoom(point,store.state.mapData.scale);
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
+        }
         let overlays = map.getOverlays();
         if(store.state.mapData.prcId){
             httpData.ceaList.map((val,index)=>{
@@ -218,7 +242,10 @@ export default{ //很关键
         store.state.mapData.longitude = data.longitude;
         store.state.mapData.scale = 15;
         // 创建点坐标  
-        map.centerAndZoom(point,store.state.mapData.scale);
+        let mapData = store.state.mapData; 
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
+        }
         let bounds = map.getBounds();
         if(store.state.mapData.ceaId){
             httpData.villageList.map((val,index)=>{
@@ -277,7 +304,10 @@ export default{ //很关键
         store.state.mapData.longitude = data.longitude;
         store.state.mapData.scale = 12;
         // 创建点坐标  
-        map.centerAndZoom(point,store.state.mapData.scale);
+        let mapData = store.state.mapData; 
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
+        }
         let bounds = map.getBounds();
         httpMetroStationData.metroStationList.map((val,index)=>{
           var txt = val.stationName, mouseoverTxt = val.roomCount + "间";
