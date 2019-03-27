@@ -8,7 +8,6 @@ export default new Vuex.Store({
   state: {
     mapData:{
       type:2,
-      sliderLeft:0,
       scale:11,
       speed:800,
       time:20,

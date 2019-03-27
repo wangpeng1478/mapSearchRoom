@@ -11,12 +11,13 @@
                 <span class="iconfont icon-buhang" :class="mapData.type == 4?'active':''" @click="choose(4)"></span>
             </div>
             
-            <slider-component
+            <sliderComponent
                 sliderMin='0'  
                 sliderMax='4' 
                 step='4'
+                value=1
                 @moveStep = "checkTime"
-            ></slider-component>
+            ></sliderComponent>
             <div class="mate_time">
                 <span>20分</span>
                 <span>30分</span>

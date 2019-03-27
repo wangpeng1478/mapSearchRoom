@@ -9,6 +9,7 @@
 
 
 <script>
+//TODO:  isInvFind
 import store from '@/store'
 export default {
     name: 'slider',
@@ -17,13 +18,17 @@ export default {
             lineLength:0,
             startX:0,
             sliderLeft:0,
+            sl:0,    //步长
+            num:0
         }
     },
     store,
-    props: ["sliderMin","sliderMax","step"],
+    props: ["sliderMin","sliderMax","step","value"],
     mounted: function (){
         this.lineLength = document.getElementsByClassName("mate_line")[0].offsetWidth;
-        this.sliderLeft = store.state.mapData.sliderLeft ;
+        this.sl = this.lineLength/this.step; 
+        this.num = this.value;
+        this.sliderLeft = this.num*this.sl;
         let s = document.getElementsByClassName("slider")[0],
             lineA = document.getElementsByClassName("mate_line_active")[0];
         s.style.left = this.sliderLeft + "px";
@@ -36,13 +41,13 @@ export default {
             
         },
         moveSlider:function (e) {
+            let sl = this.sl;
             this.$store.state.mapData.isInvFind = true;
             let target= e.srcElement? e.srcElement: e.target;
             let moveX = e.changedTouches[0].clientX;
             let _x = Math.abs(moveX - this.startX);       //滑动距离
             let s = document.getElementsByClassName("slider")[0],
                 lineA = document.getElementsByClassName("mate_line_active")[0];
-            let sl = this.lineLength/this.step;     //步长
             let num = Math.round(_x / sl);
             let lineLength = 0;
             if(this.sliderLeft + (moveX - this.startX)/_x*num*sl >= this.lineLength){
@@ -60,9 +65,7 @@ export default {
             
         },
         endSlider : function () {
-            let s = document.getElementsByClassName("slider")[0];
-            this.sliderLeft = parseFloat(s.style.left);
-            store.state.mapData.sliderLeft = this.sliderLeft;
+
             this.$store.state.mapData.isInvFind = false;
         }
     }
