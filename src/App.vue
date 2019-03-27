@@ -8,7 +8,7 @@
 <script>
 import axios from "axios";
 import API from "@/utils/api";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations,mapActions } from "vuex";
 import store from "@/store";
 export default {
   name: "app",
@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     ...mapMutations(["assign"]),
-
+    ...mapActions(['assignAsync']),
     httpQueryCityList: function() {
       let _this = this;
       axios.post(API["queryCityList"]).then(res => {
@@ -36,9 +36,31 @@ export default {
       let that = this;
       axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
         if (res.data.code == 0) {
-          _this.assign({
-            key: "mapBaseData",
-            value: res.data.data
+          console.log(res.data.data)
+          let data = res.data.data
+          _this.assignAsync({
+            key: "metroList",
+            value: data.metroList
+          });
+          _this.assignAsync({
+            key: "priceList",
+            value: data.priceList
+          });
+          _this.assignAsync({
+            key: "provincialList",
+            value: data.provincialList
+          });
+          _this.assignAsync({
+            key: "roomFeatureList",
+            value: data.roomFeatureList
+          });
+          _this.assignAsync({
+            key: "roomRentList",
+            value: data.roomRentList
+          });
+          _this.assignAsync({
+            key: "trafficSpeedList",
+            value: data.trafficSpeedList
           });
         }
       });

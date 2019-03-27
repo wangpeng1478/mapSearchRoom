@@ -45,6 +45,7 @@
   </div>
 </template>
 <script>
+import {mapState,mapMutations} from 'vuex'
 export default {
   data() {
     return {
@@ -5839,7 +5840,8 @@ export default {
       this.$emit("hiddenRegion")
     }
   }
- }
+ },
+ computed:mapState([''])
 };
 </script>
 <style scoped>

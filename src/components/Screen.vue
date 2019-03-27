@@ -61,6 +61,7 @@
 </template>
 <script>
 import Slider from "./Slider";
+import {mapState,mapMutations} from 'vuex'
 export default {
   data() {
     return {

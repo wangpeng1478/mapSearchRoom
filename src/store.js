@@ -29,7 +29,14 @@ export default new Vuex.Store({
     },
     map:"",
     cityList:null,
-    mapBaseData:null
+
+    //mapBaseData
+    metroList:[],
+    priceList:[],
+    provincialList:[],
+    roomFeatureList:[],
+    roomRentList:[],
+    trafficSpeedList:[]
   },
   mutations: {
     //state赋值公共方法
