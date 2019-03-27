@@ -30,8 +30,7 @@
 
 
 <script>
-import axios from 'axios'
-import API from '@/utils/api'
+  import axios from 'axios'
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
@@ -51,20 +50,6 @@ import API from '@/utils/api'
       msg: String,
     },
     mounted : function () {
-      console.log(API)
-      axios.post(API['queryCityList'])
-          .then((res)=>{
-            console.log(res)
-          })
-          .catch((err)=>{
-            console.log(err)
-          })
-
-
-
-
-
-
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
