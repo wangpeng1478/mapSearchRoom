@@ -16,9 +16,7 @@
   </div>
 </template>
 
-
 <script>
-import store from "@/store";
 export default {
   name: "slider",
   data() {
@@ -43,7 +41,6 @@ export default {
       }
     };
   },
-  store,
   props: ["step",'defaultValue'],
   mounted() {
     let valueArr = this.defaultValue.split(',')
