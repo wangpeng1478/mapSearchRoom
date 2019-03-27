@@ -30,12 +30,13 @@
 
 
 <script>
+import axios from 'axios'
+import API from '@/utils/api'
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
   import store from '@/store'
-  import { Promise } from 'q'
   import  ComplexOverlay  from '@/utils/prototype.js'
   export default {
     name: 'Map',
@@ -50,6 +51,20 @@
       msg: String,
     },
     mounted : function () {
+      console.log(API)
+      axios.post(API['queryCityList'])
+          .then((res)=>{
+            console.log(res)
+          })
+          .catch((err)=>{
+            console.log(err)
+          })
+
+
+
+
+
+
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();

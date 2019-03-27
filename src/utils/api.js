@@ -1,8 +1,8 @@
-const DOMAIN = '';
+// const DOMAIN = 'http://192.168.102.221:7080';
 
 const API = {
-    queryCityList:DOMAIN+'/mapsearch/queryCityList',
-    queryMapBaseData:'mapsearch/queryMapBaseData'
+    queryCityList:'/api/mapsearch/queryCityList',
+    queryMapBaseData:'/api/mapsearch/queryMapBaseData'
 }
 
 export default API;
