@@ -72,7 +72,6 @@ export default {
       }      
     },
     sliderChange(){
-      let value = this.value;
       this.sliderLeft = {
         a:this.value.a*this.stepLength,
         b:this.value.b*this.stepLength
