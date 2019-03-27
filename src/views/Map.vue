@@ -2,7 +2,7 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
-    <router-link class="currentcity iconfont icon-dingwei" to="/Address"><i class=""/>上海</router-link>
+    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>上海</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
       <a href="#" target="_blank" class="iconfont icon-liebiao list">列表</a>
@@ -31,6 +31,7 @@
 
 <script>
   import axios from 'axios'
+  import API from '@/utils/api'
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
@@ -50,6 +51,13 @@
       msg: String,
     },
     mounted : function () {
+      axios.post(API['queryCityList'])
+      .then(res=>{
+        console.log(res)
+      })
+
+
+
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();

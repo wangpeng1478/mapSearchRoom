@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   // strict: process.env.NODE_ENV !== 'production',
   state: {
+    currentCity:{},
     mapData:{
       type:2,
       scale:11,
@@ -23,7 +24,10 @@ export default new Vuex.Store({
     map:"",
   },
   mutations: {
-
+    //state赋值公共方法
+    assign(state,key,data){
+      state[key] = data
+    }
   },
   actions: {
 
