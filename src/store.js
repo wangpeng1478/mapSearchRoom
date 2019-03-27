@@ -9,12 +9,16 @@ export default new Vuex.Store({
       type:2,
       sliderLeft:0,
       scale:11,
-      speed:1000,
+      speed:800,
       time:20,
-      site:{
-        lat: 31.2363429624,
-        lng: 121.4803295328
-      },
+      latitude:31.2363429624,
+      longitude:121.4803295328,
+      prcId:0,
+      ceaId:0,
+      villageId:0,
+      isOverLay:false,    //显示覆盖物里的房源
+      isInvFind:false,    //是否为个性找房
+      findHouseRank:1          //1  区域找房       2 地铁找房
     },
     map:"",
   },
