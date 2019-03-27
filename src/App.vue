@@ -18,9 +18,6 @@ export default {
       this.httpQueryMapBaseData();
     });
   },
-  mounted() {
-    
-  },
   methods: {
     ...mapMutations(["assign"]),
 

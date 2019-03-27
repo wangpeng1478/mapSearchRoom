@@ -151,7 +151,6 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        console.log("httpData.provincialList",httpData)
         httpData.provincialList.map((val,index)=>{
             
             var txt = val.prcName, mouseoverTxt = val.roomCount + "间";

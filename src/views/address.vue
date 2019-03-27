@@ -19,7 +19,7 @@
 <script>
 import API from '@/utils/api'
 import axios from 'axios'
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 export default {
   name: "Address",
   data() {
@@ -28,10 +28,17 @@ export default {
       positionState: 1 //定位状态，1：正在定位，0：定位完成
     };
   },
+  mounted(){
+    this.getLocation()
+  },
   methods: {
+    ...mapMutations(['assign']),
     chooseCity(idx){
-      console.log(idx)
-
+      this.assign({
+        key:'currentCity',
+        value:this.cityList[idx]
+      })
+      this.$router.push('/')
     },
     //获取当前城市
     getLocation() {
@@ -42,7 +49,6 @@ export default {
         this.localCity = _this.cityList.findIndex(city => {
           return city.baiduCode == res.code;
         });
-        console.log(this.localCity)
         this.positionState=0;
       });
     }
