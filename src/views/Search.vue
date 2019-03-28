@@ -82,9 +82,10 @@
   </div>
 </template>
 <script>
-/**
- * TODO：热门和历史没有加载动画和没有列表的图标
- *  */
+
+import axios from 'axios';
+import API from '@/utils/api'
+import {mapState} from 'vuex';
 export default {
   name: "Search",
   data() {
@@ -176,6 +177,14 @@ export default {
     };
   },
   mounted() {
+  
+    axios.post(API['hotSearch'],{
+      cityId:this.currentCity.cityId
+    }).then(res=>{
+      console.log(res)
+    })
+
+
     let searchTagHistory;
     if (localStorage.searchTagHistory) {
         searchTagHistory = JSON.parse(localStorage.searchTagHistory);
@@ -211,7 +220,8 @@ export default {
     handleClearinput(){
       this.searchValue="";
     }
-  }
+  },
+  computed:mapState(['currentCity'])
 };
 </script>
 <style scoped>
