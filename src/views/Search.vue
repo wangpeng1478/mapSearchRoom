@@ -1,13 +1,8 @@
 <template>
   <div>
     <div class="input-row">
-      <input
-        type="text"
-        placeholder="请输入小区/区域/地图"
-        maxlength="50"
-        v-model="searchValue"
-      >
-       <!-- @input="handleInput" -->
+      <input type="text" placeholder="请输入小区/区域/地图" maxlength="50" v-model="searchValue">
+      <!-- @input="handleInput" -->
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
       <router-link to="/">取消</router-link>
     </div>
@@ -24,7 +19,7 @@
           <li
             @click="handleSearchTag(index,'searchTagHistory')"
             v-for="(historyTag,index) in searchTagHistory"
-            :key="historyTag.id"
+            :key="index"
           >{{historyTag.keyWords}}</li>
         </ul>
         <div v-else class="nolist">
@@ -40,7 +35,7 @@
           <li
             @click="handleSearchTag(index,'hotSearch')"
             v-for="(hotTag,index) in hotSearch"
-            :key="hotTag.id"
+            :key="index"
           >{{hotTag.keyWords}}</li>
         </ul>
         <div v-else class="nolist">
@@ -51,7 +46,7 @@
     </div>
 
     <ul class="search-result" v-show="searchValue!='' && isRegion">
-      <li v-for="result in searchResult" :key="result.id">
+      <li v-for="(result,index) in searchResult" :key="result.id" @click="handleSearchResult(index)">
         <p v-html="result.showKeyWords"></p>
         <span>{{result.typeName}}</span>
       </li>
@@ -83,7 +78,7 @@
 <script>
 import axios from "axios";
 import API from "@/utils/api";
-import { mapState } from "vuex";
+import { mapState,mapMutations } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -113,15 +108,15 @@ export default {
         }
       });
 
-    let searchTagHistory;
-    if (localStorage.searchTagHistory) {
-      searchTagHistory = JSON.parse(localStorage.searchTagHistory);
+    let localStorageName = "searchTagHistory"+this.currentCity.cityId;
+    if (localStorage[localStorageName]) {
+      this.searchTagHistory = JSON.parse(localStorage[localStorageName]);
     } else {
-      searchTagHistory = [];
+      this.searchTagHistory = [];
     }
-    this.searchTagHistory = searchTagHistory;
   },
   methods: {
+    ...mapMutations(['assign']),
     clearHistory() {
       localStorage.removeItem("searchTagHistory");
       this.searchTagHistory = [];
@@ -131,7 +126,7 @@ export default {
         cityId: this.currentCity.cityId,
         type: 3,
         limit: 9,
-        keyword:this.searchValue
+        keyword: this.searchValue
       });
       axios
         .post(API["keywordsSearch"], params, {
@@ -140,17 +135,21 @@ export default {
           }
         })
         .then(res => {
-          console.log(res)
-        });
+          if (res.data.code == 0) {
+            let searchResult = res.data.data;
 
-      // this.searchResult.map(result => {
-      //   result.showKeyWords = result.keyWords.replace(
-      //     this.searchValue,
-      //     "<span>" + this.searchValue + "</span>"
-      //   );
-      // });
+            searchResult.map(result => {
+              result.showKeyWords = result.keyWords.replace(
+                this.searchValue,
+                "<span>" + this.searchValue + "</span>"
+              );
+            });
+            this.searchResult = searchResult
+          }
+        });
     },
     handleSearchTag(idx, name) {
+      let localStorageName = "searchTagHistory"+this.currentCity.cityId;
       //点击历史或者热门的tag
       let tag = this[name][idx];
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
@@ -162,23 +161,32 @@ export default {
       }
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
-      localStorage.setItem("searchTagHistory", searchTagHistory);
+      localStorage.setItem(localStorageName, searchTagHistory);
+      this.assign({
+        key:'keywordsSearch',
+        value:tag
+      })
     },
     handleClearinput() {
       this.searchValue = "";
+    },
+    handleSearchResult(idx){
+      this.assign({
+        key:'keywordsSearch',
+        value:this.searchResult[idx]
+      })
     }
   },
   computed: mapState(["currentCity"]),
-  watch:{
-    searchValue(newVal,oldVal){
-      if(newVal!=oldVal && newVal!=''){
-        console.log('handleInput')
-        this.handleInput()
+  watch: {
+    searchValue(newVal, oldVal) {
+      if (newVal != oldVal && newVal != "") {
+        this.handleInput();
       }
-      console.log('newVal')
-      console.log(newVal)
-      console.log('oldVal')
-      console.log(oldVal)
+      if(newVal != oldVal && newVal == ""){
+        this.searchResult=[]
+      }
+      
     }
   }
 };

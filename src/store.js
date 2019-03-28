@@ -12,6 +12,7 @@ export default new Vuex.Store({
       longitude: 121.4803295328,
       url: "https://www.qk365.com"
     },
+    keywordsSearch:{},//搜索关键词
     region:{
       //筛选区域
     },
@@ -31,7 +32,7 @@ export default new Vuex.Store({
     },
     map:"",
     cityList:null,
-
+    screen:null, //筛选条件
     //mapBaseData
     mapBaseDataReady:false,
     metroList:[],
