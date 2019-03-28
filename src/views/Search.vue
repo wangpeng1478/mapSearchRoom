@@ -6,8 +6,8 @@
         placeholder="请输入小区/区域/地图"
         maxlength="50"
         v-model="searchValue"
-        @input="handleInput"
       >
+       <!-- @input="handleInput" -->
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
       <router-link to="/">取消</router-link>
     </div>
@@ -36,10 +36,10 @@
         <div class="tag-top">
           <p class="tag-tit">热门搜索</p>
         </div>
-        <ul class="tag-list" v-if="searchTagHot.length!=0">
+        <ul class="tag-list" v-if="hotSearch.length!=0">
           <li
-            @click="handleSearchTag(index,'searchTagHot')"
-            v-for="(hotTag,index) in searchTagHot"
+            @click="handleSearchTag(index,'hotSearch')"
+            v-for="(hotTag,index) in hotSearch"
             :key="hotTag.id"
           >{{hotTag.keyWords}}</li>
         </ul>
@@ -91,95 +91,16 @@ export default {
       isRegion: true, //true为区域搜索，false为位置搜索
       searchValue: "",
       searchTagHistory: [],
-      searchTagHot: [
-        {
-          id: 18,
-          keyWords: "徐汇区",
-          latitude: "31.1779920000",
-          longitude: "121.4399930000",
-          parentId: 0,
-          remark: "",
-          tableId: 4,
-          typeId: 7,
-          typeName: "行政区"
-        },
-        {
-          id: 337,
-          keyWords: "地铁7号线",
-          latitude: "",
-          longitude: "",
-          parentId: 0,
-          remark: "",
-          tableId: 7,
-          typeId: 3,
-          typeName: "地铁线路"
-        },
-        {
-          id: 3781,
-          keyWords: "地铁1号线",
-          latitude: "",
-          longitude: "",
-          parentId: 0,
-          remark: "",
-          tableId: 1,
-          typeId: 3,
-          typeName: "地铁线路"
-        }
-      ],
-      searchResult: [
-        {
-          id: 4064,
-          keyWords: "江桥万达广场",
-          latitude: "31.2420511978103",
-          longitude: "121.33028671483109",
-          parentId: 146,
-          remark: "鹤友路336弄",
-          tableId: 20758,
-          typeId: 1,
-          typeName: "小区"
-        },
-        {
-          id: 2071,
-          keyWords: "大湾名苑",
-          latitude: "31.2893265353",
-          longitude: "121.3483955139",
-          parentId: 367,
-          remark: "川沙路2015弄",
-          tableId: 3218,
-          typeId: 1,
-          typeName: "小区"
-        },
-        {
-          id: 15074,
-          keyWords: "洞泾",
-          latitude: "31.09060",
-          longitude: "121.23674",
-          parentId: 9,
-          remark: "地铁9号线",
-          tableId: 9031,
-          typeId: 2,
-          typeName: "地铁站"
-        },
-        {
-          id: 15974,
-          keyWords: "洞泾",
-          latitude: "31.09060",
-          longitude: "121.23674",
-          parentId: 9,
-          remark: "地铁9号线",
-          tableId: 9121,
-          typeId: 2,
-          typeName: "地铁站"
-        }
-      ]
+      hotSearch: [],
+      searchResult: []
     };
   },
   mounted() {
     let params = new URLSearchParams({
       cityId: this.currentCity.cityId,
-      type: 3
+      type: 3,
+      limit: 9
     });
-
     axios
       .post(API["hotSearch"], params, {
         headers: {
@@ -187,7 +108,9 @@ export default {
         }
       })
       .then(res => {
-        console.log(res);
+        if (res.data.code == 0) {
+          this.hotSearch = res.data.data;
+        }
       });
 
     let searchTagHistory;
@@ -203,13 +126,29 @@ export default {
       localStorage.removeItem("searchTagHistory");
       this.searchTagHistory = [];
     },
-    handleInput() {
-      this.searchResult.map(result => {
-        result.showKeyWords = result.keyWords.replace(
-          this.searchValue,
-          "<span>" + this.searchValue + "</span>"
-        );
+    handleInput(e) {
+      let params = new URLSearchParams({
+        cityId: this.currentCity.cityId,
+        type: 3,
+        limit: 9,
+        keyword:this.searchValue
       });
+      axios
+        .post(API["keywordsSearch"], params, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+          }
+        })
+        .then(res => {
+          console.log(res)
+        });
+
+      // this.searchResult.map(result => {
+      //   result.showKeyWords = result.keyWords.replace(
+      //     this.searchValue,
+      //     "<span>" + this.searchValue + "</span>"
+      //   );
+      // });
     },
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
@@ -229,7 +168,19 @@ export default {
       this.searchValue = "";
     }
   },
-  computed: mapState(["currentCity"])
+  computed: mapState(["currentCity"]),
+  watch:{
+    searchValue(newVal,oldVal){
+      if(newVal!=oldVal && newVal!=''){
+        console.log('handleInput')
+        this.handleInput()
+      }
+      console.log('newVal')
+      console.log(newVal)
+      console.log('oldVal')
+      console.log(oldVal)
+    }
+  }
 };
 </script>
 <style scoped>
@@ -303,6 +254,7 @@ export default {
   border-radius: 0.667vw;
   margin: 0 4vw 4vw 0;
   line-height: 8vw;
+  overflow: hidden;
 }
 .search-tag-list {
   min-height: 50vw;

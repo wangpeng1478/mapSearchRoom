@@ -4,7 +4,8 @@
       <div class="region">
         <h4>入住区域</h4>
         <p @click="selectionArea">
-          <i class="iconfont icon-dingwei"></i>{{regionName}}
+          <i class="iconfont icon-dingwei"></i>
+          {{regionName}}
           <i class="iconfont icon-you"></i>
         </p>
       </div>
@@ -14,7 +15,7 @@
           <li
             v-for="roomFeature in roomFeatureList"
             :key="roomFeature.roomFeatureId"
-            :class="query.roomFeatureIdList.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
+            :class="query.roomFeatureId.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
             @click="handleRoomFeature(roomFeature.roomFeatureId)"
           >{{roomFeature.roomFeatureName}}</li>
         </ul>
@@ -23,23 +24,25 @@
         <h4>房间户型</h4>
         <ul>
           <li
-            v-for="roomFeature in roomFeatureList"
-            :key="roomFeature.roomFeatureId"
-            :class="query.roomFeatureIdList.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
-            @click="handleRoomFeature(roomFeature.roomFeatureId)"
-          >{{roomFeature.roomFeatureName}}</li>
+            v-for="roomType in roomTypeList"
+            :key="roomType.status"
+            :class="query.roomType==roomType.status ? 'select': ''"
+            @click="handleroomType(roomType.status)"
+          >{{roomType.statusName}}</li>
         </ul>
       </div>
       <div class="screen-item">
         <h4>房间价格（元）</h4>
-        <Slider ref='slider' defaultValue='0,27' step="27" @sliderChange="customPrice"/>
-        <p class="custom-price">{{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}}　——　{{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}</p>
+        <Slider ref="slider" defaultValue="0,27" step="27" @sliderChange="customPrice"/>
+        <p
+          class="custom-price"
+        >{{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}} —— {{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}</p>
         <ul>
           <li
             v-for="(price,index) in priceList"
             :key="index"
             @click="handlePriceRecomm(price.content)"
-            :class="query.priceRecomm==price.content? 'select':''"
+            :class="priceRecomm==price.content? 'select':''"
           >{{price.name}}</li>
         </ul>
       </div>
@@ -50,7 +53,7 @@
             v-for="roomRent in roomRentList"
             :key="roomRent.roomRentDays"
             @click="handleRoomRent(roomRent.roomRentDays)"
-            :class="query.roomRentDays==roomRent.roomRentDays ? 'select' : ''"
+            :class="query.rentDays==roomRent.roomRentDays ? 'select' : ''"
           >{{roomRent.roomRentName}}</li>
         </ul>
       </div>
@@ -63,98 +66,112 @@
 </template>
 <script>
 import Slider from "./Slider";
-import {mapState,mapMutations} from 'vuex'
-import { watch } from 'fs';
+import { mapState, mapMutations } from "vuex";
+import { watch } from "fs";
 export default {
   data() {
     return {
-      regionName:null,
-      customPriceValue:[0,27],
+      regionName: null,
+      customPriceValue: [0, 27],
+      priceRecomm: null,
       query: {
-        roomFeatureIdList: [],
-        roomRentDays: null,
+        roomFeatureId: [],
+        rentDays: null,
         priceRecomm: null,
-        roomType:null
+        roomType: null
       }
     };
   },
   components: {
     Slider
   },
-  mounted(){
-    this.showRegion()
+  mounted() {
+    this.showRegion();
   },
   methods: {
-    screenChange(){
-      console.log('screenChange')
+    screenChange() {
+      console.log("screenChange");
+      let query = Object.assign(this.query);
+      console.log(query);
       let data = {
-        [this.region.key]:[this.region.value],
-        rentDays:this.rentDays
-
-        
-      }
+        [this.region.key]: [this.region.value]
+      };
     },
-    customPrice(e){
+    customPrice(e) {
       this.customPriceValue = e;
-      this.query.priceRecomm=null;
-      this.screenChange()
+      this.priceRecomm = null;
+      this.screenChange();
     },
     selectionArea() {
       this.$emit("selectionArea");
     },
     handleReset() {
       this.query = {
-        roomFeatureIdList: [],
-        roomRentDays: null,
-        priceRecomm: null
+        roomFeatureId: [],
+        rentDays: null,
+        roomType: null
       };
-      this.sliderReset()
+      (this.priceRecomm = null), this.sliderReset();
     },
-    sliderReset(){
-      this.customPriceValue = [0,27];
-      this.$refs.slider.reset()
+    sliderReset() {
+      this.customPriceValue = [0, 27];
+      this.$refs.slider.reset();
     },
     handleRoomFeature(selectRroomFeatureId) {
-      let roomFeatureIdList = this.query.roomFeatureIdList;
-      let roomFeatureIdIndex = roomFeatureIdList.indexOf(selectRroomFeatureId);
+      let roomFeatureId = this.query.roomFeatureId;
+      let roomFeatureIdIndex = roomFeatureId.indexOf(selectRroomFeatureId);
       roomFeatureIdIndex == -1
-        ? roomFeatureIdList.push(selectRroomFeatureId)
-        : roomFeatureIdList.splice(roomFeatureIdIndex, 1);
-      this.query.roomFeatureIdList = roomFeatureIdList;
-      this.screenChange()
+        ? roomFeatureId.push(selectRroomFeatureId)
+        : roomFeatureId.splice(roomFeatureIdIndex, 1);
+      this.screenChange();
+    },
+    handleroomType(selectroomTypeStatus) {
+      console.log(selectroomTypeStatus);
+      if (this.query.roomType == selectroomTypeStatus) {
+        this.query.roomType = null;
+      } else {
+        this.query.roomType = selectroomTypeStatus;
+      }
+      this.screenChange();
     },
     handleRoomRent(selectRoomRentDays) {
-      let roomRentDays = this.query.roomRentDays;
-      this.query.roomRentDays =
-        selectRoomRentDays == roomRentDays ? null : selectRoomRentDays;
-      this.screenChange()
+      let rentDays = this.query.rentDays;
+      this.query.rentDays =
+        selectRoomRentDays == rentDays ? null : selectRoomRentDays;
+      this.screenChange();
     },
     handlePriceRecomm(priceContent) {
-      this.$refs.slider.reset()
-      let priceRecomm = this.query.priceRecomm;
-      this.query.priceRecomm =
-        priceRecomm == priceContent ? null : priceContent;
-      if(this.query.priceRecomm){
-        this.sliderReset()
+      this.$refs.slider.reset();
+      let priceRecomm = this.priceRecomm;
+      this.priceRecomm = priceRecomm == priceContent ? null : priceContent;
+      if (this.priceRecomm) {
+        this.sliderReset();
       }
-      this.screenChange()
+      this.screenChange();
     },
     handelQuery() {
       console.log("点击确定");
     },
-    showRegion(){
-      if(Object.keys(this.region).length ==0){
-        this.regionName = this.currentCity.cityName
-      }else{
-        this.regionName = this.region.showRegion
+    showRegion() {
+      if (Object.keys(this.region).length == 0) {
+        this.regionName = this.currentCity.cityName;
+      } else {
+        this.regionName = this.region.showRegion;
       }
-      this.screenChange()
+      this.screenChange();
     }
   },
-  computed:mapState(['priceList','roomFeatureList','roomRentList','region','currentCity']),
-  watch:{
-    region(){
-      this.showRegion()
+  computed: mapState([
+    "priceList",
+    "roomFeatureList",
+    "roomRentList",
+    "region",
+    "currentCity",
+    "roomTypeList"
+  ]),
+  watch: {
+    region() {
+      this.showRegion();
     }
   }
 };
@@ -266,7 +283,7 @@ export default {
   color: #fff;
   border-color: #ff9900;
 }
-.custom-price{
+.custom-price {
   text-align: center;
   font-size: 4vw;
   margin: 2vw 0 4vw;

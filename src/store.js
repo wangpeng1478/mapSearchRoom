@@ -39,12 +39,18 @@ export default new Vuex.Store({
     provincialList:[],
     roomFeatureList:[],
     roomRentList:[],
-    trafficSpeedList:[]
+    trafficSpeedList:[],
+    roomTypeList:[]
   },
   mutations: {
     //state赋值公共方法
     assign(state,data){
       state[data.key] = data.value
+    },
+    mapBaseData(state,data){
+      Object.keys(data).forEach((key)=>{
+        state[key] = data[key]
+      })
     }
   },
   actions: {

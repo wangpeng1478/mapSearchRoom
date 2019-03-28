@@ -19,7 +19,7 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(["assign"]),
+    ...mapMutations(["assign","mapBaseData"]),
     ...mapActions(['assignAsync']),
     httpQueryCityList: function() {
       let _this = this;
@@ -33,35 +33,11 @@ export default {
       });
     },
     httpQueryMapBaseData: function() {
-      let _this = this;
       axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
         if (res.data.code == 0) {
           let data = res.data.data;
-          _this.assignAsync({
-            key: "metroList",
-            value: data.metroList
-          });
-          _this.assignAsync({
-            key: "priceList",
-            value: data.priceList
-          });
-          _this.assignAsync({
-            key: "provincialList",
-            value: data.provincialList
-          });
-          _this.assignAsync({
-            key: "roomFeatureList",
-            value: data.roomFeatureList
-          });
-          _this.assignAsync({
-            key: "roomRentList",
-            value: data.roomRentList
-          });
-          _this.assignAsync({
-            key: "trafficSpeedList",
-            value: data.trafficSpeedList
-          });
-           _this.assignAsync({
+          this.mapBaseData(res.data.data)
+           this.assignAsync({
             key: "mapBaseDataReady",
             value: true
           });
