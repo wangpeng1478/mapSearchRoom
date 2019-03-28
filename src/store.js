@@ -31,6 +31,7 @@ export default new Vuex.Store({
     cityList:null,
 
     //mapBaseData
+    mapBaseDataReady:false,
     metroList:[],
     priceList:[],
     provincialList:[],
