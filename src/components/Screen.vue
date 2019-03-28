@@ -60,7 +60,7 @@
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
-      <button class="confirm" @click="handelQuery">确定（100+）</button>
+      <button class="confirm" @click="handelQuery">确定（{{roomCount}}）</button>
     </div>
   </div>
 </template>
@@ -68,16 +68,18 @@
 import Slider from "./Slider";
 import { mapState, mapMutations } from "vuex";
 import { watch } from "fs";
+import axios from "axios";
+import API from "@/utils/api";
 export default {
   data() {
     return {
+      roomCount: null,
       regionName: null,
       customPriceValue: [0, 27],
       priceRecomm: null,
       query: {
         roomFeatureId: [],
         rentDays: null,
-        priceRecomm: null,
         roomType: null
       }
     };
@@ -90,12 +92,37 @@ export default {
   },
   methods: {
     screenChange() {
-      console.log("screenChange");
       let query = Object.assign(this.query);
-      console.log(query);
-      let data = {
-        [this.region.key]: [this.region.value]
-      };
+      if (Object.keys(this.region).length != 0) {
+        query[this.region.key] = this.region.value;
+      }
+
+      let customPriceValue = this.customPriceValue;
+      if (this.customPriceValue != [0, 27]) {
+        query.priceFrom =
+          customPriceValue[0] == 0 ? 0 : customPriceValue[0] * 100 + 400;
+        query.priceTo =
+          customPriceValue[1] == 27 ? "" : customPriceValue[1] * 100 + 400;
+      }
+      let priceRecomm = this.priceRecomm;
+      if (priceRecomm) {
+        let priceRecommValue = priceRecomm.split("-");
+        query.priceFrom = priceRecommValue[0];
+        query.priceTo = priceRecommValue[1];
+      }
+      if (!query.cityId) {
+        query.cityId = this.currentCity.cityId;
+      }
+      axios.post(API["queryMapRoomCount"], query).then(res => {
+        if (res.data.code == 0) {
+          let roomCount = res.data.data.roomCount;
+          if (roomCount < 100) {
+            this.roomCount = roomCount;
+          } else {
+            this.roomCount = Math.floor(roomCount / 100) + "00+";
+          }
+        }
+      });
     },
     customPrice(e) {
       this.customPriceValue = e;
@@ -111,7 +138,9 @@ export default {
         rentDays: null,
         roomType: null
       };
-      (this.priceRecomm = null), this.sliderReset();
+      this.priceRecomm = null;
+      this.sliderReset();
+      this.screenChange()
     },
     sliderReset() {
       this.customPriceValue = [0, 27];
@@ -126,7 +155,6 @@ export default {
       this.screenChange();
     },
     handleroomType(selectroomTypeStatus) {
-      console.log(selectroomTypeStatus);
       if (this.query.roomType == selectroomTypeStatus) {
         this.query.roomType = null;
       } else {
