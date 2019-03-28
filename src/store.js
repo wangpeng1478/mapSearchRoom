@@ -12,6 +12,9 @@ export default new Vuex.Store({
       longitude: 121.4803295328,
       url: "https://www.qk365.com"
     },
+    region:{
+      //筛选区域
+    },
     mapData:{
       type:2,
       scale:11,

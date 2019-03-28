@@ -31,7 +31,6 @@
           <img src="../assets/images/none.png">
           <p>暂无搜索历史</p>
         </div>
-        
       </div>
       <div class="search-tag-list">
         <div class="tag-top">
@@ -82,10 +81,9 @@
   </div>
 </template>
 <script>
-
-import axios from 'axios';
-import API from '@/utils/api'
-import {mapState} from 'vuex';
+import axios from "axios";
+import API from "@/utils/api";
+import { mapState } from "vuex";
 export default {
   name: "Search",
   data() {
@@ -177,36 +175,46 @@ export default {
     };
   },
   mounted() {
-  
-    axios.post(API['hotSearch'],{
-      cityId:this.currentCity.cityId
-    }).then(res=>{
-      console.log(res)
-    })
+    let params = new URLSearchParams({
+      cityId: this.currentCity.cityId,
+      type: 3
+    });
 
+    axios
+      .post(API["hotSearch"], params, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+        }
+      })
+      .then(res => {
+        console.log(res);
+      });
 
     let searchTagHistory;
     if (localStorage.searchTagHistory) {
-        searchTagHistory = JSON.parse(localStorage.searchTagHistory);
-      } else {
-        searchTagHistory = [];
-      }
-      this.searchTagHistory = searchTagHistory
+      searchTagHistory = JSON.parse(localStorage.searchTagHistory);
+    } else {
+      searchTagHistory = [];
+    }
+    this.searchTagHistory = searchTagHistory;
   },
   methods: {
     clearHistory() {
-      localStorage.removeItem('searchTagHistory');
-      this.searchTagHistory=[]
+      localStorage.removeItem("searchTagHistory");
+      this.searchTagHistory = [];
     },
     handleInput() {
-      this.searchResult.map((result)=>{
-        result.showKeyWords = result.keyWords.replace(this.searchValue,"<span>"+ this.searchValue +"</span>");
-      })
+      this.searchResult.map(result => {
+        result.showKeyWords = result.keyWords.replace(
+          this.searchValue,
+          "<span>" + this.searchValue + "</span>"
+        );
+      });
     },
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
       let tag = this[name][idx];
-      let searchTagHistory =  JSON.parse(JSON.stringify(this.searchTagHistory));
+      let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;
       });
@@ -217,11 +225,11 @@ export default {
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem("searchTagHistory", searchTagHistory);
     },
-    handleClearinput(){
-      this.searchValue="";
+    handleClearinput() {
+      this.searchValue = "";
     }
   },
-  computed:mapState(['currentCity'])
+  computed: mapState(["currentCity"])
 };
 </script>
 <style scoped>
@@ -367,16 +375,16 @@ export default {
   font-weight: bold;
 }
 
-.nolist img{
+.nolist img {
   display: block;
   width: 8vw;
   margin: 10vw auto 1vw;
 }
-.nolist p{
+.nolist p {
   text-align: center;
   font-size: 4vw;
   color: #888;
-  }
+}
 </style>
 <style>
 .search-result li p span {

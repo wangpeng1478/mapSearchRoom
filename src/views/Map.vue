@@ -221,7 +221,6 @@
         this.showView.showRegionAndMetro=true;
       },
       hiddenRegion(msg){
-        console.log(msg)
         this.showView.showRegionAndMetro=false;
       }
     }

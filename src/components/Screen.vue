@@ -4,12 +4,23 @@
       <div class="region">
         <h4>入住区域</h4>
         <p @click="selectionArea">
-          <i class="iconfont icon-dingwei"></i>上海市-徐汇区-龙华
+          <i class="iconfont icon-dingwei"></i>{{regionName}}
           <i class="iconfont icon-you"></i>
         </p>
       </div>
       <div class="screen-item">
         <h4>房间特色</h4>
+        <ul>
+          <li
+            v-for="roomFeature in roomFeatureList"
+            :key="roomFeature.roomFeatureId"
+            :class="query.roomFeatureIdList.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
+            @click="handleRoomFeature(roomFeature.roomFeatureId)"
+          >{{roomFeature.roomFeatureName}}</li>
+        </ul>
+      </div>
+      <div class="screen-item">
+        <h4>房间户型</h4>
         <ul>
           <li
             v-for="roomFeature in roomFeatureList"
@@ -53,35 +64,40 @@
 <script>
 import Slider from "./Slider";
 import {mapState,mapMutations} from 'vuex'
+import { watch } from 'fs';
 export default {
   data() {
     return {
+      regionName:null,
       customPriceValue:[0,27],
       query: {
         roomFeatureIdList: [],
         roomRentDays: null,
-        priceRecomm: null
+        priceRecomm: null,
+        roomType:null
       }
     };
   },
   components: {
     Slider
   },
+  mounted(){
+    this.showRegion()
+  },
   methods: {
-    // customPrice(e){
-    //   let customPriceValue = []
-    //   customPriceValue = [e[0]*100+400,e[1]*100+400];
-    //   if(e[0]==0){
-    //     customPriceValue[0]=0
-    //   }
-    //   if(e[1]==27){
-    //     customPriceValue[1]='不限'
-    //   }
-    //   console.log(customPriceValue)
-    //   this.customPriceValue = customPriceValue;
-    // },
+    screenChange(){
+      console.log('screenChange')
+      let data = {
+        [this.region.key]:[this.region.value],
+        rentDays:this.rentDays
+
+        
+      }
+    },
     customPrice(e){
       this.customPriceValue = e;
+      this.query.priceRecomm=null;
+      this.screenChange()
     },
     selectionArea() {
       this.$emit("selectionArea");
@@ -92,9 +108,11 @@ export default {
         roomRentDays: null,
         priceRecomm: null
       };
+      this.sliderReset()
+    },
+    sliderReset(){
       this.customPriceValue = [0,27];
       this.$refs.slider.reset()
-      // console.log(this.$refs.Slider.reset())
     },
     handleRoomFeature(selectRroomFeatureId) {
       let roomFeatureIdList = this.query.roomFeatureIdList;
@@ -103,22 +121,42 @@ export default {
         ? roomFeatureIdList.push(selectRroomFeatureId)
         : roomFeatureIdList.splice(roomFeatureIdIndex, 1);
       this.query.roomFeatureIdList = roomFeatureIdList;
+      this.screenChange()
     },
     handleRoomRent(selectRoomRentDays) {
       let roomRentDays = this.query.roomRentDays;
       this.query.roomRentDays =
         selectRoomRentDays == roomRentDays ? null : selectRoomRentDays;
+      this.screenChange()
     },
     handlePriceRecomm(priceContent) {
+      this.$refs.slider.reset()
       let priceRecomm = this.query.priceRecomm;
       this.query.priceRecomm =
         priceRecomm == priceContent ? null : priceContent;
+      if(this.query.priceRecomm){
+        this.sliderReset()
+      }
+      this.screenChange()
     },
     handelQuery() {
       console.log("点击确定");
+    },
+    showRegion(){
+      if(Object.keys(this.region).length ==0){
+        this.regionName = this.currentCity.cityName
+      }else{
+        this.regionName = this.region.showRegion
+      }
+      this.screenChange()
     }
   },
-  computed:mapState(['priceList','roomFeatureList','roomRentList'])
+  computed:mapState(['priceList','roomFeatureList','roomRentList','region','currentCity']),
+  watch:{
+    region(){
+      this.showRegion()
+    }
+  }
 };
 </script>
 <style scoped>
