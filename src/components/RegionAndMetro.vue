@@ -1,7 +1,7 @@
 <template>
 <div class="region-wrap">
   <div class="region-mask" @click="hiddenRegion"></div>
-  <div class="region" v-if="mapBaseDataReady">
+  <div class="region">
     <ul class="u1">
       <li @click="handleSelect(0,0)" :class="selected[0]==0 ? 'selected' : ''">不限</li>
       <li @click="handleSelect(0,1)" :class="selected[0]==1 ? 'selected' : ''">区域</li>
@@ -28,7 +28,7 @@
       <li @click="handleSelect(2,-1)" v-if="selected[0]!=-1 && selected[1]!=-1" :class="selected[2] == -1 ? 'selected' : ''">不限</li>
       <template v-if="selected[0]==1&& selected[1]!=-1">
         <li @click="handleSelect(2,index)"
-          v-for="(area,index) in provincialList[selected[1]].areaList"
+          v-for="(area,index) in provincialList[selected[1]].ceaList"
           :key="area.ceaId"
           :class="selected[2]==index ? 'selected' : ''"
         >{{area.ceaName}}</li>

@@ -46,8 +46,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    assignAsync(context,key,data){
-      context.commit('assign',key,data)
+    assignAsync({commit},data){
+      commit('assign',data)
     }
   },
   getters: {

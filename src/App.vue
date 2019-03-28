@@ -33,10 +33,9 @@ export default {
       });
     },
     httpQueryMapBaseData: function() {
-      let that = this;
+      let _this = this;
       axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
         if (res.data.code == 0) {
-          console.log(res.data.data)
           let data = res.data.data;
           _this.assignAsync({
             key: "metroList",
