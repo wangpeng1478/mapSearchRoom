@@ -47,109 +47,37 @@
         isFind:true
       }
     },
-    components:{Mate,RoomList,Screen,RegionAndMetro},
+    components:{
+      Mate,
+      RoomList,
+      Screen,
+      RegionAndMetro,
+    },
     props: {
       msg: String,
     },
     computed:{
       ...mapState(['currentCity']),
-      cityList(){
-        return this.$store.state.cityList;
+      mapBaseData(){
+        return this.$store.state.mapBaseData;
       }
     },
     watch:{
-      cityList:function(newQuestion, oldQuestion){
-        // console.log('watch')
-        // console.log(newQuestion)
-        // console.log(oldQuestion)
+      mapBaseData:function(newQuestion, oldQuestion){
         if(oldQuestion==null){
           this.baiduMap()
         }
-          
       }
     },
     mounted : function () {
-
-
-
       this.viewSetDefault()
       this.$nextTick(function(){
-        // console.log("store.state.mapBaseData",mapBaseData)
-        this.baiduMap();
+        if(this.$store.state.mapBaseData){
+          this.baiduMap();
+        }
       })
     },
     methods : {
-      
-      clickPrc:function(data){
-        var that =this;
-        this.$store.state.mapData.scale = 14;
-        this.$.showPrcHouse(data)
-        // let map = store.state.map;
-        // let httpData = this.http.queryMapBaseData.data;
-        // let that = this;
-        // // map.enableMassClear();
-        // map.getOverlays().map((val)=>{
-        //     if(val._type=="ComplexOverlay"){
-        //        map.removeOverlay(val)
-        //     }else{}
-        //     return;
-        // })
-        // let point = new BMap.Point(data.longitude,data.latitude);
-        // this.$store.state.mapData.site.lat = data.latitude;
-        // this.$store.state.mapData.site.lng = data.longitude;
-        // this.$store.state.mapData.scale += 1;
-        // // 创建点坐标  
-        // map.centerAndZoom(point,this.$store.state.mapData.scale);
-        // let overlays = map.getOverlays();
-        // httpData.ceaList.map((val,index)=>{
-        //   if(val.prcId == data.prcId){
-        //     var txt = val.ceaName, mouseoverTxt = val.roomCount + "间";
-        //     var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-        //     map.addOverlay(myCompOverlay);
-        //     //覆盖物添加点击事件+
-        //     myCompOverlay._div.addEventListener('touchstart',function(){
-        //     map.disableDragging();  //禁用地图拖拽功能
-        //     });
-        //     myCompOverlay._div.addEventListener("click", function () {
-        //       that.clickCea(val);
-        //     });
-        //   }
-        //   return;
-        // })
-      },
-      clickCea:function(data){
-        // let map = store.state.map;
-        // let httpData = this.http.queryMapBaseData.data;
-        // map.getOverlays().map((val)=>{
-        //     if(val._type=="ComplexOverlay"){
-        //        map.removeOverlay(val)
-        //     }else{}
-        //     return;
-        // })
-        // let point = new BMap.Point(data.longitude,data.latitude);
-        // this.$store.state.mapData.site.lat = data.latitude;
-        // this.$store.state.mapData.site.lng = data.longitude;
-        // this.$store.state.mapData.scale += 1;
-        // // 创建点坐标  
-        // map.centerAndZoom(point,this.$store.state.mapData.scale);
-        
-        // httpData.villageList.map((val,index)=>{
-        //   if(val.ceaId == data.ceaId){
-        //     var txt = val.villageName, mouseoverTxt = val.roomCount + "间";
-        //     var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-        //     map.addOverlay(myCompOverlay);
-        //     //覆盖物添加点击事件+
-        //     myCompOverlay._div.addEventListener('touchstart',function(){
-        //     map.disableDragging();  //禁用地图拖拽功能
-        //     });
-        //     myCompOverlay._div.addEventListener("click", function () {
-        //       // that.clickCea(val);
-        //       alert(val.villageId,val.villageName)
-        //     });
-        //   }
-        //   return;
-        // })
-      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
@@ -184,7 +112,6 @@
         this.isFind = true;
       },
       baiduMap: function () {
-        console.log("store.state.cityList",store.state.cityList)
         //模拟数据
         let that = this;
         // let httpData = this.http.queryMapBaseData.data;

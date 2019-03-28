@@ -38,7 +38,6 @@ export default {
         touchSlider : function (e) {
             let target= e.srcElement? e.srcElement: e.target;
             this.startX = e.changedTouches[0].clientX;
-            
         },
         moveSlider:function (e) {
             let sl = this.sl;
@@ -69,7 +68,6 @@ export default {
             
         },
         endSlider : function () {
-
             this.$store.state.mapData.isInvFind = false;
         }
     }

@@ -1,3 +1,5 @@
+import axios from 'axios'
+import API from '@/utils/api'
 import store from '@/store'
 import  http  from "@/utils/data.js"
 import  ComplexOverlay  from '@/utils/prototype.js'
@@ -136,7 +138,7 @@ export default{ //很关键
     },
     showPrcHouse:function(){
         let map = store.state.map;
-        let httpData = http.queryMapBaseData.data;
+        let httpData = store.state.mapBaseData;
         let that = this;
         // map.enableMassClear();
         map.getOverlays().map((val)=>{
@@ -169,7 +171,7 @@ export default{ //很关键
     showCeaHouse:function(data){
         let map = store.state.map;
         let mapData = store.state.mapData;
-        let httpData = http.queryMapBaseData.data;
+        let httpData = store.state.mapBaseData;
         let that = this;
         let bounds = map.getBounds();
         // map.enableMassClear();
@@ -229,7 +231,7 @@ export default{ //很关键
     showVillageHouse:function(data){
         let map = store.state.map;
         
-        let httpData = http.queryMapBaseData.data;
+        let httpData = store.state.mapBaseData;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
