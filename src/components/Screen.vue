@@ -24,8 +24,8 @@
         <Slider defaultValue='0,5' step="10" @sliderChange="customPrice"/>
         <ul>
           <li
-            v-for="price in priceList"
-            :key="price.id"
+            v-for="(price,index) in priceList"
+            :key="index"
             @click="handlePriceRecomm(price.content)"
             :class="query.priceRecomm==price.content? 'select':''"
           >{{price.name}}</li>
@@ -40,16 +40,6 @@
             @click="handleRoomRent(roomRent.roomRentDays)"
             :class="query.roomRentDays==roomRent.roomRentDays ? 'select' : ''"
           >{{roomRent.roomRentName}}</li>
-        </ul>
-      </div>
-      <div class="screen-item">
-        <h4>房间朝向</h4>
-        <ul>
-          <li>南</li>
-          <li>北</li>
-          <li>东</li>
-          <li>西</li>
-          <li>南北</li>
         </ul>
       </div>
     </div>
@@ -69,120 +59,7 @@ export default {
         roomFeatureIdList: [],
         roomRentDays: null,
         priceRecomm: null
-      },
-      roomRentList: [
-        {
-          roomRentName: "立即可租",
-          roomRentDays: 0
-        },
-        {
-          roomRentName: "一周内可租",
-          roomRentDays: 7
-        },
-        {
-          roomRentName: "二周内可租",
-          roomRentDays: 15
-        },
-        {
-          roomRentName: "一月内可租",
-          roomRentDays: 30
-        },
-        {
-          roomRentName: "二月内可租",
-          roomRentDays: 60
-        }
-      ],
-      roomTypeList: [
-        {
-          roomTypeId: 1,
-          roomTypeName: "独卫"
-        },
-        {
-          roomTypeId: 2,
-          roomTypeName: "单间"
-        },
-        {
-          roomTypeId: 3,
-          roomTypeName: "整租"
-        }
-      ],
-      roomFeatureList: [
-        {
-          roomFeatureId: 1,
-          roomFeatureName: "特价房"
-        },
-        {
-          roomFeatureId: 2,
-          roomFeatureName: "近地铁"
-        },
-        {
-          roomFeatureId: 3,
-          roomFeatureName: "阳台"
-        },
-        {
-          roomFeatureId: 4,
-          roomFeatureName: "朝南"
-        },
-        {
-          roomFeatureId: 5,
-          roomFeatureName: "主卧"
-        },
-        {
-          roomFeatureId: 6,
-          roomFeatureName: "飘窗"
-        }
-      ],
-      priceList: [
-        {
-          name: "500元以下",
-          content: "500",
-          id: 76,
-          type: 11,
-          no: "110"
-        },
-        {
-          name: "500-700元",
-          content: "500-700",
-          id: 27,
-          type: 11,
-          no: "111"
-        },
-        {
-          name: "700-1000元",
-          content: "700-1000",
-          id: 28,
-          type: 11,
-          no: "112"
-        },
-        {
-          name: "1000-1500元",
-          content: "1000-1500",
-          id: 29,
-          type: 11,
-          no: "113"
-        },
-        {
-          name: "1500-2000元",
-          content: "1500-2000",
-          id: 30,
-          type: 11,
-          no: "114"
-        },
-        {
-          name: "2000-3000元",
-          content: "2000-3000",
-          id: 73,
-          type: 11,
-          no: "115"
-        },
-        {
-          name: "3000元以上",
-          content: "3000-",
-          id: 31,
-          type: 11,
-          no: "116"
-        }
-      ]
+      }
     };
   },
   components: {
@@ -223,7 +100,8 @@ export default {
     handelQuery() {
       console.log("点击确定");
     }
-  }
+  },
+  computed:mapState(['priceList','roomFeatureList','roomRentList'])
 };
 </script>
 <style scoped>
