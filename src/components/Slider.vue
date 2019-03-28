@@ -21,16 +21,16 @@ export default {
   name: "slider",
   data() {
     return {
-      value:{
-        a:0,
-        b:10
+      value: {
+        a: 0,
+        b: 10
       },
       stepLength: 0,
-      temp:{
-        startX:0,
-        value:0
+      temp: {
+        startX: 0,
+        value: 0
       },
-      
+
       sliderLeft: {
         a: 0,
         b: 0
@@ -41,42 +41,53 @@ export default {
       }
     };
   },
-  props: ["step",'defaultValue'],
+  props: ["step", "defaultValue"],
   mounted() {
-    let valueArr = this.defaultValue.split(',')
-    this.value = {
-      a:parseInt(valueArr[0]),
-      b:parseInt(valueArr[1])
-    }
-    this.stepLength = document.getElementsByClassName("slider-wrap")[0].offsetWidth / this.step;
-    this.sliderChange();
+    this.reset()
   },
   methods: {
+    reset() {
+      let valueArr = this.defaultValue.split(",");
+      this.value = {
+        a: parseInt(valueArr[0]),
+        b: parseInt(valueArr[1])
+      };
+      this.stepLength =
+        document.getElementsByClassName("slider-wrap")[0].offsetWidth /
+        this.step;
+      this.sliderChange();
+    },
     touchSlider: function(item, e) {
-      this.temp={
-        startX:e.changedTouches[0].clientX,
-        value:this.value[item]
-      }
+      this.temp = {
+        startX: e.changedTouches[0].clientX,
+        value: this.value[item]
+      };
     },
     moveSlider: function(item, e) {
-      let value = this.value
-      let offsetLeft = e.changedTouches[0].clientX-this.temp.startX;
-      let valueChange = Math.round(offsetLeft/this.stepLength)+this.temp.value;
-      if((item=='a' && value.b>valueChange && valueChange>=0) || (item=='b' && value.a<valueChange  && valueChange<=this.step)){
-        value[item]=valueChange;
-        this.$emit('sliderChange',[value.a,value.b])
-        this.sliderChange();
-      }      
+      let value = this.value;
+      let offsetLeft = e.changedTouches[0].clientX - this.temp.startX;
+      let valueChange =
+        Math.round(offsetLeft / this.stepLength) + this.temp.value;
+      if (
+        (item == "a" && value.b > valueChange && valueChange >= 0) ||
+        (item == "b" && value.a < valueChange && valueChange <= this.step)
+      ) {
+        if (value[item] != valueChange) {
+          value[item] = valueChange;
+          this.$emit("sliderChange", [value.a, value.b]);
+          this.sliderChange();
+        }
+      }
     },
-    sliderChange(){
+    sliderChange() {
       this.sliderLeft = {
-        a:this.value.a*this.stepLength,
-        b:this.value.b*this.stepLength
-      }
+        a: this.value.a * this.stepLength,
+        b: this.value.b * this.stepLength
+      };
       this.activeLine = {
-        left:this.sliderLeft.a+'px',
-        width:(this.sliderLeft.b-this.sliderLeft.a)+'px'
-      }
+        left: this.sliderLeft.a + "px",
+        width: this.sliderLeft.b - this.sliderLeft.a + "px"
+      };
     }
   }
 };

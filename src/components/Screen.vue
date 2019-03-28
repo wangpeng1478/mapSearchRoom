@@ -21,7 +21,8 @@
       </div>
       <div class="screen-item">
         <h4>房间价格（元）</h4>
-        <Slider defaultValue='0,5' step="10" @sliderChange="customPrice"/>
+        <Slider ref='slider' defaultValue='0,27' step="27" @sliderChange="customPrice"/>
+        <p class="custom-price">{{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}}　——　{{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}</p>
         <ul>
           <li
             v-for="(price,index) in priceList"
@@ -55,6 +56,7 @@ import {mapState,mapMutations} from 'vuex'
 export default {
   data() {
     return {
+      customPriceValue:[0,27],
       query: {
         roomFeatureIdList: [],
         roomRentDays: null,
@@ -66,8 +68,20 @@ export default {
     Slider
   },
   methods: {
+    // customPrice(e){
+    //   let customPriceValue = []
+    //   customPriceValue = [e[0]*100+400,e[1]*100+400];
+    //   if(e[0]==0){
+    //     customPriceValue[0]=0
+    //   }
+    //   if(e[1]==27){
+    //     customPriceValue[1]='不限'
+    //   }
+    //   console.log(customPriceValue)
+    //   this.customPriceValue = customPriceValue;
+    // },
     customPrice(e){
-      console.log('缺少自定义价格函数');
+      this.customPriceValue = e;
     },
     selectionArea() {
       this.$emit("selectionArea");
@@ -78,6 +92,9 @@ export default {
         roomRentDays: null,
         priceRecomm: null
       };
+      this.customPriceValue = [0,27];
+      this.$refs.slider.reset()
+      // console.log(this.$refs.Slider.reset())
     },
     handleRoomFeature(selectRroomFeatureId) {
       let roomFeatureIdList = this.query.roomFeatureIdList;
@@ -210,5 +227,11 @@ export default {
   background: #ff9900;
   color: #fff;
   border-color: #ff9900;
+}
+.custom-price{
+  text-align: center;
+  font-size: 4vw;
+  margin: 2vw 0 4vw;
+  color: #ff9900;
 }
 </style>
