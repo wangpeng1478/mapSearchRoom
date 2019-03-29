@@ -45,6 +45,8 @@
   </div>
 </template>
 <script>
+import axios from 'axios'
+import API from '@/utils/api'
 export default {
   name: "RoomList",
   data() {
@@ -729,6 +731,9 @@ export default {
   },
   mounted() {
     this.vh = document.body.clientHeight / 100;
+    axios.post(API['queryRoomByVillage'],{
+      villageId:'',
+    })
   },
   methods: {
     test(e) {

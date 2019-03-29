@@ -13,9 +13,8 @@ export default new Vuex.Store({
       url: "https://www.qk365.com"
     },
     keywordsSearch:{},//搜索关键词
-    region:{
-      //筛选区域
-    },
+    region:{},//筛选区域
+    regionTemp:{},//筛选区域缓存
     mapData:{
       type:2,
       scale:11,
@@ -39,6 +38,7 @@ export default new Vuex.Store({
     map:"",
     cityList:null,
     screen:null, //筛选条件
+    screenTemp:null,//筛选条件缓存
     //mapBaseData
     mapBaseDataReady:false,
     metroList:[],

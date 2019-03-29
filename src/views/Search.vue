@@ -166,6 +166,7 @@ export default {
         key:'keywordsSearch',
         value:tag
       })
+      this.hotWordsCount();
     },
     handleClearinput() {
       this.searchValue = "";
@@ -175,9 +176,22 @@ export default {
         key:'keywordsSearch',
         value:this.searchResult[idx]
       })
+      this.hotWordsCount();
+    },
+    hotWordsCount(){
+      let params = new URLSearchParams({
+        cityId: this.currentCity.cityId,
+        type: 3,
+        id:this.keywordsSearch.id,
+        keyword: this.keywordsSearch.keyWords
+      });
+      axios.post(API['hotWordsCount'],params)
+        .catch(err=>{
+          console.log(err)
+        })
     }
   },
-  computed: mapState(["currentCity"]),
+  computed: mapState(["currentCity",'keywordsSearch']),
   watch: {
     searchValue(newVal, oldVal) {
       if (newVal != oldVal && newVal != "") {

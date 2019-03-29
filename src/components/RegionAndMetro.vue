@@ -121,7 +121,7 @@ export default {
           }
         }
         this.assign({
-          key:'region',
+          key:'regionTemp',
           value:data
         })
         this.$emit("hiddenRegion");
