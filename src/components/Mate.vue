@@ -44,10 +44,7 @@ export default {
     components:{sliderComponent},
     props: ['showMate'],
     computed:{
-        // ...mapGetters(["getMap"]),
-        // ...mapState(['mapData']),
         mapData(){
-            // this.$store.state.mapData
             this.$store.state.mapData.type;
             this.$store.state.mapData.latitude;
             this.$store.state.mapData.longitude;
@@ -59,15 +56,15 @@ export default {
     watch:{
         mapData:function(newQuestion, oldQuestion){
             var mp = store.state.map;
-            var _state = store.state.mapData;
-            let point = new BMap.Point(_state.longitude,_state.latitude);
+            let _state = store.state;
+            let _mapData = store.state.mapData;
+            let point = new BMap.Point(_mapData.longitude,_mapData.latitude);
             let type = newQuestion.type;
             let speed = 0;
             let time = newQuestion.time;
-            this.http.trafficSpeedList.map((val)=>{
+            _state.trafficSpeedList.map((val)=>{
                 if(val.type == type){
                     speed = val.speed;
-                    
                 }
                 return;
             })
@@ -91,35 +88,9 @@ export default {
             mp.addOverlay(circle1); //增加圆
             store.state.mapData.isOverLay = true;
             let json = {};
-            json = _state;
+            json = store.state.mapData;
             this.$.showHouse(json);
             this.$store.state.mapData.isInvFind = false;
-            // var canvasLayer = new BMap.CanvasLayer({
-            //     update: update
-            // });
-
-            // function update() {
-            //     var ctx = this.canvas.getContext("2d");
-
-            //     if (!ctx) {
-            //         return;
-            //     }
-
-            //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-            //     var temp = {};
-            //     ctx.fillStyle = "rgba(50, 50, 255, 0.7)";
-            //     ctx.beginPath();
-            //     var data = [
-            //         new BMap.Point(116.3964,39.9093),
-            //     ];
-
-            //     for (var i = 0, len = data.length; i < len; i++) {
-            //         var pixel = mp.pointToPixel(data[i]);
-            //         ctx.fillRect(pixel.x, pixel.y, 30, 30);
-            //     }
-            // }
-            // mp.addOverlay(canvasLayer);
         }
     },
     methods:{

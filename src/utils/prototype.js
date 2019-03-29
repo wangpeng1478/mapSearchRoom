@@ -118,6 +118,7 @@ ComplexVillageOverlay.prototype.initialize = function(map){
     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
     div.style.width = "14vw";
     div.style.height = "8vw";
+    div.style.zIndex = "100";
 
     var p = this._p = document.createElement("p");
     p.style.margin = "0px";

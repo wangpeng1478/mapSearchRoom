@@ -58,26 +58,37 @@
     },
     computed:{
       ...mapState(['currentCity']),
-      mapBaseData(){
-        return this.$store.state.mapBaseData;
+      mapBaseDataReady(){
+        return this.$store.state.mapBaseDataReady;
       }
     },
     watch:{
-      mapBaseData:function(newQuestion, oldQuestion){
-        if(oldQuestion==null){
-          this.baiduMap()
+      mapBaseDataReady:function(newQuestion, oldQuestion){
+        if(!oldQuestion){
+          this.baiduMap();console.log("mapBaseData")
         }
       }
     },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
-        if(this.$store.state.mapBaseData){
+        if(this.$store.state.mapBaseDataReady){
           this.baiduMap();
         }
+        this.httpQueryMapCoverData();
       })
     },
     methods : {
+      httpQueryMapCoverData:function(){
+        let _this = this;
+        axios.post(API["queryMapCoverData"], { cityId: 2 ,levelType:4}).then(res => {
+          if (res.data.code == 0) {
+            let data = res.data.data;
+            console.log(data)
+          
+          }
+        });
+      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
@@ -105,7 +116,37 @@
         let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         
         map.addOverlay(circle); //增加圆
+        let marker = new BMap.Marker(point);  // 创建标注
+        marker.setZIndex(10000)
+        marker.disableMassClear();
+        map.addOverlay(marker);           // 将标注添加到地图中
+        
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(point, function(rs){
+          var addComp = rs.addressComponents;
+          console.log(rs)
+        }); 
+        var content='<div class="alarmDiv">';
+        content+='<table style="width:100%;height:100%;" border="1" cellpadding="0" cellspacing="0">';
+        content+='<tr><td rowspan="4" style="width:80px;"><img src="/css/images/alarmLamp.gif" class="alarmPic"/></td>';
+        content+='<td class="tabLabel">姓名</td><td class="tabText">李二狗</td></tr><tr><td class="tabLabel">身份证号</td>';
+            '<tr><td align="center"><img src="/css/images/testPerson.jpg"/></td><td align="center">' +
+            '<img src="/css/images/testPerson.jpg"/></td></tr></table></td></tr></table></div>';
+        var opt = {
+          setWidth:500,
+          setHeight:500,
+          setContent:'marker'
+        }
+        var InfoWindow = new BMap.InfoWindow(content,opt)
+        marker.openInfoWindow(InfoWindow);
         store.state.mapData.isOverLay = true;
+        store.state.mapData.radius = distance;
+
+        this.$.showCoverByCoordinate(store.state.mapData);
+      },
+      callback:function(res){
+        console.log(res)
+        alert(111)
       },
       hiddenMateFun: function(msg){
         this.showView.showMate = msg;
@@ -248,9 +289,13 @@ li {
   color: #42b983;
 } */
 
+#map{
+  height: 100%;
+  width: 100%;
+}
 
 .baidumap{
-  height: 100vh;
+  height: 100%;
   width: 100%;
 }
 
@@ -443,6 +488,12 @@ li {
 </style>
 
 <style>
+
+html,body,#app{
+  height: 100%;
+  width: 100%;
+}
+
 .location_label,.location_cea_label{
     position : absolute;
     background : #0fb896;
@@ -505,4 +556,5 @@ li {
     overflow : hidden;
 }
 </style>
+
 

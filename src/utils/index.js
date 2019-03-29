@@ -45,7 +45,7 @@ export default{ //很关键
             if(mapData.isOverLay){
                 var json = {};
                 json = store.state.mapData;
-                that.showHouse(json)
+                // that.showHouse(json)
             }else{
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -324,6 +324,49 @@ export default{ //很关键
             that.showVillageHouse(val);
           });
           return;
+        })
+    },
+    showCoverByCoordinate:function(data){
+        
+        //根据经纬度坐标和半径距离查询房源
+        let map = store.state.map;
+
+        let httpMetroStationData = http.queryMetroStationMapData.data;
+        let that = this;
+        map.getOverlays().map((val)=>{
+            if(val._type=="ComplexOverlay"){
+               map.removeOverlay(val)
+            }else{}
+            return;
+        })
+        let point = new BMap.Point(data.longitude,data.latitude);
+        store.state.mapData.latitude = data.latitude;
+        store.state.mapData.longitude = data.longitude;
+        store.state.mapData.scale = 12;
+        // 创建点坐标  
+        let mapData = store.state.mapData; 
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
+        }
+        let bounds = map.getBounds();
+        axios.post(API["queryMapCoverByCoordinate"],data).then(res=>{
+            console.log(res)
+            if(res.data.code==0){
+                let data = res.data.data
+                data.map((val,index)=>{
+                    var txt = val.value, mouseoverTxt = val.count + "间";
+                    var myCompOverlay = new ComplexOverlay.ComplexVillageOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
+                    map.addOverlay(myCompOverlay);
+                    myCompOverlay._div.addEventListener('touchstart',function(){
+                    map.disableDragging();  //禁用地图拖拽功能
+                    });
+                    myCompOverlay._div.addEventListener("click", function () {
+                        alert(txt)
+                    });
+                    return;
+                })
+            }
+            
         })
     }
 }

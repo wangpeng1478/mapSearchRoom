@@ -41,9 +41,11 @@ export default {
             key: "mapBaseDataReady",
             value: true
           });
+         
         }
       });
-    }
+    },
+    
   },
   store
 };
