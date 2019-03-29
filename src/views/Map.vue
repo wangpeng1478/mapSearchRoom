@@ -13,7 +13,9 @@
     </transition>
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
-    <RoomList v-if="showView.showRoomList"/>
+    <transition name="roomlist">
+    <RoomList @roomListDestroy ='roomListDestroy' v-if="showView.showRoomList"/>
+    </transition>
     <transition name="screen">
       <Screen v-if="showView.showScreen" @selectionArea="selectionArea"/>
     </transition>
@@ -263,6 +265,9 @@
       },
       hiddenRegion(msg){
         this.showView.showRegionAndMetro=false;
+      },
+      roomListDestroy(){
+        this.showView.showRoomList=false;
       }
     }
   }
@@ -485,6 +490,13 @@ li {
   transform: translateY(-10vw);
   opacity: 0;
 }
+.roomlist-enter-active,.roomlist-leave-active {
+  transition: all .3s linear;
+}
+.roomlist-enter, .roomlist-leave-to{
+  top: 100vh;
+}
+
 </style>
 
 <style>
