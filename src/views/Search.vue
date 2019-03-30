@@ -10,7 +10,8 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <router-link to="/">取消</router-link>
+      <!-- <router-link to="/">取消</router-link> -->
+      <p @click="handleCannel">取消</p>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion">
@@ -146,6 +147,10 @@ export default {
   },
   methods: {
     ...mapMutations(["assign"]),
+    handleCannel(){
+      this.$router.go(-1);
+    },
+
     clearPoint() {
       localStorage.removeItem(this.storageName);
       this.pointTagHistory = [];
