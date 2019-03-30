@@ -47,8 +47,7 @@ export default new Vuex.Store({
     roomFeatureList:[],
     roomRentList:[],
     trafficSpeedList:[],
-    roomTypeList:[],
-    systempInfo:null
+    roomTypeList:[]
   },
   mutations: {
     //state赋值公共方法

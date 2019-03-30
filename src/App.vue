@@ -9,15 +9,10 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations,mapActions } from "vuex";
-import systempInfo from '@/utils/systempInfo'
 
 export default {
   name: "app",
   created: function() {
-    this.assign({
-      key:'systempInfo',
-      value:systempInfo()
-    })
     this.$nextTick(function() {
       this.httpQueryCityList();
       this.httpQueryMapBaseData();
