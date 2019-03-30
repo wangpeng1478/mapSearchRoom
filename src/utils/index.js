@@ -41,6 +41,7 @@ export default{ //很关键
         var that = this;
         obj.addEventListener("moving", function(e){
             let map = store.state.map;
+            let _state = store.state;
             let mapData = store.state.mapData;
             if(mapData.isOverLay){
                 var json = {};
@@ -53,6 +54,7 @@ export default{ //很关键
                 var json = {};
                 json = store.state.mapData;
                 that.showHouse(json)
+                
             }
             
         });
@@ -65,7 +67,6 @@ export default{ //很关键
             if(mapData.isOverLay){
                 var json = {};
                 json = store.state.mapData;
-                that.showHouse(json)
             }else{
                 let zoom = e.currentTarget.getZoom();
                 var cp = obj.getCenter();
@@ -79,37 +80,11 @@ export default{ //很关键
             
         });
     },
-    showHouse:function(data){
+    showHouse:function(callback){
         let _state = store.state;
-        
-        if(_state.mapData. isOverLay){
-            console.log(_state.mapScreen.radius)
-            var json = {};
-            json.longitude = _state.mapData.longitude;
-            json.latitude = _state.mapData.latitude;
-            // json.radius = _state.mapData.radius;
-            Object.assign(_state.mapScreen,json);
-             
-            axios.post(API["queryMapCoverByCoordinate"], _state.mapScreen).then(res => {
-                if (res.data.code == 0) {
-                    console.log(res)
-                    let data = res.data.data;
-                    store.state.coverDataList = data;
-                    switch (_state.mapScreen.levelType) {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            this.showAreaHouse();
-                            break
-                        case 5:
-                            this.showMetroHouse();
-                            break
-                        case 6:
-                        case 7:
-                    }
-                }
-            });
+        console.log(_state.mapData.isOverLay)
+        if(_state.mapData.isOverLay){
+            callback();
         }else{
             if(!_state.mapScreen){
                 var json = {};
@@ -138,6 +113,39 @@ export default{ //很关键
             });
         }
         
+        
+    },
+    showCoverHouse:function(data){
+        let _state = store.state;
+        console.log("isOverLay",_state.mapData.isOverLay)
+        if(_state.mapData.isOverLay){
+            var json = {};
+            json.longitude = _state.mapData.longitude;
+            json.latitude = _state.mapData.latitude;
+            Object.assign(_state.mapScreen,json);
+             
+            axios.post(API["queryMapCoverByCoordinate"], _state.mapScreen).then(res => {
+                if (res.data.code == 0) {
+                    let data = res.data.data;
+                    store.state.coverDataList = data;
+                    this.showAreaHouse();
+                    console.log(data)
+                    // switch (_state.mapScreen.levelType) {
+                    //     case 1:
+                    //     case 2:
+                    //     case 3:
+                    //     case 4:
+                    //         this.showAreaHouse();
+                    //         break
+                    //     case 5:
+                    //         this.showMetroHouse();
+                    //         break
+                    //     case 6:
+                    //     case 7:
+                    // }
+                }
+            });
+        }
         
     },
     showAreaHouse:function(){
