@@ -80,67 +80,70 @@ export default{ //很关键
         });
     },
     showHouse:function(data){
-        if(data.findHouseRank == 1){
-            switch (data.scale) {
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    this.showPrcHouse();
-                    break;
-                case 10:
-                case 11:
-                case 12:
-                    this.showPrcHouse();
-                    break;
-                case 13:
-                case 14:
-                    this.showCeaHouse(data);
-                    break
-                case 15:
-                case 16:
-                case 17:
-                case 18:
-                case 19:
-                    this.showVillageHouse(data)
-                    break;
-            
-                default:
-                    break;
+        let _state = store.state;
+        
+        if(_state.mapData. isOverLay){
+            console.log(_state.mapScreen.radius)
+            var json = {};
+            json.longitude = _state.mapData.longitude;
+            json.latitude = _state.mapData.latitude;
+            // json.radius = _state.mapData.radius;
+            Object.assign(_state.mapScreen,json);
+             
+            axios.post(API["queryMapCoverByCoordinate"], _state.mapScreen).then(res => {
+                if (res.data.code == 0) {
+                    console.log(res)
+                    let data = res.data.data;
+                    store.state.coverDataList = data;
+                    switch (_state.mapScreen.levelType) {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            this.showAreaHouse();
+                            break
+                        case 5:
+                            this.showMetroHouse();
+                            break
+                        case 6:
+                        case 7:
+                    }
+                }
+            });
+        }else{
+            if(!_state.mapScreen){
+                var json = {};
+                json.cityId = _state.currentCity.cityId;
+                json.levelType = 2;
+                _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
-        }else if(data.findHouseRank == 2){
-            switch (data.scale) {
-
-                case 10:
-                case 11:
-                case 12:
-                case 13:
-                case 14:
-                    this.showMetroStationHouse(data);
-                    break
-                case 15:
-                case 16:
-                case 17:
-                case 18:
-                case 19:
-                    this.showVillageHouse(data)
-                    break;
-            
-                default:
-                    break;
+            axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
+            if (res.data.code == 0) {
+                let data = res.data.data;
+                store.state.coverDataList = data;
+                switch (_state.mapScreen.levelType) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        this.showAreaHouse();
+                        break
+                    case 5:
+                        this.showMetroHouse();
+                        break
+                    case 6:
+                    case 7:
+                }
             }
+            });
         }
         
         
     },
-    showPrcHouse:function(){
+    showAreaHouse:function(){
         let map = store.state.map;
-        let httpData = store.state.mapBaseData;
+        let _state = store.state;
         let that = this;
-        // map.enableMassClear();
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
@@ -149,22 +152,50 @@ export default{ //很关键
         })
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
-        let mapData = store.state.mapData; 
+        let mapData = store.state.mapData;
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        httpData.provincialList.map((val,index)=>{
+        console.log(_state.coverDataList)
+        let bounds = map.getBounds();
+        _state.coverDataList.map((val,index)=>{
+            if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
+                var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
+                var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),price, txt,mouseoverTxt,"ComplexOverlay");
+                map.addOverlay(myCompOverlay);
+                //覆盖物添加点击事件+
+                myCompOverlay._div.addEventListener('touchstart',function(){
+                    map.disableDragging();  //禁用地图拖拽功能
+                });
+                myCompOverlay._div.addEventListener("click", function () {
+                    store.state.mapScreen.levelType = _state.mapScreen.levelType+1;
+                    store.state.mapScreen.latitude = val.lat;
+                    store.state.mapScreen.longitude = val.lng;
+                    switch (store.state.mapScreen.levelType) {
+                        case 1:
+                        case 2:
+                            store.state.mapData.scale = 11;
+                            break;
+                        case 3:
+                            store.state.mapData.scale = 14;
+                            break;
+                        case 4:
+                            store.state.mapData.scale = 15;
+                            break;
+                        case 5:
+                            store.state.mapData.scale = 12;
+                            break;
+                        case 6:
+                            store.state.mapData.scale = 15;
+                            break;
+                        case 7:
+                        default:
+                            break;
+                    }
+                    that.showHouse();
+                });
+            }
             
-            var txt = val.prcName, mouseoverTxt = val.roomCount + "间";
-            var myCompOverlay = new ComplexOverlay.ComplexPrcOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-            map.addOverlay(myCompOverlay);
-            //覆盖物添加点击事件+
-            myCompOverlay._div.addEventListener('touchstart',function(){
-                map.disableDragging();  //禁用地图拖拽功能
-            });
-            myCompOverlay._div.addEventListener("click", function () {
-                that.showCeaHouse(val);
-            });
             return;
         })
     },
@@ -204,7 +235,7 @@ export default{ //很关键
                     myCompOverlay._div.addEventListener("click", function () {
                         store.state.mapData.scale = 15;
                         val.isSlider = data.isSlider;
-                        that.showVillageHouse(val);
+                        that.showHouse(val);
                     });
                 }
                 return;

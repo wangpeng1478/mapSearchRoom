@@ -1,4 +1,120 @@
 
+
+
+//区域覆盖物
+function ComplexAreaOverlay(point,price, text, mouseoverText,type){
+    this._point = point;
+    this._price = price;
+    this._text = text;
+    this._overText = mouseoverText;
+    this._type = type;
+}
+ComplexAreaOverlay.prototype = new BMap.Overlay();
+ComplexAreaOverlay.prototype.initialize = function(map){ 
+    let _this = this;
+    this._map = map;
+    var div = this._div = document.createElement("div");
+    div.className = "location_label";
+    div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
+    div.style.width = "14vw";
+    div.style.height = "8vw";
+
+    var p = this._p = document.createElement("p");
+    p.style.margin = "0px";
+    div.appendChild(p);
+    p.appendChild(document.createTextNode("¥"+this._price+"+"));
+    var p2 = this._p = document.createElement("p");
+    p2.style.margin = "0px";
+    p2.style.textAlign = "center";
+    div.appendChild(p2);
+    p2.appendChild(document.createTextNode(_this._overText));
+
+    var arrow = this._arrow = document.createElement("div");
+    arrow.className = "label_arrow";
+    arrow.style.border = "8vw solid transparent";
+    arrow.style.borderTop = "3vw solid #0fb896";
+    div.appendChild(arrow);
+
+    var p3 = this.p3 = document.createElement("p");
+    p3.className = "label_area_name";
+    div.appendChild(p3);
+    p3.appendChild(document.createTextNode(_this._text));
+
+
+    map.getPanes().labelPane.appendChild(div);
+
+    return div;
+}
+ComplexAreaOverlay.prototype.draw = function(){
+    var map = this._map;
+    var pixel = map.pointToOverlayPixel(this._point);
+    this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
+    this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
+}
+
+
+//定位覆盖物
+function ComplexSiteOverlay(point, text,type){
+    this._point = point;
+    this._text = text;
+    this._type = type;
+}
+ComplexSiteOverlay.prototype = new BMap.Overlay();
+ComplexSiteOverlay.prototype.initialize = function(map){ 
+    let _this = this;
+    this._map = map;
+    var div = this._div = document.createElement("div");
+    div.className = "location_site_label";
+    div.style.height = "8vw";
+    div.style.zIndex = "1000";
+    div.style.backgroundColor = "#fff";
+    div.style.cursor = "pointer";
+
+    var p = this._p = document.createElement("p");
+    p.style.margin = "0px";
+    p.style.color = "#000";
+    p.style.background="#fff";
+    p.style.padding="2vw 3vw";
+    p.style.fontSize= "4vw";
+    p.style.borderRadius = "1vw";
+
+    div.appendChild(p);
+    p.appendChild(document.createTextNode(this._text));
+    var i = this._p = document.createElement("i");
+    i.className = "location_site_write";
+    
+    
+    p.appendChild(i);
+
+
+    var arrow = this._arrow = document.createElement("div");
+    arrow.className = "label_site_arrow";
+    arrow.style.border = "2vw solid transparent";
+    arrow.style.borderTop = "2vw solid #fff";
+    div.appendChild(arrow);
+
+    var p3 = this.p3 = document.createElement("p");
+    p3.className = "label_site_img";
+    div.appendChild(p3);
+
+    console.log(div)
+    div.addEventListener('touchend',function(){
+        console.log("touchend")
+    });
+    map.getPanes().labelPane.appendChild(div);
+
+    return div;
+}
+ComplexSiteOverlay.prototype.draw = function(){
+    var map = this._map;
+    var pixel = map.pointToOverlayPixel(this._point);
+    this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
+    this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
+    console.log(parseInt(this._div.style.height) + parseInt(this._arrow.style.borderWidth))
+}
+
+
+
 //行政区覆盖物
 function ComplexPrcOverlay(point, text, mouseoverText,type){
     this._point = point;
@@ -193,6 +309,8 @@ ComplexMetroStationOverlay.prototype.draw = function(){
 }
 
 export default  {
+    ComplexSiteOverlay,
+    ComplexAreaOverlay,
     ComplexPrcOverlay,
     ComplexCeaOverlay,
     ComplexVillageOverlay,

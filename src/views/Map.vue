@@ -23,10 +23,6 @@
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
-    <!-- <div @click="findHouse" class="find-house" v-if="isFind">
-      <p class="">点我找房</p>
-      <div class="site-pin"></div>
-    </div> -->
   </div>
 </template>
 
@@ -65,33 +61,23 @@
       }
     },
     watch:{
-      mapBaseDataReady:function(newQuestion, oldQuestion){
-        if(!oldQuestion){
-          this.baiduMap();
-          console.log("mapBaseData")
-        }
-      }
+      // mapBaseDataReady:function(newQuestion, oldQuestion){
+      //   if(!oldQuestion){
+      //     this.baiduMap();console.log("mapBaseData")
+      //   }
+      // }
     },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
-        if(this.$store.state.mapBaseDataReady){
-          this.baiduMap();
-        }
-        this.httpQueryMapCoverData();
+        this.baiduMap();
+        // if(this.$store.state.mapBaseDataReady){
+        //   this.baiduMap();
+        // }
+        // this.httpQueryMapCoverData();
       })
     },
     methods : {
-      httpQueryMapCoverData:function(){
-        let _this = this;
-        axios.post(API["queryMapCoverData"], { cityId: 2 ,levelType:4}).then(res => {
-          if (res.data.code == 0) {
-            let data = res.data.data;
-            console.log(data)
-          
-          }
-        });
-      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
@@ -108,44 +94,30 @@
       showMateFun:function(){
         this.isFind = false;
         this.showView.showMate = true;
-        var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
+       var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         elements.className = "BMap_noprint anchorBL bottom48"; 
-        let _state = store.state.mapData;
-        let map = store.state.map;
-        let distance = store.state.mapData.speed*store.state.mapData.time;
-        let point = new BMap.Point(_state.longitude,_state.latitude);
-        let scale = _state.scale;
-        map.centerAndZoom(point, scale);
-        let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-        
-        map.addOverlay(circle); //增加圆
-        let marker = new BMap.Marker(point);  // 创建标注
-        marker.setZIndex(10000)
-        marker.disableMassClear();
-        map.addOverlay(marker);           // 将标注添加到地图中
-        
-        var geoc = new BMap.Geocoder();
-        geoc.getLocation(point, function(rs){
-          var addComp = rs.addressComponents;
-          console.log(rs)
-        }); 
-        var content='<div class="alarmDiv">';
-        content+='<table style="width:100%;height:100%;" border="1" cellpadding="0" cellspacing="0">';
-        content+='<tr><td rowspan="4" style="width:80px;"><img src="/css/images/alarmLamp.gif" class="alarmPic"/></td>';
-        content+='<td class="tabLabel">姓名</td><td class="tabText">李二狗</td></tr><tr><td class="tabLabel">身份证号</td>';
-            '<tr><td align="center"><img src="/css/images/testPerson.jpg"/></td><td align="center">' +
-            '<img src="/css/images/testPerson.jpg"/></td></tr></table></td></tr></table></div>';
-        var opt = {
-          setWidth:500,
-          setHeight:500,
-          setContent:'marker'
-        }
-        var InfoWindow = new BMap.InfoWindow(content,opt)
-        marker.openInfoWindow(InfoWindow);
-        store.state.mapData.isOverLay = true;
-        store.state.mapData.radius = distance;
+        // var geoc = new BMap.Geocoder();
+        // geoc.getLocation(point, function(rs){
+        //   var addComp = rs.addressComponents;
+        //   console.log(rs)
+        // }); 
+        // var content='<div class="alarmDiv">';
+        // content+='<table style="width:100%;height:100%;" border="1" cellpadding="0" cellspacing="0">';
+        // content+='<tr><td rowspan="4" style="width:80px;"><img src="/css/images/alarmLamp.gif" class="alarmPic"/></td>';
+        // content+='<td class="tabLabel">姓名</td><td class="tabText">李二狗</td></tr><tr><td class="tabLabel">身份证号</td>';
+        //     '<tr><td align="center"><img src="/css/images/testPerson.jpg"/></td><td align="center">' +
+        //     '<img src="/css/images/testPerson.jpg"/></td></tr></table></td></tr></table></div>';
+        // var opt = {
+        //   setWidth:500,
+        //   setHeight:500,
+        //   setContent:'marker'
+        // }
+        // var InfoWindow = new BMap.InfoWindow(content,opt)
+        // marker.openInfoWindow(InfoWindow);
+        // store.state.mapData.isOverLay = true;
+        // store.state.mapData.radius = distance;
 
-        this.$.showCoverByCoordinate(store.state.mapData);
+        // this.$.showCoverByCoordinate(store.state.mapData);
       },
       callback:function(res){
         console.log(res)
@@ -158,7 +130,7 @@
       baiduMap: function () {
         //模拟数据
         let that = this;
-        // let httpData = this.http.queryMapBaseData.data;
+        // let httpData = this.$store.state.coverDataList;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
         _state.map = map;
@@ -187,9 +159,8 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-        // marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
 
-        this.$.showHouse(_state.mapData);
+        this.$.showHouse();
       
         
         // this.$.showMetroStationHouse(_state.mapData);
@@ -493,6 +464,8 @@ html,body,#app{
   width: 100%;
 }
 
+
+
 .location_label,.location_cea_label{
     position : absolute;
     background : #0fb896;
@@ -502,7 +475,6 @@ html,body,#app{
     white-space : nowrap;
     -moz-user-select : none;
     font-size : 4vw;
-    z-index: 10000;
 }
 
 .label_arrow,.label_cea_arrow{
@@ -527,6 +499,44 @@ html,body,#app{
   margin-top : 4vw;
   text-align : center;
 }
+
+.location_site_label{
+  position : absolute;
+  white-space : nowrap;
+  -moz-user-select : none;
+  font-size : 4vw;
+  z-index: 10000;
+}
+.label_site_img{
+  position : absolute;
+  top:11vw;
+  left: 50%;
+  width: 5vw;
+  height : 6vw;
+  border-radius : 1vw;
+  background:url("../assets/images/icon/site2.png") no-repeat;
+  background-size:100% 100%;
+  margin-left:-2.5vw;
+}
+.location_site_write{
+  width : 3vw;
+  height : 4vw;
+  display : inline-block;
+  margin : 0px;
+  background : url('../assets/images/icon/write.png') no-repeat;
+  background-size : 100% 100%;
+  margin-left: 3vw;
+  vertical-align: middle;
+}
+.label_site_arrow{
+  position : absolute;
+  width : 0px;
+  height : 0px;
+  top : 9vw;
+  left : 50%;
+  overflow : hidden;
+  margin-left:-2vw;
+}
   .BMap_noprint.anchorBL{
     left: auto !important;
     right: 10px !important;
@@ -543,7 +553,6 @@ html,body,#app{
     -moz-user-select : none;
     font-size : 4vw;
     z-index: 100;
-    border-radius: 1vw;
   }
 
   .label_metro_arrow{

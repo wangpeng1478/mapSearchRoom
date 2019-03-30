@@ -15,32 +15,30 @@ export default new Vuex.Store({
     keywordsSearch:{},//搜索关键词
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
-    mapData:{
+
+    data:{
       type:2,
       scale:11,
       speed:800,
       time:20,
-      radius:null,
-      rentDays:null,
-      priceFrom:null,
-      priceTo:null,
-      roomType:null,
-      roomFeatureIds:[],
+    },
+    mapData:{
+      type:2,
+      cityId:2,
+      radius:0,
       latitude:31.2363429624,
       longitude:121.4803295328,
-      prcId:0,
-      ceaId:0,
-      villageId:0,
+      scale:11,
       isOverLay:false,    //显示覆盖物里的房源
       isInvFind:false,    //是否使用滑块改变scale
-      findHouseRank:1          //1  区域找房       2 地铁找房
     },
     map:"",
     cityList:null,
+    mapScreen:null,
     screen:null, //筛选条件
     screenTemp:null,//筛选条件缓存
-    //mapBaseData
     mapBaseDataReady:false,
+    coverDataList:[],
     metroList:[],
     priceList:[],
     provincialList:[],

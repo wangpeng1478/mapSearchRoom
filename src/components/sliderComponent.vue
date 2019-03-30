@@ -37,9 +37,12 @@ export default {
     methods:{
         touchSlider : function (e) {
             let target= e.srcElement? e.srcElement: e.target;
+            var s = document.getElementsByClassName("slider")[0];
+            this.sliderLeft = parseFloat(s.style.left);
             this.startX = e.changedTouches[0].clientX;
         },
         moveSlider:function (e) {
+            
             let sl = this.sl;
             this.$store.state.mapData.isInvFind = true;
             let target= e.srcElement? e.srcElement: e.target;
@@ -59,6 +62,7 @@ export default {
                 lineLength = this.sliderLeft + (moveX - this.startX)/_x*num*sl + "px";
             }
             s.style.left = lineLength;
+            
             lineA.style.width = lineLength;
             if(this.num!=num){
                 this.num = num;
@@ -68,6 +72,7 @@ export default {
             
         },
         endSlider : function () {
+            
             this.$store.state.mapData.isInvFind = false;
         }
     }
