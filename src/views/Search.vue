@@ -7,8 +7,8 @@
         placeholder="请输入小区/区域/地图"
         maxlength="50"
         v-model="searchValue"
+        @input="handleInput"
       >
-      <!-- @input="handleInput" -->
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
       <router-link to="/">取消</router-link>
     </div>
@@ -179,7 +179,7 @@ export default {
       }
       pointTagHistory.unshift(point);
       pointTagHistory = JSON.stringify(pointTagHistory.slice(0, 9));
-      
+
       localStorage.setItem(this.storageName, pointTagHistory);
     },
     clearHistory() {
@@ -187,31 +187,40 @@ export default {
       this.searchTagHistory = [];
     },
     handleInput(e) {
-      let params = new URLSearchParams({
-        cityId: this.currentCity.cityId,
-        type: 3,
-        limit: 9,
-        keyword: this.searchValue
-      });
-      axios
-        .post(API["keywordsSearch"], params, {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
-          }
-        })
-        .then(res => {
-          if (res.data.code == 0) {
-            let searchResult = res.data.data;
-
-            searchResult.map(result => {
-              result.showKeyWords = result.keyWords.replace(
-                this.searchValue,
-                "<span>" + this.searchValue + "</span>"
-              );
-            });
-            this.searchResult = searchResult;
-          }
+      if (this.searchValue.length == 0) {
+        this.searchResult = [];
+        this.acResult = [];
+        return;
+      }
+      if (this.isRegion) {
+        let params = new URLSearchParams({
+          cityId: this.currentCity.cityId,
+          type: 3,
+          limit: 9,
+          keyword: this.searchValue
         });
+        axios
+          .post(API["keywordsSearch"], params, {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8"
+            }
+          })
+          .then(res => {
+            if (res.data.code == 0) {
+              let searchResult = res.data.data;
+
+              searchResult.map(result => {
+                result.showKeyWords = result.keyWords.replace(
+                  this.searchValue,
+                  "<span>" + this.searchValue + "</span>"
+                );
+              });
+              this.searchResult = searchResult;
+            }
+          });
+      } else {
+        this.acResult = this.ac.getResults().Lq;
+      }
     },
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
@@ -254,22 +263,7 @@ export default {
       });
     }
   },
-  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"]),
-  watch: {
-    searchValue(newVal, oldVal) {
-      if (this.isRegion) {
-        if (newVal != oldVal && newVal != "") {
-          this.handleInput();
-        }
-        if (newVal != oldVal && newVal == "") {
-          this.searchResult = [];
-        }
-      } else {
-        console.log(this.ac.getResults());
-        this.acResult = this.ac.getResults().Lq;
-      }
-    }
-  }
+  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])
 };
 </script>
 <style scoped>

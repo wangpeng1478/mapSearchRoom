@@ -144,7 +144,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
-            }else{}
+            }
             return;
         })
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
@@ -178,7 +178,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
-            }else{}
+            }
             return;
         })
         let point = new BMap.Point(data.longitude,data.latitude);
@@ -235,7 +235,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
-            }else{}
+            }
             return;
         })
         let point = new BMap.Point(data.longitude,data.latitude);
@@ -297,7 +297,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
-            }else{}
+            }
             return;
         })
         let point = new BMap.Point(data.longitude,data.latitude);
@@ -336,7 +336,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
-            }else{}
+            }
             return;
         })
         let point = new BMap.Point(data.longitude,data.latitude);
