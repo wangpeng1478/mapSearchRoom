@@ -6,6 +6,7 @@
       <button class="retract"></button>
       <div class="village-info">
         <p>{{roomList[0].villageName}}（{{roomList.length}}间）</p>
+        <!-- TODO -->
         <span>距龙华中路约{{roomList[0].metroDistance }}米</span>
       </div>
     </div>

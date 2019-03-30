@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "mobile-detect": "^1.4.3",
     "vue": "^2.6.6",
     "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
