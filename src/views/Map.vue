@@ -14,7 +14,7 @@
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
     <transition name="roomlist">
-    <RoomList @roomListDestroy ='roomListDestroy' v-if="showView.showRoomList"/>
+    <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="mapData.showRoomList"/>
     </transition>
     <transition name="screen">
       <Screen v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
@@ -52,9 +52,7 @@
       RoomList,
       Screen,
       RegionAndMetro,
-    },
-    props: {
-      msg: String,
+     
     },
     computed:{
       ...mapState(['currentCity','keywordsSearch','mapData']),
@@ -185,8 +183,8 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-
-        this.$.showHouse(that.showMateFun);
+        console.log(that)
+        this.$.showHouse(that.showMateFun,that);
          _state.map = map;
         
       

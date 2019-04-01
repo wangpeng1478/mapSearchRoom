@@ -2,9 +2,10 @@
 
 
 //区域覆盖物
-function ComplexAreaOverlay(point,price, text, mouseoverText,type){
+function ComplexAreaOverlay(point,key,price, text, mouseoverText,type){
     this._point = point;
     this._price = price;
+    this._key = key;
     this._text = text;
     this._overText = mouseoverText;
     this._type = type;
@@ -15,6 +16,9 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     this._map = map;
     var div = this._div = document.createElement("div");
     div.className = "location_label";
+    div.setAttribute("lat",this._point.lat);
+    div.setAttribute("lng",this._point.lng);
+    div.setAttribute("key",this._key);
     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
     div.style.width = "14vw";
     div.style.height = "8vw";
