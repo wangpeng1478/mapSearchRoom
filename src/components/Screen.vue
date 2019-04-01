@@ -31,9 +31,9 @@
           >{{roomType.statusName}}</li>
         </ul>
       </div>
-      <div class="screen-item">
+      <div class="screen-item" v-if="customPriceValue">
         <h4>房间价格（元）</h4>
-        <Slider ref="slider" defaultValue="0,27" step="27" @sliderChange="customPrice"/>
+        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="customPrice"/>
         <p class="custom-price">
           {{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}} ——
           {{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}
@@ -76,7 +76,7 @@ export default {
     return {
       roomCount: null,
       regionName: null,
-      customPriceValue: [0, 27],
+      customPriceValue: null,
       priceRecomm: null,
       query: {
         roomFeatureId: [],
@@ -93,11 +93,13 @@ export default {
     this.isOverLay = this.mapData.isOverLay;
     let screenTemp = JSON.parse(JSON.stringify(this.screenTemp));
     if (this.screenTemp) {
-      (this.roomCount = screenTemp.roomCount),
-        (this.regionName = screenTemp.regionName),
-        (this.customPriceValue = screenTemp.customPriceValue),
-        (this.priceRecomm = screenTemp.priceRecomm),
-        (this.query = screenTemp.query);
+      this.roomCount = screenTemp.roomCount;
+        this.regionName = screenTemp.regionName,
+        this.customPriceValue = screenTemp.customPriceValue;
+        this.priceRecomm = screenTemp.priceRecomm;
+        this.query = screenTemp.query;
+    }else{
+      this.customPriceValue = [0,27]
     }
     if (!this.isOverLay) {
       if (Object.keys(this.region).length == 0) {

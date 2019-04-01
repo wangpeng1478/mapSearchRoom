@@ -47,10 +47,10 @@ export default {
   },
   methods: {
     reset() {
-      let valueArr = this.defaultValue.split(",");
+      let valueArr = this.defaultValue;
       this.value = {
-        a: parseInt(valueArr[0]),
-        b: parseInt(valueArr[1])
+        a: valueArr[0],
+        b: valueArr[1]
       };
       this.stepLength =
         document.getElementsByClassName("slider-wrap")[0].offsetWidth /
