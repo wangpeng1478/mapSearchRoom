@@ -6,8 +6,8 @@
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
-      <router-link to="/search" class="search">请输入小区/区域/地铁</router-link>
-      <i class="iconfont icon-guanbi"></i>
+      <router-link to="/search" class="search">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入小区/区域/地铁'}}</router-link>
+      <i class="iconfont icon-guanbi" @click="handelClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     </transition>
@@ -57,7 +57,7 @@
       msg: String,
     },
     computed:{
-      ...mapState(['currentCity']),
+      ...mapState(['currentCity','keywordsSearch']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       }
@@ -69,11 +69,18 @@
       })
     },
     methods : {
+      ...mapMutations(['assign']),
       mapScreen(){
         //地图条件搜索
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        console.log('缺少筛选后的函数')
+        console.log('缺少筛选后的函数');
+      },
+      handelClearSearh(){
+        this.assign({
+          key:'keywordsSearch',
+          value:{}
+        })
       },
       handelList(){
         record(2,'地图找房页面列表按钮')
