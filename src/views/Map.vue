@@ -37,6 +37,7 @@
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
   import {mapState,mapMutations} from 'vuex'
+  import record from '@/utils/record'
   export default {
     name: 'Map',
     data () {
@@ -84,6 +85,7 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
+        record(2,'地图找房页面个性找房按钮')
         console.log("showMateFun")
         let map = this.$store.state.map;
         let _this = this;
@@ -218,6 +220,7 @@
         // });
       },
       handleComponentView(component){
+        record(2,'地图页面筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
       },

@@ -28,7 +28,9 @@ const record = (eventType,value) => {
         recordHttp(eventType)
     }
     if(eventType==2){
-
+        recordHttp(eventType,{
+            buttonName:value
+        })
     }
     if(eventType==3){
         console.log(value)
