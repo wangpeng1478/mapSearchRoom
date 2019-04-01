@@ -157,7 +157,6 @@ export default {
       this.pointTagHistory = [];
     },
     handleAcResult(idx) {
-      console.log("handleAcResult");
       let _this = this;
       let myValue =
         this.acResult[idx].city +

@@ -244,7 +244,6 @@ export default {
         }
       })
       
-      console.log(query.priceTo=='')
       if(query.priceTo==''){
         query.priceTo='不限'
       }
