@@ -103,7 +103,6 @@
       },
       showMateFun:function(){
         record(2,'地图找房页面个性找房按钮')
-        console.log("showMateFun")
         let map = this.$store.state.map;
         let that = this;
         this.isFind = false;
@@ -121,7 +120,6 @@
         // var geoc = new BMap.Geocoder();
         // geoc.getLocation(point, function(rs){
         //   var addComp = rs.addressComponents;
-        //   console.log(rs)
         // }); 
         // var content='<div class="alarmDiv">';
         // content+='<table style="width:100%;height:100%;" border="1" cellpadding="0" cellspacing="0">';
@@ -184,7 +182,6 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-        console.log(that)
         this.$.showHouse(that.showMateFun,that);
          _state.map = map;
         
@@ -233,7 +230,6 @@
         // var geolocation = new BMap.Geolocation();
         // geolocation.enableSDKLocation();
         // geolocation.getCurrentPosition(function(r){
-        //   console.log(r)
         //   if(this.getStatus() == BMAP_STATUS_SUCCESS){
         //     var mk = new BMap.Marker(r.point);
         //     map.addOverlay(mk);

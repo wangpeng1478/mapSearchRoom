@@ -92,7 +92,6 @@ export default{ //很关键
                 json.levelType = 2;
                 _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
-            console.log(obj)
             axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
             if (res.data.code == 0) {
                 let data = res.data.data;
@@ -149,7 +148,6 @@ export default{ //很关键
         
     },
     showAreaHouse:function(obj){
-        console.log(obj)
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -176,7 +174,6 @@ export default{ //很关键
                     map.disableDragging();  //禁用地图拖拽功能
                 });
                 let objVue = obj;
-                // console.log(obj)
                 if(_state.mapScreen.levelType==4||_state.mapScreen.levelType==6||_state.mapScreen.levelType==7){
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
@@ -417,7 +414,6 @@ export default{ //很关键
         }
         let bounds = map.getBounds();
         axios.post(API["queryMapCoverByCoordinate"],data).then(res=>{
-            console.log(res)
             if(res.data.code==0){
                 let data = res.data.data
                 data.map((val,index)=>{

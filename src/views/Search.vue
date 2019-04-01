@@ -267,9 +267,7 @@ export default {
         keyType:2,
         keyWords:this.keywordsSearch.keyWords
       })
-      axios.post(API["hotWordsCount"], params).catch(err => {
-        console.log(err);
-      });
+      axios.post(API["hotWordsCount"], params)
       this.backMap()
     },
     backMap(){
