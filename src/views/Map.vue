@@ -6,7 +6,7 @@
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
-      <router-link to="/search" class="search">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入小区/区域/地铁'}}</router-link>
+      <router-link to="/search" class="search" @click="record(2,'点击搜索框')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入小区/区域/地铁'}}</router-link>
       <i class="iconfont icon-guanbi" @click="handelClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
