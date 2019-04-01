@@ -3,6 +3,7 @@ import API from '@/utils/api'
 import store from '@/store'
 import  http  from "@/utils/data.js"
 import  ComplexOverlay  from '@/utils/prototype.js'
+import  Map  from '@/views/Map.vue'
 export default{ //很关键
     hasClass:(ele, cls) =>  {
         return ele.className.match(new RegExp("(\\s|^)" + cls + "(\\s|$)"));
@@ -80,9 +81,8 @@ export default{ //很关键
             
         });
     },
-    showHouse:function(callback){
+    showHouse:function(callback,obj){
         let _state = store.state;
-        console.log(_state.mapData.isOverLay)
         if(_state.mapData.isOverLay){
             callback();
         }else{
@@ -92,6 +92,7 @@ export default{ //很关键
                 json.levelType = 2;
                 _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
+            console.log(obj)
             axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
             if (res.data.code == 0) {
                 let data = res.data.data;
@@ -101,10 +102,10 @@ export default{ //很关键
                     case 2:
                     case 3:
                     case 4:
-                        this.showAreaHouse();
+                        this.showAreaHouse(obj);
                         break
                     case 5:
-                        this.showMetroHouse();
+                        this.showMetroHouse(obj);
                         break
                     case 6:
                     case 7:
@@ -147,7 +148,8 @@ export default{ //很关键
         }
         
     },
-    showAreaHouse:function(){
+    showAreaHouse:function(obj){
+        console.log(obj)
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -163,44 +165,71 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        console.log(_state.coverDataList)
         let bounds = map.getBounds();
         _state.coverDataList.map((val,index)=>{
             if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
                 var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
-                var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),price, txt,mouseoverTxt,"ComplexOverlay");
+                var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                 map.addOverlay(myCompOverlay);
                 //覆盖物添加点击事件+
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                 });
-                myCompOverlay._div.addEventListener("click", function () {
-                    store.state.mapScreen.levelType = _state.mapScreen.levelType+1;
-                    store.state.mapScreen.latitude = val.lat;
-                    store.state.mapScreen.longitude = val.lng;
-                    switch (store.state.mapScreen.levelType) {
-                        case 1:
-                        case 2:
-                            store.state.mapData.scale = 11;
-                            break;
-                        case 3:
-                            store.state.mapData.scale = 14;
-                            break;
-                        case 4:
-                            store.state.mapData.scale = 15;
-                            break;
-                        case 5:
-                            store.state.mapData.scale = 12;
-                            break;
-                        case 6:
-                            store.state.mapData.scale = 15;
-                            break;
-                        case 7:
-                        default:
-                            break;
+                let objVue = obj;
+                // console.log(obj)
+                if(_state.mapScreen.levelType==4||_state.mapScreen.levelType==6||_state.mapScreen.levelType==7){
+                    myCompOverlay._div.addEventListener("click", 
+                    function (e) {
+                        // function fn(objVue){
+                        //     console.log(objVue)
+                        // }
+                        // fn();
+                        store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
+                        store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
+                        store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
+                        store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+                        store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
+                        store.state.mapData.showRoomList = true;
+                        // var json = {showRoomList:true};
+                        // Map.data.showView = json;
+                        
+                        // that.showHouse();
                     }
-                    that.showHouse();
-                });
+                    ,false);
+                }else{
+                    myCompOverlay._div.addEventListener("click", 
+                    function (e) {
+                        store.state.mapScreen.levelType = _state.mapScreen.levelType+1;
+                        store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
+                        store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
+                        store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
+                        store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+                        switch (store.state.mapScreen.levelType) {
+                            case 1:
+                            case 2:
+                                store.state.mapData.scale = 11;
+                                break;
+                            case 3:
+                                store.state.mapData.scale = 14;
+                                break;
+                            case 4:
+                                store.state.mapData.scale = 15;
+                                break;
+                            case 5:
+                                store.state.mapData.scale = 12;
+                                break;
+                            case 6:
+                                store.state.mapData.scale = 15;
+                                break;
+                            case 7:
+                            default:
+                                break;
+                        }
+                        that.showHouse();
+                    }
+                    ,false);
+                }
+                
             }
             
             return;

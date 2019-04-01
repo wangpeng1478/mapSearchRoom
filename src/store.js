@@ -27,6 +27,8 @@ export default new Vuex.Store({
       speed:800,
       time:30,
       // radius:0,
+      villageId:null,
+      showRoomList:false,
       latitude:31.2363429624,
       longitude:121.4803295328,
       scale:11,
