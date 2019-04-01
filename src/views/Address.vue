@@ -18,6 +18,7 @@
 </template>
 <script>
 import {mapState,mapMutations} from 'vuex'
+import record from '@/utils/record'
 export default {
   name: "Address",
   data() {
@@ -36,6 +37,7 @@ export default {
         key:'currentCity',
         value:this.cityList[idx]
       })
+      record(2,'选择城市按钮'+this.cityList[idx].cityName)
       this.$router.push('/')
     },
     //获取当前城市

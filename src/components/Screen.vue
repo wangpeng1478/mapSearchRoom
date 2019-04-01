@@ -133,7 +133,7 @@ export default {
       }
       return query;
     },
-    screenChange() {
+    screenChange(msg) {
       let query = this.screenCondition();
       axios.post(API["queryMapRoomCount"], query).then(res => {
         if (res.data.code == 0) {
@@ -145,11 +145,12 @@ export default {
           }
         }
       });
+      record(2,msg)
     },
     customPrice(e) {
       this.customPriceValue = e;
       this.priceRecomm = null;
-      this.screenChange();
+      this.screenChange('自定义价格筛选');
     },
     selectionArea() {
       this.$emit("selectionArea");
@@ -166,7 +167,7 @@ export default {
         key: "regionTemp",
         value: {}
       });
-      this.screenChange();
+      this.screenChange('条件筛选重置按钮');
     },
     sliderReset() {
       this.customPriceValue = [0, 27];
@@ -178,7 +179,7 @@ export default {
       roomFeatureIdIndex == -1
         ? roomFeatureId.push(selectRroomFeatureId)
         : roomFeatureId.splice(roomFeatureIdIndex, 1);
-      this.screenChange();
+      this.screenChange('房间特色按钮');
     },
     handleroomType(selectroomTypeStatus) {
       if (this.query.roomType == selectroomTypeStatus) {
@@ -186,13 +187,13 @@ export default {
       } else {
         this.query.roomType = selectroomTypeStatus;
       }
-      this.screenChange();
+      this.screenChange('房间类型按钮');
     },
     handleRoomRent(selectRoomRentDays) {
       let rentDays = this.query.rentDays;
       this.query.rentDays =
         selectRoomRentDays == rentDays ? null : selectRoomRentDays;
-      this.screenChange();
+      this.screenChange('可租日期按钮');
     },
     handlePriceRecomm(priceContent) {
       this.$refs.slider.reset();
@@ -201,7 +202,7 @@ export default {
       if (this.priceRecomm) {
         this.sliderReset();
       }
-      this.screenChange();
+      this.screenChange('房间价格按钮');
     },
     handelQuery() {
       let query = this.screenCondition();
@@ -263,7 +264,7 @@ export default {
       } else {
         this.regionName = this.regionTemp.showRegion;
       }
-      this.screenChange();
+      this.screenChange('区域筛选按钮');
     }
   },
   computed: mapState([
