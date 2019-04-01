@@ -7,12 +7,12 @@
       <div class="village-info">
         <p>{{roomList[0].villageName}}（{{roomList.length}}间）</p>
         <!-- TODO -->
-        <span>距龙华中路约{{roomList[0].metroDistance }}米</span>
+        <span>距{{roomList[0].metroStationName}}约{{roomList[0].metroDistance }}米</span>
       </div>
     </div>
 
     <div class="roomlist" :class="{'height80' : translateState==1}">
-      <a href="javascript:;" target="_blank" v-for="room in roomList" :key="room.roomId">
+      <a :href="currentCity.url+'room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if="room.roomSpecialOffer>0">特价</em>
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>
@@ -26,14 +26,14 @@
           <div class="roon-info-line2">
             <i class="iconfont icon-dingwei"></i>
             <!-- TODO -->
-            <p v-if="room.busStationName.length>0 && room.busDistance>0 && room.busDistance  < 1500">距龙华中路约{{room.metroDistance }}米
+            <p v-if="room.busStationName.length>0 && room.busDistance>0 && room.busDistance  < 1500">距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
             </p>
-            <span>{{room.activityName}}</span>
+            <span v-if="room.activityName!=''">{{room.activityName}}</span>
           </div>
           <div class="price">
-            <p class="oldprice">原价：{{room.formatRoomRent}}元/月</p>
+            <p class="oldprice">原价：{{room.roomRent}}元/月</p>
             <p class="newprice">
-              {{room.roomSpecialOffer!=0 && room.roomSpecialOffer !=null ? '特价' : 'VIP价'}}：<span>{{room.formatShowPrice}}</span>元/月起
+              {{room.roomSpecialOffer!=0 && room.roomSpecialOffer !=null ? '特价' : 'VIP价'}}：<span>{{room.showPrice}}</span>元/月起
             </p>
           </div>
           <div class="tag">
@@ -63,6 +63,7 @@
         roomList: []
       };
     },
+    props:['villageId'],
     mounted() {
       this.vh = document.body.clientHeight / 100;
       // let screen = JSON.parse(JSON.stringify(this.screen));
@@ -76,7 +77,7 @@
           roomFeatureIds: this.screen.roomFeatureIds
         }
       }
-      params.villageId = 2205
+      params.villageId = this.villageId
       axios.post(API['queryRoomByVillage'], params)
         .then(res => {
           if (res.data.code == 0) {
@@ -113,7 +114,7 @@
         }
       }
     },
-    computed: mapState(['screen'])
+    computed: mapState(['screen','currentCity'])
   };
 </script>
 
@@ -311,7 +312,7 @@
     color: #767676;
     font-size: 2.667vw;
     float: left;
-    margin-top: 0.5vw;
+    margin-top: 1.8vw;
     line-height: 1.4;
   }
 

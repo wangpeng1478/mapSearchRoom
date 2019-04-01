@@ -50,9 +50,6 @@ const recordHttp = (eventType,value) =>{
     }
 
     axios.post(API['record'],params)
-        .then(res=>{
-            console.log(res.data.msg)
-        })
 }
 
 export default record;
