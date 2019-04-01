@@ -5,7 +5,7 @@
     <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>{{currentCity.cityName}}</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
-      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list">列表</a>
+      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="/search" class="search">请输入小区/区域/地铁</router-link>
       <i class="iconfont icon-guanbi"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
@@ -71,6 +71,9 @@
       })
     },
     methods : {
+      handelList(){
+        record(2,'地图找房页面列表按钮')
+      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
