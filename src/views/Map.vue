@@ -194,7 +194,7 @@
         
       
         
-        // this.$.showMetroStationHouse(_state.mapData);
+        this.$.showMetroStationHouse(_state.mapData);
 
         
 
@@ -270,7 +270,7 @@
         this.showView.showRegionAndMetro=false;
       },
       roomListDestroy(){
-        this.showView.showRoomList=false;
+        store.state.mapData.showRoomList = false;
       }
     }
   }
@@ -519,15 +519,15 @@ html,body,#app{
 .label_area_name,.label_area_cea_name{
   position : absolute;
   margin : 0px;
-  width: 19vw;
+  min-width:19vw;
   height : 5vw;
   line-height : 5vw;
   padding : 0vw 2vw;
   background : #ff9900;
   border-radius : 1vw;
-  margin-left : -5vw;
   margin-top : 4vw;
   text-align : center;
+  transform : translate(-22.5%)
 }
 
 .location_site_label{

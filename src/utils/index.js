@@ -92,26 +92,99 @@ export default{ //很关键
                 json.levelType = 2;
                 _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
-            Object.assign(_state.mapScreen,_state.screen);
-            axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
-            if (res.data.code == 0) {
-                let data = res.data.data;
-                store.state.coverDataList = data;
-                switch (_state.mapScreen.levelType) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        this.showAreaHouse(obj);
-                        break
-                    case 5:
-                        this.showMetroHouse(obj);
-                        break
-                    case 6:
-                    case 7:
+            if(_state.keywordsSearch.typeId ==1){
+                _state.mapScreen.levelType = 4;
+                _state.mapScreen.villageId  = _state.keywordsSearch.tableId;
+                
+            }else{
+                var json = {};
+                if(_state.keywordsSearch.typeId){
+                    switch(_state.keywordsSearch.typeId){
+                        case 2:
+                            _state.mapScreen.levelType = 6;
+                            json.metroStationId = _state.keywordsSearch.tableId;
+                            json.cityId  = _state.currentCity.cityId;
+                            json.prcId  = null;
+                            json.ceaId  = null;
+                            json.metroId = null;
+                            json.busStationId  = null;
+                            json.villageId  = null;
+                            break;
+                        case 3:
+                            _state.mapScreen.levelType = 5;
+                            json.metroId = _state.keywordsSearch.tableId;
+                            json.cityId  = _state.currentCity.cityId;
+                            json.prcId  = null;
+                            json.ceaId  = null;
+                            json.metroStationId = null;
+                            json.busStationId  = null;
+                            json.villageId  = null;
+                            break;
+                        case 4:
+                            _state.mapScreen.levelType = 7;
+                            json.busStationId  = _state.keywordsSearch.tableId;
+                            json.cityId  = _state.currentCity.cityId;
+                            json.prcId  = null;
+                            json.ceaId  = null;
+                            json.metroId = null;
+                            json.metroStationId = null;
+                            json.villageId  = null;
+                            break;  
+                        case 5:break;
+                        case 6:
+                            _state.mapScreen.levelType = 4;
+                            json.ceaId  = _state.keywordsSearch.tableId;
+                            json.prcId  = _state.keywordsSearch.parentId;
+                            json.cityId = _state.currentCity.cityId;
+                            json.metroId = null;
+                            json.metroStationId = null;
+                            json.busStationId  = null;
+                            json.villageId  = null;
+                            break;
+                        case 7:
+                            _state.mapScreen.levelType = 3;
+                            json.cityId  = _state.keywordsSearch.parentId;
+                            json.prcId  = _state.keywordsSearch.tableId;
+                            json.ceaId  = null;
+                            json.metroId = null;
+                            json.metroStationId = null;
+                            json.busStationId  = null;
+                            json.villageId  = null;
+                            break;
+                        default:break;
+                    }
+                }else{
+                    json.cityId  = _state.currentCity.cityId;
+                    json.prcId  = null;
+                    json.ceaId  = null;
+                    json.metroId = null;
+                    json.metroStationId = null;
+                    json.busStationId  = null;
+                    json.villageId  = null;
                 }
+                console.log(json)
+                Object.assign(_state.mapScreen,_state.screen,json);
+                axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
+                if (res.data.code == 0) {
+                    let data = res.data.data;
+                    store.state.coverDataList = data;
+                    switch (_state.mapScreen.levelType) {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            this.showAreaHouse(obj);
+                            break
+                        case 5:
+                            this.showMetroHouse(obj);
+                            break
+                        case 6:
+                        case 7:
+                    }
+                }
+                });
             }
-            });
+            
         }
         
         
