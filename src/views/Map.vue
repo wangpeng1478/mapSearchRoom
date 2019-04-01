@@ -2,7 +2,7 @@
 <template>
   <div id="map">
     <div class="baidumap" id="allmap"></div>
-    <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>{{currentCity.cityName}}</router-link>
+    <p class="currentcity iconfont icon-dingwei" @click="handleAddress"><i/>{{currentCity.cityName}}</p>
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
@@ -70,6 +70,10 @@
     },
     methods : {
       ...mapMutations(['assign']),
+      handleAddress(){
+        record(2,'地图找房页面切换城市按钮')
+        this.$router.push('/address')
+      },
       mapScreen(){
         //地图条件搜索
         this.showView.showMask=false;
