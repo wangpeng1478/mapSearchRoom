@@ -35,7 +35,6 @@ export default {
     httpQueryMapBaseData: function() {
       axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
         if (res.data.code == 0) {
-          let data = res.data.data;
           this.mapBaseData(res.data.data)
            this.assignAsync({
             key: "mapBaseDataReady",
