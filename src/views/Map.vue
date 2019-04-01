@@ -83,6 +83,7 @@
           key:'keywordsSearch',
           value:{}
         })
+        record(2,'地图页面清除搜索框按钮')
       },
       handelList(){
         record(2,'地图找房页面列表按钮')

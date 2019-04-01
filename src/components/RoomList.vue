@@ -1,6 +1,6 @@
 <template>
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
-    :style="{transform: 'translateY('+translateY+'px)'}">
+    :style="{transform: 'translateY('+translateY+'px)'}" v-if="roomList.length!=0">
     <div class="village" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd"
       @touchmove="handleRoomlistScroll">
       <button class="retract"></button>
@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="roomlist" :class="{'height80' : translateState==1}">
+    <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
       <a :href="currentCity.url+'room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if="room.roomSpecialOffer>0">特价</em>
