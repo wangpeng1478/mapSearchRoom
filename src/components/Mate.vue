@@ -34,6 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
+import record from 'record'
 export default {
     name: 'iMate',
     data () {
@@ -193,6 +194,7 @@ export default {
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == res){
                     store.state.mapData.speed = val.speed;
+                    record(2,'切换交通公交'+val.typeName)
                 }
             })
             this.$store.state.mapScreen.radius =this.$store.state.mapData.speed*this.$store.state.mapData.time;
