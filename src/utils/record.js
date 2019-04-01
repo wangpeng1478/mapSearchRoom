@@ -28,10 +28,11 @@ const record = (eventType,value) => {
         recordHttp(eventType)
     }
     if(eventType==2){
-
+        recordHttp(eventType,{
+            buttonName:value
+        })
     }
     if(eventType==3){
-        console.log(value)
         recordHttp(eventType,{
             keyWords:value.keyWords,
             keyType:value.keyType
@@ -47,8 +48,6 @@ const recordHttp = (eventType,value) =>{
         eventType,
         ...value
     }
-    console.log(params)
-
 
     axios.post(API['record'],params)
         .then(res=>{

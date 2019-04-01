@@ -35,7 +35,6 @@ export default {
     },
     methods:{
         touchSlider : function (e) {
-            let target= e.srcElement? e.srcElement: e.target;
             var s = document.getElementsByClassName("slider")[0];
             this.sliderLeft = parseFloat(s.style.left);
             this.startX = e.changedTouches[0].clientX;
@@ -44,7 +43,6 @@ export default {
             
             let sl = this.sl;
             this.$store.state.mapData.isInvFind = true;
-            let target= e.srcElement? e.srcElement: e.target;
             let moveX = e.changedTouches[0].clientX;
             let _x = Math.abs(moveX - this.startX);       //滑动距离
             let s = document.getElementsByClassName("slider")[0],

@@ -226,6 +226,7 @@ export default {
         });
       }
       this.recordInfo(query)
+      this.$emit('screen')
     },
     recordInfo(query){
       let roomFeatureId = this.query.roomFeatureId;
@@ -244,7 +245,6 @@ export default {
         }
       })
       
-      console.log(query.priceTo=='')
       if(query.priceTo==''){
         query.priceTo='不限'
       }

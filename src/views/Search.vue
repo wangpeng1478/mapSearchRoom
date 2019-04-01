@@ -87,6 +87,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
+import record from '@/utils/record'
 export default {
   name: "Search",
   data() {
@@ -156,7 +157,6 @@ export default {
       this.pointTagHistory = [];
     },
     handleAcResult(idx) {
-      console.log("handleAcResult");
       let _this = this;
       let myValue =
         this.acResult[idx].city +
@@ -263,6 +263,10 @@ export default {
         id: this.keywordsSearch.id,
         keyword: this.keywordsSearch.keyWords
       });
+      record(3,{
+        keyType:2,
+        keyWords:this.keywordsSearch.keyWords
+      })
       axios.post(API["hotWordsCount"], params).catch(err => {
         console.log(err);
       });

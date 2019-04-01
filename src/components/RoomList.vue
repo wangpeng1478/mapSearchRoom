@@ -79,10 +79,8 @@
       params.villageId = 2205
       axios.post(API['queryRoomByVillage'], params)
         .then(res => {
-          console.log(res)
           if (res.data.code == 0) {
             this.roomList = res.data.data;
-            console.log(this.roomList)
           }
         })
     },

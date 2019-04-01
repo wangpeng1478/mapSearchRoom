@@ -5,7 +5,7 @@
     <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>{{currentCity.cityName}}</router-link>
     <transition name="top-bar">
     <div class="top-bar" v-if="showView.showTopBar">
-      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list">列表</a>
+      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="/search" class="search">请输入小区/区域/地铁</router-link>
       <i class="iconfont icon-guanbi"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
@@ -17,7 +17,7 @@
     <RoomList @roomListDestroy ='roomListDestroy' v-if="showView.showRoomList"/>
     </transition>
     <transition name="screen">
-      <Screen v-if="showView.showScreen" @selectionArea="selectionArea"/>
+      <Screen v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
     </transition>
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
@@ -37,6 +37,7 @@
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
   import {mapState,mapMutations} from 'vuex'
+  import record from '@/utils/record'
   export default {
     name: 'Map',
     data () {
@@ -61,8 +62,6 @@
         return this.$store.state.mapBaseDataReady;
       }
     },
-    watch:{
-    },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
@@ -70,6 +69,15 @@
       })
     },
     methods : {
+      mapScreen(){
+        //地图条件搜索
+        this.showView.showMask=false;
+        this.showView.showScreen=false;
+        console.log('缺少筛选后的函数')
+      },
+      handelList(){
+        record(2,'地图找房页面列表按钮')
+      },
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
@@ -84,6 +92,7 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
+        record(2,'地图找房页面个性找房按钮')
         console.log("showMateFun")
         let map = this.$store.state.map;
         let that = this;
@@ -227,6 +236,7 @@
         // });
       },
       handleComponentView(component){
+        record(2,'地图页面筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
       },
