@@ -21,7 +21,7 @@ export default new Vuex.Store({
       scale:11,
       
     },
-    mapData:{
+    data:{
       type:2,
       cityId:2,
       speed:800,
