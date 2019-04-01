@@ -92,7 +92,7 @@ export default{ //很关键
                 json.levelType = 2;
                 _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
-            console.log(obj)
+            Object.assign(_state.mapScreen,_state.screen);
             axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
             if (res.data.code == 0) {
                 let data = res.data.data;
@@ -149,7 +149,6 @@ export default{ //很关键
         
     },
     showAreaHouse:function(obj){
-        console.log(obj)
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -175,25 +174,15 @@ export default{ //很关键
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                 });
-                let objVue = obj;
-                // console.log(obj)
                 if(_state.mapScreen.levelType==4||_state.mapScreen.levelType==6||_state.mapScreen.levelType==7){
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
-                        // function fn(objVue){
-                        //     console.log(objVue)
-                        // }
-                        // fn();
                         store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
                         store.state.mapData.showRoomList = true;
-                        // var json = {showRoomList:true};
-                        // Map.data.showView = json;
-                        
-                        // that.showHouse();
                     }
                     ,false);
                 }else{

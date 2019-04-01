@@ -5,10 +5,10 @@
         <div class="imate"></div>
         <div class="individuality_mate">
             <div class="mate_icon">
-                <span class="iconfont icon-gongjiao" :class="state.mapData.type == 1?'active':''" @click="choose(1)"></span>
-                <span class="iconfont icon-chuzuche" :class="state.mapData.type == 2?'active':''" @click="choose(2)"></span>
-                <span class="iconfont icon-paobuqihang" :class="state.mapData.type == 3?'active':''" @click="choose(3)"></span>
-                <span class="iconfont icon-buhang" :class="state.mapData.type == 4?'active':''" @click="choose(4)"></span>
+                <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
+                <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
+                <span class="iconfont icon-paobuqihang" :class="mapData.type == 3?'active':''" @click="choose(3)"></span>
+                <span class="iconfont icon-buhang" :class="mapData.type == 4?'active':''" @click="choose(4)"></span>
             </div>
             
             <sliderComponent
@@ -87,53 +87,6 @@ export default {
             _state.mapData.isOverLay = true;
             // this.$.showCoverHouse();
         })
-    },
-    mounted:function(){
-        let map = store.state.map;
-        let _state = store.state;
-        let _this = this;
-        let distance = 0;
-        this.$store.state.trafficSpeedList.map((val)=>{
-            if(val.type == _state.mapData.type){
-                _this.speed = val.speed
-            }
-        })
-        this.time = 30;
-        
-        if(_state.mapScreen.radius){
-          distance = _state.mapScreen.radius;
-        }else{
-          distance = this.speed *this.time ; //默认出行方式
-        }
-         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
-        let scale = _state.mapData.scale;
-        map.centerAndZoom(point, scale);
-        let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-        map.addOverlay(circle); //增加圆
-        
-        
-
-        var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, "徐汇区","ComplexOverlay");
-        map.addOverlay(myCompOverlay);
-        //覆盖物添加点击事件+
-        // myCompOverlay._div.addEventListener('touchstart',function(){
-        //     map.disableDragging();  //禁用地图拖拽功能
-        // });
-        // myCompOverlay._div.addEventListener("click", function () {
-        // });
-       
-        _state.mapScreen.radius = distance;
-        _state.mapData.isOverLay = true;
-        //  this.$.showHouse();
-
-         
-        
-        
-        
-        
-        //
-        
-        // this.$.showHouse();
     },
     methods:{
         filter:function(){
