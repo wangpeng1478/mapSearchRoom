@@ -140,6 +140,7 @@ export default {
             this.$emit("hiddenMate",hiddenMate)
         },
         choose :function (res) {
+            let _this = this;
             this.$store.state.mapData.isInvFind = true;
             this.$store.state.mapData.type = res;
             this.$store.state.trafficSpeedList.map((val)=>{

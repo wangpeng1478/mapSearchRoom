@@ -86,18 +86,18 @@
       showMateFun:function(){
         console.log("showMateFun")
         let map = this.$store.state.map;
-        let _this = this;
+        let that = this;
         this.isFind = false;
         this.showView.showMate = true;
         // var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
         // elements.className = "BMap_noprint anchorBL bottom48";
-        console.log(this.geolocationControl)
-        map.removeControl(_this.geolocationControl);
+        map.removeControl(that.geolocationControl);
         
-        this.geolocationControl = new BMap.GeolocationControl({
+        let geolocationControl = new BMap.GeolocationControl({
           anchor:BMAP_ANCHOR_BOTTOM_RIGHT,
-          offset:new BMap.Size(0,190)
+          offset:new BMap.Size(10,190)
         });
+        this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl);
         // var geoc = new BMap.Geocoder();
         // geoc.getLocation(point, function(rs){
@@ -123,8 +123,15 @@
         // this.$.showCoverByCoordinate(store.state.mapData);
       },
       hiddenMateFun: function(msg){
+        let map = this.$store.state.map;
         this.showView.showMate = msg;
         this.isFind = true;
+        map.removeControl(this.geolocationControl)
+        let geolocationControl = new BMap.GeolocationControl({
+          anchor:BMAP_ANCHOR_BOTTOM_RIGHT,
+        });
+        this.geolocationControl = geolocationControl;
+        map.addControl(geolocationControl);
       },
       baiduMap: function () {
         //模拟数据
@@ -132,7 +139,7 @@
         // let httpData = this.$store.state.coverDataList;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
-        _state.map = map;
+       
         // 创建地图实例 
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
@@ -144,11 +151,11 @@
         });
 
 
-        this.geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT});
-        map.addControl(that.geolocationControl); 
-         console.log("geolocationControl",this.geolocationControl)
+        let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT});
+        this.geolocationControl = geolocationControl;
+        map.addControl(geolocationControl); 
         //监听定位控件
-        this.$.locationSuccess(that.geolocationControl);
+        this.$.locationSuccess(geolocationControl);
         //监听拖拽事件
         this.$.movingEvent(map);
         //监听缩放事件
@@ -160,6 +167,8 @@
         map.addOverlay(marker);               // 将标注添加到地图中
 
         this.$.showHouse(that.showMateFun);
+         _state.map = map;
+        
       
         
         // this.$.showMetroStationHouse(_state.mapData);
@@ -426,7 +435,7 @@
   .site-pin{
     width: 6vw;
     height: 12vw;
-    background: url(../assets/images/icon/sitepin.png) no-repeat;
+    /* background: url(../assets/images/icon/sitepin.png) no-repeat; */
     background-size: 100%;
     margin-left: 9.5vw;
     margin-top: 2vw;
@@ -462,7 +471,6 @@ html,body,#app{
   height: 100%;
   width: 100%;
 }
-
 
 
 .location_label,.location_cea_label{

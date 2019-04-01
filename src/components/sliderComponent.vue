@@ -69,6 +69,7 @@ export default {
             }
         },
         endSlider : function () {
+            
             this.$store.state.mapData.isInvFind = false;
         }
     }
