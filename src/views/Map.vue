@@ -253,7 +253,6 @@
         this.showView = {
           showMate: false,
           showScreen:false,
-          showRoomList:false,
           showRegionAndMetro:false,
           showMask:false
         }
@@ -265,7 +264,7 @@
         this.showView.showRegionAndMetro=false;
       },
       roomListDestroy(){
-        this.showView.showRoomList=false;
+        
       }
     }
   }
