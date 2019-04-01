@@ -117,7 +117,7 @@ export default{ //很关键
     },
     showCoverHouse:function(data){
         let _state = store.state;
-        console.log("isOverLay",_state.mapData.isOverLay)
+        console.log("isOverLay",_state.mapData)
         if(_state.mapData.isOverLay){
             var json = {};
             json.longitude = _state.mapData.longitude;
@@ -129,7 +129,6 @@ export default{ //很关键
                     let data = res.data.data;
                     store.state.coverDataList = data;
                     this.showAreaHouse();
-                    console.log(data)
                     // switch (_state.mapScreen.levelType) {
                     //     case 1:
                     //     case 2:

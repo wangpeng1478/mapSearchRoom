@@ -38,8 +38,6 @@ export default {
     name: 'iMate',
     data () {
         return{
-            speed:0,
-            time:0,
         }
     },
     store,
@@ -60,15 +58,14 @@ export default {
             let distance = 0;
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == _state.mapData.type){
-                    _this.speed = val.speed
+                    _state.mapData.speed = val.speed
                 }
             })
-            this.time = 30;
             
             if(_state.mapScreen.radius){
                 distance = _state.mapScreen.radius;
             }else{
-                distance = this.speed *this.time ; //默认出行方式
+                distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
             }
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
@@ -121,9 +118,8 @@ export default {
         },
         checkTime : function (params) {
             if(this.time !== (20+10*params)){
-                console.log(20+10*params)
-                this.time = (20+10*params);
-                this.$store.state.mapScreen.radius = (20+10*params)*this.speed;
+                this.$store.state.mapData.time = (20+10*params);
+                this.$store.state.mapScreen.radius = (20+10*params)*this.$store.state.mapData.speed;
                 this.filter();
             }
         },
@@ -144,15 +140,15 @@ export default {
             this.$emit("hiddenMate",hiddenMate)
         },
         choose :function (res) {
-            let _this = this;
             this.$store.state.mapData.isInvFind = true;
             this.$store.state.mapData.type = res;
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == res){
-                    _this.speed = val.speed
+                    store.state.mapData.speed = val.speed;
                 }
             })
-            this.$store.state.mapScreen.radius = this.speed*this.time;
+            this.$store.state.mapScreen.radius =this.$store.state.mapData.speed*this.$store.state.mapData.time;
+            this.filter();
         }
     }
 }
