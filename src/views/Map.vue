@@ -4,7 +4,7 @@
     <div class="baidumap" id="allmap"></div>
     <router-link class="currentcity iconfont icon-dingwei" to="/address"><i class=""/>{{currentCity.cityName}}</router-link>
     <transition name="top-bar">
-    <div class="top-bar">
+    <div class="top-bar" v-if="!mapData.isOverLay">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="/search" class="search">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入小区/区域/地铁'}}</router-link>
       <i class="iconfont icon-guanbi" @click="handelClearSearh"></i>
@@ -57,7 +57,7 @@
       msg: String,
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch']),
+      ...mapState(['currentCity','keywordsSearch','mapData']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       }
