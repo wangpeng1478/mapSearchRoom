@@ -10,8 +10,7 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <!-- <router-link to="/">取消</router-link> -->
-      <p @click="handleCannel">取消</p>
+      <router-link to="/">取消</router-link>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion">
@@ -44,7 +43,7 @@
           </p>
         </div>
         <ul class="tag-list" v-if="pointTagHistory.length!=0">
-          <li v-for="(pointTag,index) in pointTagHistory" :key="index">{{pointTag.name}}</li>
+          <li v-for="(pointTag,index) in pointTagHistory" :key="index" @click="handleAcHistory(index)">{{pointTag.name}}</li>
         </ul>
         <div v-else class="nolist">
           <img src="../assets/images/none.png">
@@ -148,10 +147,9 @@ export default {
   },
   methods: {
     ...mapMutations(["assign"]),
-    handleCannel(){
-      this.$router.go(-1);
+    handleAcHistory(idx){
+      this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
     },
-
     clearPoint() {
       localStorage.removeItem(this.storageName);
       this.pointTagHistory = [];
@@ -169,10 +167,12 @@ export default {
             let point = res;
             point.name = _this.acResult[idx].business;
             _this.savePointStorage(point);
+            this.assign({key:'pointSearch',value:point})
           }
         },
         this.currentCity.cityName + "市"
       );
+      this.backMap()
     },
     savePointStorage(point) {
       let pointTagHistory = JSON.parse(JSON.stringify(this.pointTagHistory));
@@ -270,6 +270,10 @@ export default {
       axios.post(API["hotWordsCount"], params).catch(err => {
         console.log(err);
       });
+      this.backMap()
+    },
+    backMap(){
+      this.$router.push('/')
     }
   },
   computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])

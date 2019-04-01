@@ -15,7 +15,7 @@ export default new Vuex.Store({
     keywordsSearch:{},//搜索关键词
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
-
+    pointSearch:null,
     data:{
       type:2,
       scale:11,
