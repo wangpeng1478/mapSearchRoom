@@ -61,20 +61,11 @@
       }
     },
     watch:{
-      // mapBaseDataReady:function(newQuestion, oldQuestion){
-      //   if(!oldQuestion){
-      //     this.baiduMap();console.log("mapBaseData")
-      //   }
-      // }
     },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
-        // if(this.$store.state.mapBaseDataReady){
-        //   this.baiduMap();
-        // }
-        // this.httpQueryMapCoverData();
       })
     },
     methods : {
@@ -92,10 +83,11 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
+        console.log("showMateFun")
         this.isFind = false;
         this.showView.showMate = true;
-       var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
-        elements.className = "BMap_noprint anchorBL bottom48"; 
+        var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
+        elements.className = "BMap_noprint anchorBL bottom48";
         // var geoc = new BMap.Geocoder();
         // geoc.getLocation(point, function(rs){
         //   var addComp = rs.addressComponents;
@@ -118,10 +110,6 @@
         // store.state.mapData.radius = distance;
 
         // this.$.showCoverByCoordinate(store.state.mapData);
-      },
-      callback:function(res){
-        console.log(res)
-        alert(111)
       },
       hiddenMateFun: function(msg){
         this.showView.showMate = msg;
@@ -160,7 +148,7 @@
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
 
-        this.$.showHouse();
+        this.$.showHouse(that.showMateFun);
       
         
         // this.$.showMetroStationHouse(_state.mapData);

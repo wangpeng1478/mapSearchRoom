@@ -21,6 +21,8 @@ ComplexAreaOverlay.prototype.initialize = function(map){
 
     var p = this._p = document.createElement("p");
     p.style.margin = "0px";
+    p.style.textAlign = "center";
+    p.style.overflow = "hidden";
     div.appendChild(p);
     p.appendChild(document.createTextNode("¥"+this._price+"+"));
     var p2 = this._p = document.createElement("p");
@@ -54,10 +56,11 @@ ComplexAreaOverlay.prototype.draw = function(){
 
 
 //定位覆盖物
-function ComplexSiteOverlay(point, text,type){
+function ComplexSiteOverlay(point, text,type,callback){
     this._point = point;
     this._text = text;
     this._type = type;
+    this._callback = callback;
 }
 ComplexSiteOverlay.prototype = new BMap.Overlay();
 ComplexSiteOverlay.prototype.initialize = function(map){ 
@@ -69,7 +72,6 @@ ComplexSiteOverlay.prototype.initialize = function(map){
     div.style.zIndex = "1000";
     div.style.backgroundColor = "#fff";
     div.style.cursor = "pointer";
-
     var p = this._p = document.createElement("p");
     p.style.margin = "0px";
     p.style.color = "#000";
@@ -97,9 +99,8 @@ ComplexSiteOverlay.prototype.initialize = function(map){
     p3.className = "label_site_img";
     div.appendChild(p3);
 
-    console.log(div)
     div.addEventListener('touchend',function(){
-        console.log("touchend")
+        _this._callback();
     });
     map.getPanes().labelPane.appendChild(div);
 
@@ -110,7 +111,6 @@ ComplexSiteOverlay.prototype.draw = function(){
     var pixel = map.pointToOverlayPixel(this._point);
     this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
     this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
-    console.log(parseInt(this._div.style.height) + parseInt(this._arrow.style.borderWidth))
 }
 
 

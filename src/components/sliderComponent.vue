@@ -9,7 +9,6 @@
 
 
 <script>
-//TODO:  isInvFind
 import store from '@/store'
 export default {
     name: 'slider',
@@ -68,11 +67,8 @@ export default {
                 this.num = num;
                 this.$emit("moveStep",num)
             }
-            
-            
         },
         endSlider : function () {
-            
             this.$store.state.mapData.isInvFind = false;
         }
     }
