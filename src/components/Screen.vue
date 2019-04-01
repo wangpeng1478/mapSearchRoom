@@ -128,6 +128,7 @@ export default {
         query.priceFrom = priceRecommValue[0];
         query.priceTo = priceRecommValue[1];
       }
+      
       if (!query.cityId) {
         query.cityId = this.currentCity.cityId;
       }
@@ -230,7 +231,7 @@ export default {
       this.$emit('screen')
     },
     recordInfo(query){
-      let roomFeatureId = this.query.roomFeatureId;
+      let roomFeatureId = JSON.parse(JSON.stringify(this.query.roomFeatureId));
       let roomFeatureKeyword = ''
       this.roomFeatureList.forEach(item=>{
         roomFeatureId.forEach(id=>{
