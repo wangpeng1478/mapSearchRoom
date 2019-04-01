@@ -70,6 +70,7 @@ import Slider from "./Slider";
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
 import API from "@/utils/api";
+import record from '@/utils/record'
 export default {
   data() {
     return {
@@ -224,6 +225,37 @@ export default {
           value: this.regionTemp
         });
       }
+      this.recordInfo(query)
+    },
+    recordInfo(query){
+      let roomFeatureId = this.query.roomFeatureId;
+      let roomFeatureKeyword = ''
+      this.roomFeatureList.forEach(item=>{
+        roomFeatureId.forEach(id=>{
+          if(item.roomFeatureId==id){
+            roomFeatureKeyword=roomFeatureKeyword+'-'+item.roomFeatureName
+          }
+        })
+      })
+      let roomTypeKeyword = '';
+      this.roomTypeList.forEach(item=>{
+        if(this.query.roomType==item.status){
+          roomTypeKeyword=item.statusName
+        }
+      })
+      
+      console.log(query.priceTo=='')
+      if(query.priceTo==''){
+        query.priceTo='不限'
+      }
+      let keyWords=`${this.regionName}-${roomFeatureKeyword}-${roomTypeKeyword}-${query.priceFrom}-${query.priceTo}元`
+      if(query.rentDays){
+        keyWords=keyWords+'-'+query.rentDays+'日可租'
+      }
+      record(3,{
+        keyWords,
+        keyType:1
+      })
     },
     showRegion() {
       if (Object.keys(this.regionTemp).length == 0) {

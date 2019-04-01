@@ -25,18 +25,27 @@ const record = (eventType,value) => {
             cityId:value.cityId,
             cityName:value.cityName
         }
+        recordHttp(eventType)
     }
     if(eventType==2){
-        
+
     }
-    recordHttp(eventType)
+    if(eventType==3){
+        console.log(value)
+        recordHttp(eventType,{
+            keyWords:value.keyWords,
+            keyType:value.keyType
+        })
+    }
+    
 }
 
-const recordHttp = (eventType) =>{
+const recordHttp = (eventType,value) =>{
     let params = {
         ...info,
         ...routePath,
-        eventType
+        eventType,
+        ...value
     }
     console.log(params)
 
