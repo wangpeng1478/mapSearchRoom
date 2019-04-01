@@ -34,7 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
-import record from 'record'
+import record from '@/utils/record'
 export default {
     name: 'iMate',
     data () {
