@@ -12,7 +12,7 @@
     </div>
 
     <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
-      <a :href="currentCity.url+'room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
+      <a :href="currentCity.url+'/room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if="room.roomSpecialOffer>0">特价</em>
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>
@@ -25,7 +25,6 @@
           <p class="room-list-tit">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i class="iconfont icon-dingwei"></i>
-            <!-- TODO -->
             <p v-if="room.busStationName.length>0 && room.busDistance>0 && room.busDistance  < 1500">距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
             </p>
             <span v-if="room.activityName!=''">{{room.activityName}}</span>
