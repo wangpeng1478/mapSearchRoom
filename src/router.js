@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
-
+import record from '@/utils/record'
+import store from '@/store'
 Vue.use(Router)
 
-export default new Router({
+ const router = new Router({
   mode:'history',
   routes: [
     {
@@ -22,3 +23,16 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to,from,next)=>{
+  let currentCity = store.state.currentCity;
+  record(1,{
+    to:to.name,
+    from:from.name,
+    cityId:currentCity.cityId,
+    cityName:currentCity.cityName
+  })
+  next()
+})
+
+export default router;

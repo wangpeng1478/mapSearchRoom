@@ -10,7 +10,9 @@ const API = {
 
     queryMapCoverData:'/mapsearch/queryMapCoverData',
     queryRoomByVillage:'/mapsearch/queryRoomByVillage',
-    queryMapCoverByCoordinate:'/mapsearch/queryMapCoverByCoordinate'
+    queryMapCoverByCoordinate:'/mapsearch/queryMapCoverByCoordinate',
+    //埋点
+    record:'/behavioral/record'
 }
 
 export default API;
