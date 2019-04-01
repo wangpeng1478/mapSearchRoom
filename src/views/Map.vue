@@ -17,7 +17,7 @@
     <RoomList @roomListDestroy ='roomListDestroy' v-if="showView.showRoomList"/>
     </transition>
     <transition name="screen">
-      <Screen v-if="showView.showScreen" @selectionArea="selectionArea"/>
+      <Screen v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
     </transition>
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
@@ -62,8 +62,6 @@
         return this.$store.state.mapBaseDataReady;
       }
     },
-    watch:{
-    },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
@@ -71,6 +69,12 @@
       })
     },
     methods : {
+      mapScreen(){
+        //地图条件搜索
+        this.showView.showMask=false;
+        this.showView.showScreen=false;
+        console.log('缺少筛选后的函数')
+      },
       handelList(){
         record(2,'地图找房页面列表按钮')
       },

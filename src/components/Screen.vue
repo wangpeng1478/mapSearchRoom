@@ -226,6 +226,7 @@ export default {
         });
       }
       this.recordInfo(query)
+      this.$emit('screen')
     },
     recordInfo(query){
       let roomFeatureId = this.query.roomFeatureId;
