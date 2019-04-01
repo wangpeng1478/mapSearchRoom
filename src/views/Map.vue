@@ -77,6 +77,10 @@
         this.showView.showMask=false;
         this.showView.showScreen=false;
         console.log('缺少筛选后的函数');
+        console.log(this.$store.state.screen)
+        
+        
+        this.$.showHouse()
       },
       handelClearSearh(){
         this.assign({
@@ -149,6 +153,7 @@
         });
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl);
+        this.$.showHouse();
       },
       baiduMap: function () {
         //模拟数据

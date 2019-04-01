@@ -92,6 +92,10 @@ export default{ //很关键
                 json.levelType = 2;
                 _state.mapScreen = Object.assign(json,_state.mapScreen)
             }
+<<<<<<< HEAD
+=======
+            Object.assign(_state.mapScreen,_state.screen);
+>>>>>>> a5474fcca935c057e09d7a1d49e025b0986703cc
             axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
             if (res.data.code == 0) {
                 let data = res.data.data;
@@ -173,24 +177,19 @@ export default{ //很关键
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                 });
+<<<<<<< HEAD
                 let objVue = obj;
+=======
+>>>>>>> a5474fcca935c057e09d7a1d49e025b0986703cc
                 if(_state.mapScreen.levelType==4||_state.mapScreen.levelType==6||_state.mapScreen.levelType==7){
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
-                        // function fn(objVue){
-                        //     console.log(objVue)
-                        // }
-                        // fn();
                         store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
                         store.state.mapData.showRoomList = true;
-                        // var json = {showRoomList:true};
-                        // Map.data.showView = json;
-                        
-                        // that.showHouse();
                     }
                     ,false);
                 }else{
