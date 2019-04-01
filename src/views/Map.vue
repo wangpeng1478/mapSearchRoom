@@ -42,7 +42,8 @@
     data () {
       return{
         showView:{},
-        isFind:true
+        isFind:true,
+        geolocationControl:null,
       }
     },
     components:{
@@ -84,10 +85,20 @@
       },
       showMateFun:function(){
         console.log("showMateFun")
+        let map = this.$store.state.map;
+        let _this = this;
         this.isFind = false;
         this.showView.showMate = true;
-        var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
-        elements.className = "BMap_noprint anchorBL bottom48";
+        // var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
+        // elements.className = "BMap_noprint anchorBL bottom48";
+        console.log(this.geolocationControl)
+        map.removeControl(_this.geolocationControl);
+        
+        this.geolocationControl = new BMap.GeolocationControl({
+          anchor:BMAP_ANCHOR_BOTTOM_RIGHT,
+          offset:new BMap.Size(0,190)
+        });
+        map.addControl(geolocationControl);
         // var geoc = new BMap.Geocoder();
         // geoc.getLocation(point, function(rs){
         //   var addComp = rs.addressComponents;
@@ -133,11 +144,11 @@
         });
 
 
-        let geolocationControl = new BMap.GeolocationControl();
-        map.addControl(geolocationControl); 
-
+        this.geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT});
+        map.addControl(that.geolocationControl); 
+         console.log("geolocationControl",this.geolocationControl)
         //监听定位控件
-        this.$.locationSuccess(geolocationControl);
+        this.$.locationSuccess(that.geolocationControl);
         //监听拖拽事件
         this.$.movingEvent(map);
         //监听缩放事件
@@ -525,10 +536,7 @@ html,body,#app{
   overflow : hidden;
   margin-left:-2vw;
 }
-  .BMap_noprint.anchorBL{
-    left: auto !important;
-    right: 10px !important;
-  }
+
 
 
   .location_metro_label{
