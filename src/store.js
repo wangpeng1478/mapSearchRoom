@@ -55,6 +55,12 @@ export default new Vuex.Store({
     assign(state,data){
       state[data.key] = data.value
     },
+    currentCityChange(state,index){
+      let currentCity = state.cityList[index]
+      state.currentCity = currentCity;
+      state.mapData.latitude = currentCity.latitude;
+      state.mapData.longitude = currentCity.longitude;
+    },
     mapDataChangelatitudeAndLongitude(state,data){
       state.mapData.latitude = data.latitude;
       state.mapData.longitude = data.longitude;

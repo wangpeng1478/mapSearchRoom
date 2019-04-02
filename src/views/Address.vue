@@ -31,12 +31,9 @@ export default {
     this.getLocation()
   },
   methods: {
-    ...mapMutations(['assign']),
+    ...mapMutations(['assign','currentCityChange']),
     chooseCity(idx){
-      this.assign({
-        key:'currentCity',
-        value:this.cityList[idx]
-      })
+      this.currentCityChange(idx);
       record(2,'选择城市按钮'+this.cityList[idx].cityName)
       this.$router.push('/')
     },
