@@ -78,9 +78,12 @@
         this.showView.showScreen=false;
         console.log('缺少筛选后的函数');
         console.log(this.$store.state.screen)
-        
-        
-        this.$.showHouse()
+        var json = {};
+        let _screen = this.$store.state.screen;
+        Object.assign(json,_screen)
+        console.log(this.$store.state.mapScreen)
+  
+        this.$.showHouse(json)
       },
       handelClearSearh(){
         this.assign({
@@ -187,12 +190,23 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-        this.$.showHouse(that.showMateFun,that);
+
+        var json = {};
+        json.cityId = _state.currentCity.cityId;
+        json.levelType = 2;
+        Object.assign(json,_state.screen)
+        if(_state.mapData.isOverLay){
+          this.$.showHouse(json);
+          this.showMateFun();
+        }else{
+          this.$.showHouse(json);
+        }
+        
          _state.map = map;
         
       
         
-        this.$.showMetroStationHouse(_state.mapData);
+        // this.$.showMetroStationHouse(_state.mapData);
 
         
 

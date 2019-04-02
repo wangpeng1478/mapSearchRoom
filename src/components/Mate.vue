@@ -85,7 +85,9 @@ export default {
             }); 
             _state.mapScreen.radius = distance;
             _state.mapData.isOverLay = true;
-            // this.$.showCoverHouse();
+            var json = {};
+            Object.assign(json,_state.mapScreen,_state.screen)
+            this.$.showCoverHouse(json);
         })
     },
     methods:{
