@@ -51,7 +51,6 @@ export default{ //很关键
             if(mapData.isOverLay){
                 var json = {};
                 json = store.state.mapData;
-                // that.showHouse(json)
             }else{
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -59,8 +58,12 @@ export default{ //很关键
                 store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
+                json.levelType = 2;
                 Object.assign(json,store.state.screen);
-                json.levelType = that.toLevelType(store.state.mapData.scale);
+                if(store.state.screen){
+                    json.levelType = that.toLevelType(store.state.mapData.scale);
+                }
+                
                 
                 that.showHouse(json)
                 

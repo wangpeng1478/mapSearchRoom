@@ -69,9 +69,15 @@
       },
       showRoomList(){
         return this.$store.state.mapData.showRoomList;
+      },
+      cityId(){
+        return this.$store.state.currentCity.cityId;
       }
     },
     watch:{
+      cityId(){
+        this.baiduMap();
+      }
     },
     mounted : function () {
       this.viewSetDefault()
@@ -166,27 +172,6 @@
         });
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl);
-        // var geoc = new BMap.Geocoder();
-        // geoc.getLocation(point, function(rs){
-        //   var addComp = rs.addressComponents;
-        // }); 
-        // var content='<div class="alarmDiv">';
-        // content+='<table style="width:100%;height:100%;" border="1" cellpadding="0" cellspacing="0">';
-        // content+='<tr><td rowspan="4" style="width:80px;"><img src="/css/images/alarmLamp.gif" class="alarmPic"/></td>';
-        // content+='<td class="tabLabel">姓名</td><td class="tabText">李二狗</td></tr><tr><td class="tabLabel">身份证号</td>';
-        //     '<tr><td align="center"><img src="/css/images/testPerson.jpg"/></td><td align="center">' +
-        //     '<img src="/css/images/testPerson.jpg"/></td></tr></table></td></tr></table></div>';
-        // var opt = {
-        //   setWidth:500,
-        //   setHeight:500,
-        //   setContent:'marker'
-        // }
-        // var InfoWindow = new BMap.InfoWindow(content,opt)
-        // marker.openInfoWindow(InfoWindow);
-        // store.state.mapData.isOverLay = true;
-        // store.state.mapData.radius = distance;
-
-        // this.$.showCoverByCoordinate(store.state.mapData);
       },
       hiddenMateFun: function(msg){
         let map = this.$store.state.map;
@@ -292,7 +277,6 @@
           this.$.showHouse(json);
           
         }
-        console.log(this.$store.state.keywordsSearch)
          _state.map = map;
         
       
