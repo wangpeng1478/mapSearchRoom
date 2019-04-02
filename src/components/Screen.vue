@@ -216,7 +216,7 @@ export default {
         if(this.regionTemp.levelType){
           query.levelType = this.regionTemp.levelType;
         }else{
-          query.levelType=1
+          query.levelType=2
         }
       }
       console.log(query)

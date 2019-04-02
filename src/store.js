@@ -78,7 +78,6 @@ export default new Vuex.Store({
       })
     },
     mapDataChangelatitudeAndLongitude(state,data){
-      console.log(data)
       state.mapData.latitude = data.latitude;
       state.mapData.longitude = data.longitude;
     },
