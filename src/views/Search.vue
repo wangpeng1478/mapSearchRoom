@@ -149,7 +149,7 @@ export default {
     ...mapMutations(["assign","searchCompelet"]),
     handleAcHistory(idx){
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
-      backMap
+      this.backMap()
     },
     clearPoint() {
       localStorage.removeItem(this.storageName);
