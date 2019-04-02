@@ -33,6 +33,7 @@ export default new Vuex.Store({
       scale:11,
       isOverLay:false,    //显示覆盖物里的房源
       isInvFind:false,    //是否使用滑块改变scale
+      isClickZoom:false,      //是否点击缩放
     },
     map:"",
     cityList:null,

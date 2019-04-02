@@ -63,25 +63,40 @@ export default{ //很关键
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
-            let map = store.state.map;
-            let mapData = store.state.mapData;
-            if(mapData.isOverLay){
-                var json = {};
-                json = store.state.mapData;
-            }else{
-                let zoom = e.currentTarget.getZoom();
-                var cp = obj.getCenter();
-                store.state.mapData.latitude = cp.lat;
-                store.state.mapData.longitude = cp.lng;
-                store.state.mapData.scale =  zoom;
-                var json = {};
-                json = store.state.mapData;
-                that.showHouse(json)
+            if(!store.state.mapData.isClickZoom){
+                let map = store.state.map;
+                let mapData = store.state.mapData;
+                if(mapData.isOverLay){
+                    var json = {};
+                    json = store.state.mapData;
+                }else{
+                    let zoom = e.currentTarget.getZoom();
+                    var cp = obj.getCenter();
+                    store.state.mapData.latitude = cp.lat;
+                    store.state.mapData.longitude = cp.lng;
+                    store.state.mapData.scale =  zoom;
+                    var json = {};
+                    Object.assign(json,store.state.screen)
+    
+                    that.showHouse(json)
+                }
+                store.state.mapData.isClickZoom = false;
             }
+            
+
+            // var json = {};
+            // json.cityId = store.state.currentCity.cityId;
+            // json.
+            // Object.assign(json,store.state.screen)
+            // console.log(store.state)
+            // console.log(json)
+            // that.showHouse(json)
+            
             
         });
     },
     showHouse:function(mpdata){
+        console.log("showHouse")
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
             if (res.data.code == 0) {
@@ -259,7 +274,6 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        // map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
         _state.coverDataList.map((val,index)=>{
             if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
@@ -343,10 +357,57 @@ export default{ //很关键
             store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
             store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
             if(!flag){
+                // let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                // store.state.mapData.scale = that.toScale(levelType);
+                // switch (levelType) {
+                //     case 1:
+                //     case 2:
+                //         store.state.mapData.scale = 11;
+                //         break;
+                //     case 3:
+                //         store.state.mapData.scale = 14;
+                //         break;
+                //     case 4:
+                //         store.state.mapData.scale = 15;
+                //         break;
+                //     case 5:
+                //         store.state.mapData.scale = 12;
+                //         break;
+                //     case 6:
+                //         store.state.mapData.scale = 15;
+                //     case 7:
+                // }
+                // map.centerAndZoom(point,store.state.mapData.scale);
                 that.showHouse(json);
+                store.state.mapData.isClickZoom = true;
             }
             
         }
+    },
+    toScale:function(levelType){
+        var scale = 11;
+        switch (levelType) {
+            case 1:
+            scale = 9;
+            case 2:
+            scale = 11;
+                break;
+            case 3:
+            scale = 14;
+                break;
+            case 4:
+            scale = 15;
+                break;
+            case 5:
+            scale = 12;
+                break;
+            case 6:
+            scale = 15;
+            case 7:
+                break;
+            default:break;
+        }
+        return scale;
     },
     showCeaHouse:function(data){
         let map = store.state.map;
