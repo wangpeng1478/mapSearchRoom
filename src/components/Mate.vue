@@ -77,7 +77,7 @@ export default {
             
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
-                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexOverlay",
+                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
                 function(){
                     _this.$router.push("/search");
                 });
@@ -89,14 +89,22 @@ export default {
             json.longitude = _state.mapData.longitude;
             json.latitude = _state.mapData.latitude;
             Object.assign(json,_state.mapScreen,_state.screen)
-            console.log("json",json)
             this.$.showCoverHouse(json);
         })
     },
     methods:{
         filter:function(){
+           
             if(this.speed!=0){
                 var mp = store.state.map;
+
+
+                 mp.getOverlays().map((val)=>{
+                    if(val._type=="ComplexCoverOverlay"){
+                    mp.removeOverlay(val)
+                    }
+                    return;
+                })
                 let _state = store.state;
                 let _mapData = store.state.mapData;
                 let point = new BMap.Point(_mapData.longitude,_mapData.latitude);
@@ -120,8 +128,7 @@ export default {
 
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
-                    // console.log(rs)
-                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexOverlay",
+                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
                     function(){
                         _this.$router.push("/search");
                     });
@@ -133,7 +140,6 @@ export default {
                 json.longitude = _state.mapData.longitude;
                 json.latitude = _state.mapData.latitude;
                 Object.assign(json,_state.mapScreen,_state.screen)
-                console.log("json",json)
                 this.$.showCoverHouse(json);
             }
         },
@@ -150,11 +156,7 @@ export default {
             var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
                 elements.className = "BMap_noprint anchorBL "; 
             mp.getOverlays().map((val)=>{
-                if(val._type=="ComplexOverlay"){
-                
-                }else{
-                    mp.removeOverlay(val)
-                }
+                 mp.removeOverlay(val)
                 return;
             })
             store.state.mapData.isOverLay = false;

@@ -94,6 +94,12 @@
           key:'keywordsSearch',
           value:{}
         })
+        let _state = this.$store.state;
+        var json = {};
+        json.cityId = _state.currentCity.cityId;
+        json.levelType = 2;
+        Object.assign(json,_state.screen)
+        this.$.showHouse(json);
         record(2,'地图页面清除搜索框按钮')
       },
       handelList(){
@@ -118,8 +124,10 @@
         let that = this;
         this.isFind = false;
         this.showView.showMate = true;
-        // var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
-        // elements.className = "BMap_noprint anchorBL bottom48";
+        this.assign({
+          key:'keywordsSearch',
+          value:{}
+        })
         map.removeControl(that.geolocationControl);
         
         let geolocationControl = new BMap.GeolocationControl({
@@ -208,7 +216,39 @@
           this.$.showHouse(json);
           this.showMateFun();
         }else{
+          
+          if(_state.keywordsSearch.tableId){
+            switch(_state.keywordsSearch.typeId){
+              case 1:
+                json.levelType = 4;
+                json.villageId = _state.keywordsSearch.tableId;
+                break;
+              case 2:
+                json.levelType = 6;
+                json.metroStationId = _state.keywordsSearch.tableId;
+                break;
+              case 3:
+                json.levelType = 5;
+                json.metroId  = _state.keywordsSearch.tableId;
+                break;
+              case 4:
+                json.levelType = 7;
+                json.busStationId  = _state.keywordsSearch.tableId;
+                break;
+              case 6:
+                json.levelType = 3;
+                json.ceaId  = _state.keywordsSearch.tableId;
+                json.prcId  = _state.keywordsSearch.parentId;
+                break;
+              case 7:
+                json.levelType = 2;
+                 json.prcId  = _state.keywordsSearch.tableId;
+                break;
+            }
+            
+          }
           this.$.showHouse(json);
+          
         }
         console.log(this.$store.state.keywordsSearch)
          _state.map = map;

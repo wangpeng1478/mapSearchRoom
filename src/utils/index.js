@@ -178,7 +178,6 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-                    // this.showVillageHouse(data);
                     this.showAreaHouse(data);
                 }
             });

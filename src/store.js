@@ -16,10 +16,10 @@ export default new Vuex.Store({
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
-    data:{
-      type:2,
-      scale:11,
-    },
+    // data:{
+    //   type:2,
+    //   scale:11,
+    // },
     mapData:{
       type:2,
       cityId:2,
