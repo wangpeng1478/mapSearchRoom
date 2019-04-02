@@ -129,9 +129,10 @@ export default {
         let priceRecommValue = priceRecomm.split("-");
         if(priceRecommValue.length==1 && priceRecommValue[0]==500){
           query.priceTo = priceRecommValue[0]
+        }else{
+          query.priceFrom = priceRecommValue[0];
+          query.priceTo = priceRecommValue[1];
         }
-        query.priceFrom = priceRecommValue[0];
-        query.priceTo = priceRecommValue[1];
       }
       
       if (!query.cityId) {
