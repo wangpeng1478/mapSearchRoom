@@ -90,7 +90,9 @@ export default{ //很关键
                     
                     var json = {};
                     json.cityId = store.state.currentCity.cityId;
+                    console.log(mapData.scale)
                     json.levelType = that.toLevelType(mapData.scale);
+                    
                     Object.assign(json,store.state.screen)
     
                     that.showHouse(json)
@@ -309,55 +311,56 @@ export default{ //很关键
     },
     toLevelType:function(scale){
         var levelType = 2;
-        if(store.state.screen.levelType == 5||store.state.screen.levelType ==6){
-            switch (scale) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    levelType = 1;
-                    break;
-                case 10:
-                case 11:
-                case 12:
-                case 13:
-                case 14:
-                    levelType = 5;
-                    break;
-                default:
-                    levelType = 6;
-                    break;
-            }
-        }else{
-            switch (scale) {
-                case 1:
-                case 2:
-                case 3:
-                case 4:
-                case 5:
-                case 6:
-                case 7:
-                case 8:
-                case 9:
-                    levelType = 1;
-                    break;
-                case 10:
-                case 11:
-                case 12:
-                    levelType = 2;
-                    break;
-                case 13:
-                case 14:
+        switch (scale) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                levelType = 1;
+                break;
+            case 10:
+            case 11:
+            case 12:
+                levelType = 2;
+                break;
+            case 13:
+            case 14:
                 levelType = 3;
-                    break;
-                default:
-                    levelType = 4;
-                    break;
+                break;
+            default:
+                levelType = 4;
+                break;
+        }
+        if(store.state.screen){
+            if(store.state.screen.levelType == 5||store.state.screen.levelType ==6){
+                switch (scale) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                        levelType = 1;
+                        break;
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                        levelType = 5;
+                        break;
+                    default:
+                        levelType = 6;
+                        break;
+                }
             }
         }
         return levelType;
