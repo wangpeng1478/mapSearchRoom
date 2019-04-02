@@ -255,6 +255,7 @@ export default {
         value: this.searchResult[idx]
       });
       this.hotWordsCount();
+      console.log(this.searchResult[idx])
     },
     hotWordsCount() {
       let params = new URLSearchParams({

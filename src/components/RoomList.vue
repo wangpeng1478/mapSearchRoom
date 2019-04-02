@@ -65,6 +65,7 @@
     props:['villageId'],
     mounted() {
       this.vh = document.body.clientHeight / 100;
+      this.loadRoomList();
     },
     methods: {
       loadRoomList(){

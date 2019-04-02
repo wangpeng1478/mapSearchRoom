@@ -76,6 +76,8 @@ export default{ //很关键
                     store.state.mapData.longitude = cp.lng;
                     store.state.mapData.scale =  zoom;
                     var json = {};
+                    json.cityId = store.state.currentCity.cityId;
+                    // json.levelType = that.toLevelType(mapData.scale);
                     Object.assign(json,store.state.screen)
     
                     that.showHouse(json)
@@ -96,7 +98,6 @@ export default{ //很关键
         });
     },
     showHouse:function(mpdata){
-        console.log("showHouse")
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
             if (res.data.code == 0) {
@@ -315,8 +316,8 @@ export default{ //很关键
                         function (e) {
                             fuzhi(e,4,true);
                             store.state.mapData.scale = 15;
+                            store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
                             store.state.mapData.showRoomList = true;
-                            console.log(store.state.mapData.showRoomList)
                         }
                         ,false);
                         break;
@@ -383,6 +384,35 @@ export default{ //很关键
             }
             
         }
+    },
+    toLevelType:function(scale){
+        var levelType = 2;
+        switch (scale) {
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                levelType = 1;
+                break;
+            case 10:
+            case 11:
+            case 12:
+                levelType = 2;
+                break;
+            case 13:
+            case 14:
+            levelType = 3;
+                break;
+            default:
+                levelType = 4;
+                break;
+        }
+        return levelType;
     },
     toScale:function(levelType){
         var scale = 11;

@@ -14,7 +14,7 @@
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
     <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
     <transition name="roomlist">
-    <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="mapData.showRoomList"/>
+    <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
     <transition name="screen">
       <Screen v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
@@ -59,14 +59,11 @@
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       },
-      aa(){
+      showRoomList(){
         return this.$store.state.mapData.showRoomList;
       }
     },
     watch:{
-      aa(){
-        console.log("showRoomList",this.$store.state.mapData.showRoomList)
-      }
     },
     mounted : function () {
       this.viewSetDefault()
