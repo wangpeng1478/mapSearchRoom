@@ -64,13 +64,21 @@ export default new Vuex.Store({
       localStorage.setItem("currentCity", JSON.stringify(currentCity));
       currentCity.confirm = true;
       state.currentCity = currentCity;
-      state.mapData.latitude = currentCity.latitude;
-      state.mapData.longitude = currentCity.longitude;
+      this.commit('mapDataChangelatitudeAndLongitude',{
+        latitude:currentCity.latitude,
+        longitude:currentCity.longitude
+      })
     },
     currentCityAddConfirm(state){
       state.currentCity.confirm = true;
+      let currentCity = state.currentCity;
+      this.commit('mapDataChangelatitudeAndLongitude',{
+        latitude:currentCity.latitude,
+        longitude:currentCity.longitude
+      })
     },
     mapDataChangelatitudeAndLongitude(state,data){
+      console.log(data)
       state.mapData.latitude = data.latitude;
       state.mapData.longitude = data.longitude;
     },

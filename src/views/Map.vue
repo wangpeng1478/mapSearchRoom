@@ -207,7 +207,7 @@
       },
       loadCity(){
         if(this.currentCity.confirm==undefined){
-          if(localStorage.currentCity==undefined){
+          if(localStorage.currentCity!=undefined){
             this.assign({
             key:'currentCity',
             value:JSON.parse(localStorage.currentCity)
