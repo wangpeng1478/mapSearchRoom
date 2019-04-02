@@ -33,8 +33,12 @@ export default{ //很关键
             // 定位成功事件
             store.state.mapData.latitude = e.point.lat;
             store.state.mapData.longitude = e.point.lng;
+            
+            store.state.mapData.scale = store.state.map.getZoom();
             var json = {};
-            json = store.state.mapData;
+            json.cityId = store.state.currentCity.cityId;
+            json.levelType = that.toLevelType(store.state.mapData.scale);
+            Object.assign(json,store.state.screen);
             that.showHouse(json)
         });
     },
@@ -52,8 +56,13 @@ export default{ //很关键
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
+                store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
-                json = store.state.mapData;
+                console.log()
+                json.cityId = store.state.currentCity.cityId;
+                Object.assign(json,store.state.screen);
+                json.levelType = that.toLevelType(store.state.mapData.scale);
+                
                 that.showHouse(json)
                 
             }
@@ -63,6 +72,8 @@ export default{ //很关键
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
+            let zoom = e.currentTarget.getZoom();
+            store.state.mapData.scale =  zoom;
             if(!store.state.mapData.isClickZoom){
                 let map = store.state.map;
                 let mapData = store.state.mapData;
@@ -70,34 +81,56 @@ export default{ //很关键
                     var json = {};
                     json = store.state.mapData;
                 }else{
-                    let zoom = e.currentTarget.getZoom();
+                    
                     var cp = obj.getCenter();
                     store.state.mapData.latitude = cp.lat;
                     store.state.mapData.longitude = cp.lng;
-                    store.state.mapData.scale =  zoom;
+                    
                     var json = {};
                     json.cityId = store.state.currentCity.cityId;
-                    // json.levelType = that.toLevelType(mapData.scale);
+                    json.levelType = that.toLevelType(mapData.scale);
                     Object.assign(json,store.state.screen)
     
                     that.showHouse(json)
                 }
                 store.state.mapData.isClickZoom = false;
             }
-            
-
-            // var json = {};
-            // json.cityId = store.state.currentCity.cityId;
-            // json.
-            // Object.assign(json,store.state.screen)
-            // console.log(store.state)
-            // console.log(json)
-            // that.showHouse(json)
-            
-            
         });
     },
     showHouse:function(mpdata){
+        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+            
+            if (res.data.code == 0) {
+                res = res.data.data;
+                
+                switch (mpdata.levelType) {
+                    case 1:
+                    case 2:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 3:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 4:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 5:
+                        store.state.coverDataList = res.mapResultDtos;
+                        this.showMetroHouse(mpdata);
+                        break;
+                    case 6:
+                        store.state.coverDataList = res.mapResultDtos;
+                        this.showAreaHouse(mpdata);
+                    case 7:
+                        break;
+                }
+            }
+        });
+    },
+    showScreenHouse:function(mpdata){
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
             if (res.data.code == 0) {
@@ -131,116 +164,9 @@ export default{ //很关键
                 }
             }
         });
-        // let _state = store.state;
-        // if(_state.mapData.isOverLay){
-        //     callback();
-        // }else{
-        //     if(!_state.mapScreen){
-        //         var json = {};
-        //         json.cityId = _state.currentCity.cityId;
-        //         json.levelType = 2;
-        //         _state.mapScreen = Object.assign(json,_state.mapScreen)
-        //     }
-        //     if(_state.keywordsSearch.typeId ==1){
-        //         _state.mapScreen.levelType = 4;
-        //         _state.mapScreen.villageId  = _state.keywordsSearch.tableId;
-                
-        //     }else{
-        //         var json = {};
-        //         if(_state.keywordsSearch.typeId){
-        //             switch(_state.keywordsSearch.typeId){
-        //                 case 2:
-        //                     _state.mapScreen.levelType = 6;
-        //                     json.metroStationId = _state.keywordsSearch.tableId;
-        //                     json.cityId  = _state.currentCity.cityId;
-        //                     json.prcId  = null;
-        //                     json.ceaId  = null;
-        //                     json.metroId = null;
-        //                     json.busStationId  = null;
-        //                     json.villageId  = null;
-        //                     break;
-        //                 case 3:
-        //                     _state.mapScreen.levelType = 5;
-        //                     json.metroId = _state.keywordsSearch.tableId;
-        //                     json.cityId  = _state.currentCity.cityId;
-        //                     json.prcId  = null;
-        //                     json.ceaId  = null;
-        //                     json.metroStationId = null;
-        //                     json.busStationId  = null;
-        //                     json.villageId  = null;
-        //                     break;
-        //                 case 4:
-        //                     _state.mapScreen.levelType = 7;
-        //                     json.busStationId  = _state.keywordsSearch.tableId;
-        //                     json.cityId  = _state.currentCity.cityId;
-        //                     json.prcId  = null;
-        //                     json.ceaId  = null;
-        //                     json.metroId = null;
-        //                     json.metroStationId = null;
-        //                     json.villageId  = null;
-        //                     break;  
-        //                 case 5:break;
-        //                 case 6:
-        //                     _state.mapScreen.levelType = 4;
-        //                     json.ceaId  = _state.keywordsSearch.tableId;
-        //                     json.prcId  = _state.keywordsSearch.parentId;
-        //                     json.cityId = _state.currentCity.cityId;
-        //                     json.metroId = null;
-        //                     json.metroStationId = null;
-        //                     json.busStationId  = null;
-        //                     json.villageId  = null;
-        //                     break;
-        //                 case 7:
-        //                     _state.mapScreen.levelType = 3;
-        //                     json.cityId  = _state.keywordsSearch.parentId;
-        //                     json.prcId  = _state.keywordsSearch.tableId;
-        //                     json.ceaId  = null;
-        //                     json.metroId = null;
-        //                     json.metroStationId = null;
-        //                     json.busStationId  = null;
-        //                     json.villageId  = null;
-        //                     break;
-        //                 default:break;
-        //             }
-        //         }else{
-        //             json.cityId  = _state.currentCity.cityId;
-        //             json.prcId  = null;
-        //             json.ceaId  = null;
-        //             json.metroId = null;
-        //             json.metroStationId = null;
-        //             json.busStationId  = null;
-        //             json.villageId  = null;
-        //         }
-        //         console.log(json)
-        //         Object.assign(_state.mapScreen,_state.screen,json);
-        //         axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
-        //             if (res.data.code == 0) {
-        //                 let data = res.data.data;
-        //                 store.state.coverDataList = data;
-        //                 switch (_state.mapScreen.levelType) {
-        //                     case 1:
-        //                     case 2:
-        //                     case 3:
-        //                     case 4:
-        //                         this.showAreaHouse();
-        //                         break
-        //                     case 5:
-        //                         this.showMetroHouse();
-        //                         break
-        //                     case 6:
-        //                     case 7:
-        //                 }
-        //             }
-        //         });
-        //     }
-            
-        // }
-        
-        
     },
     showCoverHouse:function(data){
         let _state = store.state;
-        console.log("isOverLay",_state.mapData)
         if(_state.mapData.isOverLay){
             var json = {};
             json.longitude = _state.mapData.longitude;
@@ -251,14 +177,14 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-                    this.showVillageHouse(data);
+                    // this.showVillageHouse(data);
+                    this.showAreaHouse(data);
                 }
             });
         }
         
     },
     showAreaHouse:function(data){
-        console.log("showAreaHouse")
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -268,7 +194,6 @@ export default{ //很关键
             }
             return;
         })
-        console.log(store.state.mapData)
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
         let mapData = store.state.mapData;
@@ -349,7 +274,6 @@ export default{ //很关键
 
         function fuzhi(e,levelType,flag){
             var json = data;
-            json.levelType = levelType;
             json.latitude = e.target.parentNode.getAttribute("lat");
             json.longitude = e.target.parentNode.getAttribute("lng");
             store.state.mapScreen.levelType = levelType;
@@ -357,28 +281,9 @@ export default{ //很关键
             store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
             store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
             store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+            Object.assign(json,store.state.screen);
+            json.levelType = levelType;
             if(!flag){
-                // let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-                // store.state.mapData.scale = that.toScale(levelType);
-                // switch (levelType) {
-                //     case 1:
-                //     case 2:
-                //         store.state.mapData.scale = 11;
-                //         break;
-                //     case 3:
-                //         store.state.mapData.scale = 14;
-                //         break;
-                //     case 4:
-                //         store.state.mapData.scale = 15;
-                //         break;
-                //     case 5:
-                //         store.state.mapData.scale = 12;
-                //         break;
-                //     case 6:
-                //         store.state.mapData.scale = 15;
-                //     case 7:
-                // }
-                // map.centerAndZoom(point,store.state.mapData.scale);
                 that.showHouse(json);
                 store.state.mapData.isClickZoom = true;
             }
@@ -387,30 +292,56 @@ export default{ //很关键
     },
     toLevelType:function(scale){
         var levelType = 2;
-        switch (scale) {
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9:
-                levelType = 1;
-                break;
-            case 10:
-            case 11:
-            case 12:
-                levelType = 2;
-                break;
-            case 13:
-            case 14:
-            levelType = 3;
-                break;
-            default:
-                levelType = 4;
-                break;
+        if(store.state.screen.levelType == 5||store.state.screen.levelType ==6){
+            switch (scale) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    levelType = 1;
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                    levelType = 5;
+                    break;
+                default:
+                    levelType = 6;
+                    break;
+            }
+        }else{
+            switch (scale) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                    levelType = 1;
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                    levelType = 2;
+                    break;
+                case 13:
+                case 14:
+                levelType = 3;
+                    break;
+                default:
+                    levelType = 4;
+                    break;
+            }
         }
         return levelType;
     },
@@ -439,66 +370,7 @@ export default{ //很关键
         }
         return scale;
     },
-    showCeaHouse:function(data){
-        let map = store.state.map;
-        let mapData = store.state.mapData;
-        let httpData = store.state.mapBaseData;
-        let that = this;
-        let bounds = map.getBounds();
-        // map.enableMassClear();
-        map.getOverlays().map((val)=>{
-            if(val._type=="ComplexOverlay"){
-               map.removeOverlay(val)
-            }
-            return;
-        })
-        let point = new BMap.Point(data.longitude,data.latitude);
-        store.state.mapData.latitude = data.latitude;
-        store.state.mapData.longitude = data.longitude;
-        store.state.mapData.scale = 14
-        // 创建点坐标  
-        if(!mapData.isOverLay){
-            map.centerAndZoom(point,store.state.mapData.scale);
-        }
-        let overlays = map.getOverlays();
-        if(store.state.mapData.prcId){
-            httpData.ceaList.map((val,index)=>{
-                if(val.prcId == store.state.mapData.prcId){
-                    
-                    var txt = val.ceaName, mouseoverTxt = val.roomCount + "间";
-                    var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-                    map.addOverlay(myCompOverlay);
-                    //覆盖物添加点击事件+
-                    myCompOverlay._div.addEventListener('touchstart',function(){
-                        map.disableDragging();  //禁用地图拖拽功能
-                    });
-                    myCompOverlay._div.addEventListener("click", function () {
-                        store.state.mapData.scale = 15;
-                        val.isSlider = data.isSlider;
-                        that.showHouse(val);
-                    });
-                }
-                return;
-            })
-        }else{
-            
-            httpData.ceaList.map((val,index)=>{
-                var txt = val.ceaName, mouseoverTxt = val.roomCount + "间";
-                var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-                map.addOverlay(myCompOverlay);
-                //覆盖物添加点击事件+
-                myCompOverlay._div.addEventListener('touchstart',function(){
-                    map.disableDragging();  //禁用地图拖拽功能
-                });
-                myCompOverlay._div.addEventListener("click", function () {
-                    store.state.mapData.scale = 15;
-                    val.isSlider = data.isSlider;
-                    that.showVillageHouse(val);
-                });
-                return;
-            })
-        }
-    },
+    
     showVillageHouse:function(data){
         let map = store.state.map;
         map.getOverlays().map((val)=>{
@@ -601,7 +473,7 @@ export default{ //很关键
         console.log("showMetroHouse")
         _state.coverDataList.map((val,index)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
-          var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
+          var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
         //   myCompOverlay.disableMassClear();
           map.addOverlay(myCompOverlay);
           //覆盖物添加点击事件+
@@ -609,8 +481,23 @@ export default{ //很关键
           myCompOverlay._div.addEventListener('touchstart',function(){
            map.disableDragging();  //禁用地图拖拽功能
           });
-          myCompOverlay._div.addEventListener("click", function () {
+          myCompOverlay._div.addEventListener("click", function (e) {
               console.log("地铁房源")
+              var json = {};
+              store.state.mapScreen.levelType =  6;
+              store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
+              store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
+              store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
+              store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+              store.state.mapData.scale = 15;
+              Object.assign(json,store.state.screen);
+              json.metroStationId = e.target.parentNode.getAttribute("key");
+              json.levelType = 6;
+              that.showHouse(json);
+              console.log(json)
+              console.log(store.state.mapData)
+              store.state.mapData.isClickZoom = true;
+              
             // that.showVillageHouse(val);
           });
           return;
