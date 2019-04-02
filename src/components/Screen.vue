@@ -127,6 +127,9 @@ export default {
       let priceRecomm = this.priceRecomm;
       if (priceRecomm) {
         let priceRecommValue = priceRecomm.split("-");
+        if(priceRecommValue.length==1 && priceRecommValue[0]==500){
+          query.priceTo = priceRecommValue[0]
+        }
         query.priceFrom = priceRecommValue[0];
         query.priceTo = priceRecommValue[1];
       }
