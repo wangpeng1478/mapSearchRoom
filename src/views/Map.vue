@@ -12,7 +12,7 @@
     </div>
     </transition>
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
-    <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun"/>
+    <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
@@ -350,6 +350,9 @@
         //     alert('failed'+this.getStatus());
         //   }        
         // });
+      },
+      mateScreenFun:function(msg){
+        this.handleComponentView(msg)
       },
       handleComponentView(component){
         record(2,'地图页面筛选')
