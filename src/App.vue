@@ -2,6 +2,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <p class="toast" v-if="toast">{{toast}}</p>
   </div>
 </template>
 
@@ -9,6 +10,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations,mapActions } from "vuex";
+import { setTimeout } from 'timers';
 
 export default {
   name: "app",
@@ -38,21 +40,50 @@ export default {
             key: "mapBaseDataReady",
             value: true
           });
-         
         }
       });
     },
     
   },
-  computed:mapState(['currentCity']),
+  computed:mapState(['currentCity','toast']),
   watch:{
     currentCity(){
       this.httpQueryMapBaseData();
       this.resetAllState();
+    },
+    toast(val){
+      if(val){
+        setTimeout(()=>{
+          this.assign({
+            key:'toast',
+            value:null
+          })
+        },3000)
+      }
     }
   }
 };
 </script>
+
+<style scoped>
+.toast{
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 30vh;
+  margin: auto;
+  z-index: 999;
+  font-size: 14px;
+  text-align: center;
+  width: 70vw;
+  background: rgba(0, 0, 0, 0.5);
+  color: #eee;
+  line-height: 1.4;
+  padding: 5px 0;
+  border-radius: 10px;
+}
+</style>
+
 
 <style>
 body,

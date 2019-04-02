@@ -4,8 +4,8 @@
       <input
         id="suggestId"
         type="text"
-        placeholder="请输入小区/区域/地图"
-        maxlength="50"
+        placeholder="请输入您想入住的地址或区域"
+        maxlength="20"
         v-model="searchValue"
         @input="handleInput"
       >

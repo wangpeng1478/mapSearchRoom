@@ -61,7 +61,7 @@
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
-      <button class="confirm" @click="handleQuery">确定（{{roomCount}}）</button>
+      <button class="confirm" :class="roomCount==0 ? 'gray' : ''" @click="handleQuery">确定（{{roomCount}}）</button>
     </div>
   </div>
 </template>
@@ -430,5 +430,8 @@ export default {
   font-size: 4vw;
   margin: 2vw 0 4vw;
   color: #ff9900;
+}
+.gray{
+  background: #666;
 }
 </style>

@@ -48,12 +48,16 @@ export default new Vuex.Store({
     roomFeatureList:[],
     roomRentList:[],
     trafficSpeedList:[],
-    roomTypeList:[]
+    roomTypeList:[],
+    toast:null
   },
   mutations: {
     //state赋值公共方法
     assign(state,data){
       state[data.key] = data.value
+    },
+    showToast(state,msg){
+      state.toast = msg
     },
     currentCityChange(state,index){
       let currentCity = state.cityList[index]
