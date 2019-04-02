@@ -240,18 +240,23 @@ export default {
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem(this.storageName, searchTagHistory);
-      this.searchCompelet(tag);
       this.hotWordsCount(tag);
     },
     handleClearinput() {
       this.searchValue = "";
     },
     handleSearchResult(idx) {
-      this.searchCompelet(this.searchResult[idx]);
       this.hotWordsCount(this.searchResult[idx]);
       console.log(this.searchResult[idx])
     },
     hotWordsCount(keywordsSearch) {
+      console.log(keywordsSearch)
+      if(keywordsSearch.typeId==0){
+        //房间
+        window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
+      }else{
+        this.searchCompelet(keywordsSearch);
+      }
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
         type: 3,
@@ -266,7 +271,7 @@ export default {
       this.backMap()
     },
     backMap(){
-      // this.$router.push('/')
+      this.$router.push('/')
     }
   },
   computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])
