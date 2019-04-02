@@ -22,6 +22,13 @@
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
+    <div class="model" v-if="showView.showModel">
+     <p class="context">您当前所在定位城市为[上海]，是否切换至当前城市</p>
+     <div class="model-btn">
+       <p class="cancel" @click="handleModel(false)">取消</p>
+       <p class="confirm" @click="handleModel(true)">确定</p>
+     </div>
+    </div>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
 </template>
@@ -279,7 +286,8 @@
           showMate: false,
           showScreen:false,
           showRegionAndMetro:false,
-          showMask:false
+          showMask:false,
+          showModel:false
         }
       },
       selectionArea(){
@@ -290,6 +298,13 @@
       },
       roomListDestroy(){
         store.state.mapData.showRoomList = false;
+      },
+      handleModel(res){
+        if(res){
+          console.error("没有取消函数")
+        }else{
+          console.error("没有确定函数")
+        }
       }
     }
   }
@@ -504,7 +519,45 @@
 .roomlist-enter, .roomlist-leave-to{
   top: 100vh;
 }
-
+.model{
+  width:88vw;
+  height: 45vw;
+  overflow: hidden;
+  background: #fff;
+  border-radius: 3vw;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  z-index: 20;
+}
+.model .context{
+  height: 30vw;
+  box-sizing: border-box;
+  padding: 10vw;
+  text-align: center;
+  font-size: 4.5vw;
+  box-sizing: border-box;
+  border-bottom: 1px solid #e3e3e3;
+}
+.model .model-btn p{
+  width: 44vw;
+  float: left;
+  text-align: center;
+  height: 15vw;
+  line-height: 15vw;
+  font-size: 4vw;
+}
+.model .model-btn .cancel{
+  color: #333;
+  box-sizing: border-box;
+  border-right: 1px solid #e3e3e3;
+}
+.model .model-btn .confirm{
+  color: #ff9900;
+}
 </style>
 
 <style>
@@ -587,9 +640,7 @@ html,body,#app{
   margin-left:-2vw;
 }
 
-
-
-  .location_metro_label{
+.location_metro_label{
     position : absolute;
     background : #0fb896;
     color : white;
