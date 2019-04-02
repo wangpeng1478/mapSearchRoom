@@ -2,23 +2,7 @@
   <div class="region-wrap">
     <div class="region-mask" @click="hiddenRegion"></div>
     <div class="region">
-      <ul class="u1">
-        <li @click="handleSelect(0,-1)" :class="selected[0]==-1 ? 'selected' : ''">不限</li>
-        <li @click="handleSelect(0,0)" :class="selected[0]==0 ? 'selected' : ''">区域</li>
-        <li @click="handleSelect(0,1)" :class="selected[0]==1 ? 'selected' : ''">地铁</li>
-      </ul>
-      <ul class="u2">
-        <!-- <li  @click="handleSelect(1,-1)" v-if="selected[0]!=-1" :class="selected[1] == -1 ? 'selected' : ''">不限</li> -->
-        <template v-if="selected[0]==0">
-          <li @click="handleSelect(1,index)" v-for="(provincial,index) in provincialList" :key="provincial.prcId"
-            :class="selected[1]==index ? 'selected' : ''">{{provincial.prcName}}</li>
-        </template>
-        <template v-if="selected[0]==1">
-          <li @click="handleSelect(1,index)" v-for="(metro,index) in metroList" :key="metro.metroId"
-            :class="selected[1]==index ? 'selected' : ''">{{metro.simpleName}}</li>
-        </template>
-      </ul>
-      <ul class="u3">
+      <ul class="u3" :class="selected[1]==-1 ? 'noshow' : ''">
         <li @click="handleSelect(2,-1)" v-if="selected[0]!=-1 && selected[1]!=-1"
           :class="selected[2] == -1 ? 'selected' : ''">不限</li>
         <template v-if="selected[0]==0&& selected[1]!=-1">
@@ -29,6 +13,22 @@
           <li @click="handleSelect(2,index)" v-for="(station,index) in metroList[selected[1]].metroStationList"
             :key="station.stationId" :class="selected[2]==index ? 'selected' : ''">{{station.stationName}}</li>
         </template>
+      </ul>
+      <ul class="u2" :class="selected[0]==-1 ? 'noshow' : ''">
+        <!-- <li  @click="handleSelect(1,-1)" v-if="selected[0]!=-1" :class="selected[1] == -1 ? 'selected' : ''">不限</li> -->
+        <template v-if="selected[0]==0">
+          <li @click="handleSelect(1,index)" v-for="(provincial,index) in provincialList" :key="provincial.prcId"
+            :class="selected[1]==index ? 'selected' : ''">{{provincial.prcName}}</li>
+        </template>
+        <template v-if="selected[0]==1">
+          <li @click="handleSelect(1,index)" v-for="(metro,index) in metroList" :key="metro.metroId"
+            :class="selected[1]==index ? 'selected' : ''">{{metro.simpleName}}</li>
+        </template>
+      </ul>
+      <ul class="u1">
+        <li @click="handleSelect(0,-1)" :class="selected[0]==-1 ? 'selected' : ''">不限</li>
+        <li @click="handleSelect(0,0)" :class="selected[0]==0 ? 'selected' : ''">区域</li>
+        <li @click="handleSelect(0,1)" :class="selected[0]==1 ? 'selected' : ''">地铁</li>
       </ul>
     </div>
   </div>
@@ -199,9 +199,7 @@
     top: 0;
     right: 0;
     height: 100vh;
-    width: 84vw;
     overflow: hidden;
-    background: #fff;
     z-index: 10;
   }
 
@@ -212,12 +210,14 @@
     left: 0;
     right: 0;
     z-index: 9;
+    background: rgba(0, 0, 0, 0.5);
   }
 
   .region ul {
     overflow: auto;
     height: 100vh;
-    float: left;
+    float: right;
+    transition: all 0.3s linear;
   }
 
   .region ul li {
@@ -241,6 +241,7 @@
 
   .u3 {
     width: 30vw;
+    background: #fff;
   }
 
   .region .selected {
@@ -253,5 +254,9 @@
 
   .region .u2 .selected {
     background: #fff;
+  }
+  .noshow{
+    width: 0;
+    overflow: hidden;
   }
 </style>
