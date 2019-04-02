@@ -117,13 +117,21 @@
       },
       mapScreen(){
         //地图条件搜索
+        var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        var json = {};
-        let _screen = this.$store.state.screen;
-        Object.assign(json,_screen)
-  
-        this.$.showScreenHouse(json)
+        if(this.mapData.isOverLay){
+            json.longitude = this.mapData.longitude;
+            json.latitude = this.mapData.latitude;
+            Object.assign(json,this.$store.state.mapScreen,this.$store.state.screen)
+          this.$.showCoverHouse(json);
+        }else{
+        
+          let _screen = this.$store.state.screen;
+          Object.assign(json,_screen)
+          this.$.showScreenHouse(json)
+        }
+        
       },
       handelClearSearh(){
         this.assign({
@@ -344,13 +352,24 @@
         this.showView.showMask=true;
       },
       viewSetDefault(){
-        this.showView = {
-          showMate: false,
-          showScreen:false,
-          showRegionAndMetro:false,
-          showMask:false,
-          showModel:false
+        if(this.mapData.isOverLay){
+            this.showView = {
+              showMate: true,
+              showScreen:false,
+              showRegionAndMetro:false,
+              showMask:false,
+              showModel:false
+            }
+        }else{
+          this.showView = {
+            showMate: false,
+            showScreen:false,
+            showRegionAndMetro:false,
+            showMask:false,
+            showModel:false
+          }
         }
+        
       },
       selectionArea(){
         this.showView.showRegionAndMetro=true;
