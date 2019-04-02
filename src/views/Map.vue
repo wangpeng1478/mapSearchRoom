@@ -81,7 +81,6 @@
         //地图条件搜索
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        console.log('缺少筛选后的函数');
         console.log(this.$store.state.screen)
         var json = {};
         let _screen = this.$store.state.screen;
