@@ -81,111 +81,132 @@ export default{ //很关键
             
         });
     },
-    showHouse:function(callback,obj){
-        let _state = store.state;
-        if(_state.mapData.isOverLay){
-            callback();
-        }else{
-            if(!_state.mapScreen){
-                var json = {};
-                json.cityId = _state.currentCity.cityId;
-                json.levelType = 2;
-                _state.mapScreen = Object.assign(json,_state.mapScreen)
-            }
-            if(_state.keywordsSearch.typeId ==1){
-                _state.mapScreen.levelType = 4;
-                _state.mapScreen.villageId  = _state.keywordsSearch.tableId;
-                
-            }else{
-                var json = {};
-                if(_state.keywordsSearch.typeId){
-                    switch(_state.keywordsSearch.typeId){
-                        case 2:
-                            _state.mapScreen.levelType = 6;
-                            json.metroStationId = _state.keywordsSearch.tableId;
-                            json.cityId  = _state.currentCity.cityId;
-                            json.prcId  = null;
-                            json.ceaId  = null;
-                            json.metroId = null;
-                            json.busStationId  = null;
-                            json.villageId  = null;
-                            break;
-                        case 3:
-                            _state.mapScreen.levelType = 5;
-                            json.metroId = _state.keywordsSearch.tableId;
-                            json.cityId  = _state.currentCity.cityId;
-                            json.prcId  = null;
-                            json.ceaId  = null;
-                            json.metroStationId = null;
-                            json.busStationId  = null;
-                            json.villageId  = null;
-                            break;
-                        case 4:
-                            _state.mapScreen.levelType = 7;
-                            json.busStationId  = _state.keywordsSearch.tableId;
-                            json.cityId  = _state.currentCity.cityId;
-                            json.prcId  = null;
-                            json.ceaId  = null;
-                            json.metroId = null;
-                            json.metroStationId = null;
-                            json.villageId  = null;
-                            break;  
-                        case 5:break;
-                        case 6:
-                            _state.mapScreen.levelType = 4;
-                            json.ceaId  = _state.keywordsSearch.tableId;
-                            json.prcId  = _state.keywordsSearch.parentId;
-                            json.cityId = _state.currentCity.cityId;
-                            json.metroId = null;
-                            json.metroStationId = null;
-                            json.busStationId  = null;
-                            json.villageId  = null;
-                            break;
-                        case 7:
-                            _state.mapScreen.levelType = 3;
-                            json.cityId  = _state.keywordsSearch.parentId;
-                            json.prcId  = _state.keywordsSearch.tableId;
-                            json.ceaId  = null;
-                            json.metroId = null;
-                            json.metroStationId = null;
-                            json.busStationId  = null;
-                            json.villageId  = null;
-                            break;
-                        default:break;
-                    }
-                }else{
-                    json.cityId  = _state.currentCity.cityId;
-                    json.prcId  = null;
-                    json.ceaId  = null;
-                    json.metroId = null;
-                    json.metroStationId = null;
-                    json.busStationId  = null;
-                    json.villageId  = null;
-                }
-                console.log(json)
-                Object.assign(_state.mapScreen,_state.screen,json);
-                axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
-                if (res.data.code == 0) {
-                    let data = res.data.data;
-                    store.state.coverDataList = data;
-                    switch (_state.mapScreen.levelType) {
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            this.showAreaHouse(obj);
-                            break
-                        case 5:
-                            this.showMetroHouse(obj);
-                            break
-                        case 6:
-                        case 7:
-                    }
-                }
-                });
-            }
+    showHouse:function(mpdata){
+        axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
-        }
+            if (res.data.code == 0) {
+                res = res.data.data;
+                store.state.coverDataList = res;
+                store.state.mapScreen = mpdata; 
+                switch (mpdata.levelType) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        this.showAreaHouse(mpdata);
+                        break
+                    case 5:
+                        this.showMetroHouse(mpdata);
+                        break
+                    case 6:
+                    case 7:
+                }
+            }
+        });
+        // let _state = store.state;
+        // if(_state.mapData.isOverLay){
+        //     callback();
+        // }else{
+        //     if(!_state.mapScreen){
+        //         var json = {};
+        //         json.cityId = _state.currentCity.cityId;
+        //         json.levelType = 2;
+        //         _state.mapScreen = Object.assign(json,_state.mapScreen)
+        //     }
+        //     if(_state.keywordsSearch.typeId ==1){
+        //         _state.mapScreen.levelType = 4;
+        //         _state.mapScreen.villageId  = _state.keywordsSearch.tableId;
+                
+        //     }else{
+        //         var json = {};
+        //         if(_state.keywordsSearch.typeId){
+        //             switch(_state.keywordsSearch.typeId){
+        //                 case 2:
+        //                     _state.mapScreen.levelType = 6;
+        //                     json.metroStationId = _state.keywordsSearch.tableId;
+        //                     json.cityId  = _state.currentCity.cityId;
+        //                     json.prcId  = null;
+        //                     json.ceaId  = null;
+        //                     json.metroId = null;
+        //                     json.busStationId  = null;
+        //                     json.villageId  = null;
+        //                     break;
+        //                 case 3:
+        //                     _state.mapScreen.levelType = 5;
+        //                     json.metroId = _state.keywordsSearch.tableId;
+        //                     json.cityId  = _state.currentCity.cityId;
+        //                     json.prcId  = null;
+        //                     json.ceaId  = null;
+        //                     json.metroStationId = null;
+        //                     json.busStationId  = null;
+        //                     json.villageId  = null;
+        //                     break;
+        //                 case 4:
+        //                     _state.mapScreen.levelType = 7;
+        //                     json.busStationId  = _state.keywordsSearch.tableId;
+        //                     json.cityId  = _state.currentCity.cityId;
+        //                     json.prcId  = null;
+        //                     json.ceaId  = null;
+        //                     json.metroId = null;
+        //                     json.metroStationId = null;
+        //                     json.villageId  = null;
+        //                     break;  
+        //                 case 5:break;
+        //                 case 6:
+        //                     _state.mapScreen.levelType = 4;
+        //                     json.ceaId  = _state.keywordsSearch.tableId;
+        //                     json.prcId  = _state.keywordsSearch.parentId;
+        //                     json.cityId = _state.currentCity.cityId;
+        //                     json.metroId = null;
+        //                     json.metroStationId = null;
+        //                     json.busStationId  = null;
+        //                     json.villageId  = null;
+        //                     break;
+        //                 case 7:
+        //                     _state.mapScreen.levelType = 3;
+        //                     json.cityId  = _state.keywordsSearch.parentId;
+        //                     json.prcId  = _state.keywordsSearch.tableId;
+        //                     json.ceaId  = null;
+        //                     json.metroId = null;
+        //                     json.metroStationId = null;
+        //                     json.busStationId  = null;
+        //                     json.villageId  = null;
+        //                     break;
+        //                 default:break;
+        //             }
+        //         }else{
+        //             json.cityId  = _state.currentCity.cityId;
+        //             json.prcId  = null;
+        //             json.ceaId  = null;
+        //             json.metroId = null;
+        //             json.metroStationId = null;
+        //             json.busStationId  = null;
+        //             json.villageId  = null;
+        //         }
+        //         console.log(json)
+        //         Object.assign(_state.mapScreen,_state.screen,json);
+        //         axios.post(API["queryMapCoverData"], _state.mapScreen).then(res => {
+        //             if (res.data.code == 0) {
+        //                 let data = res.data.data;
+        //                 store.state.coverDataList = data;
+        //                 switch (_state.mapScreen.levelType) {
+        //                     case 1:
+        //                     case 2:
+        //                     case 3:
+        //                     case 4:
+        //                         this.showAreaHouse();
+        //                         break
+        //                     case 5:
+        //                         this.showMetroHouse();
+        //                         break
+        //                     case 6:
+        //                     case 7:
+        //                 }
+        //             }
+        //         });
+        //     }
+            
+        // }
         
         
     },
@@ -200,8 +221,8 @@ export default{ //很关键
              
             axios.post(API["queryMapCoverByCoordinate"], _state.mapScreen).then(res => {
                 if (res.data.code == 0) {
-                    let data = res.data.data;
-                    store.state.coverDataList = data;
+                    res = res.data.data;
+                    store.state.coverDataList = res;
                     this.showAreaHouse();
                     // switch (_state.mapScreen.levelType) {
                     //     case 1:
@@ -221,7 +242,7 @@ export default{ //很关键
         }
         
     },
-    showAreaHouse:function(obj){
+    showAreaHouse:function(data){
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -237,6 +258,7 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
+        // map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
         _state.coverDataList.map((val,index)=>{
             if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
@@ -247,9 +269,10 @@ export default{ //很关键
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                 });
-                if(_state.mapScreen.levelType==4||_state.mapScreen.levelType==6||_state.mapScreen.levelType==7){
+                if(data.levelType==4||data.levelType==6||data.levelType==7){
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
+                        store.state.mapScreen.levelType = data.levelType;
                         store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
@@ -261,7 +284,7 @@ export default{ //很关键
                 }else{
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
-                        store.state.mapScreen.levelType = _state.mapScreen.levelType+1;
+                        store.state.mapScreen.levelType = data.levelType+1;
                         store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
                         store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
                         store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
@@ -417,11 +440,10 @@ export default{ //很关键
         
         
     },
-    showMetroStationHouse:function(data){
+    showMetroHouse:function(data){
         //地铁房源
         let map = store.state.map;
-
-        let httpMetroStationData = http.queryMetroStationMapData.data;
+        let _state = store.state;
         let that = this;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
@@ -429,18 +451,17 @@ export default{ //很关键
             }
             return;
         })
-        let point = new BMap.Point(data.longitude,data.latitude);
-        store.state.mapData.latitude = data.latitude;
-        store.state.mapData.longitude = data.longitude;
+        let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         store.state.mapData.scale = 12;
         // 创建点坐标  
-        let mapData = store.state.mapData; 
-        if(!mapData.isOverLay){
-            map.centerAndZoom(point,store.state.mapData.scale);
-        }
+        // let mapData = store.state.mapData; 
+        // if(!mapData.isOverLay){
+        //     map.centerAndZoom(point,store.state.mapData.scale);
+        // }
+        map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
-        httpMetroStationData.metroStationList.map((val,index)=>{
-          var txt = val.stationName, mouseoverTxt = val.roomCount + "间";
+        _state.coverDataList.map((val,index)=>{
+          var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
         //   myCompOverlay.disableMassClear();
           map.addOverlay(myCompOverlay);
@@ -450,7 +471,8 @@ export default{ //很关键
            map.disableDragging();  //禁用地图拖拽功能
           });
           myCompOverlay._div.addEventListener("click", function () {
-            that.showVillageHouse(val);
+              console.log("地铁房源")
+            // that.showVillageHouse(val);
           });
           return;
         })

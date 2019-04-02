@@ -37,7 +37,7 @@ export default new Vuex.Store({
     },
     map:"",
     cityList:null,
-    mapScreen:null,
+    mapScreen:{},
     screen:null, //筛选条件
     screenTemp:null,//筛选条件缓存
     mapBaseDataReady:false,
