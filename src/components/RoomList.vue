@@ -126,7 +126,7 @@
   .roomlist-wrap {
     background: #fff;
     position: fixed;
-    z-index: 99;
+    z-index: 5;
     top: 60vh;
     width: 100%;
     height: 80vh;
