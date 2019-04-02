@@ -73,7 +73,7 @@
               showRegion: cityName,
               key: "cityId",
               value: this.currentCity.cityId,
-              levelType:1,
+              levelType:2,
                 latitudeAndLongitude:{
                   latitude:this.currentCity.latitude,
                   longitude:this.currentCity.longitude
@@ -87,11 +87,11 @@
                 showRegion: cityName + '-' + provincial.prcName,
                 key: "prcId",
                 value: provincial.prcId,
-                levelType:2,
                 latitudeAndLongitude:{
                   latitude:provincial.latitude,
                   longitude:provincial.longitude
-                }
+                },
+                levelType:3
               };
             }
             if (selected[0] == 1) {
@@ -111,11 +111,11 @@
                 showRegion: cityName + '-' + this.provincialList[selected[1]].prcName + '-' + cea.ceaName,
                 key: "ceaId",
                 value: cea.ceaId,
-                levelType:3,
                 latitudeAndLongitude:{
                   latitude:cea.latitude,
                   longitude:cea.longitude
-                }
+                },
+                levelType:4
               };
 
             }

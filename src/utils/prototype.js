@@ -274,10 +274,11 @@ ComplexVillageOverlay.prototype.draw = function(){
 }
 
 //地铁覆盖物
-function ComplexMetroStationOverlay(point, text, mouseoverText){
+function ComplexMetroStationOverlay(point, text, mouseoverText,type){
     this._point = point;
     this._text = text;
     this._overText = mouseoverText;
+    this._type = type;
 }
 ComplexMetroStationOverlay.prototype = new BMap.Overlay();
 ComplexMetroStationOverlay.prototype.initialize = function(map){ 

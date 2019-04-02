@@ -86,19 +86,31 @@ export default{ //很关键
             
             if (res.data.code == 0) {
                 res = res.data.data;
-                store.state.coverDataList = res;
-                store.state.mapScreen = mpdata; 
+                
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
-                    case 3:
-                    case 4:
+                        store.state.mapData.scale = 11;
+                        store.state.coverDataList = res;
                         this.showAreaHouse(mpdata);
-                        break
+                        break;
+                    case 3:
+                        store.state.mapData.scale = 14;
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 4:
+                        store.state.mapData.scale = 15;
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
                     case 5:
+                        store.state.mapData.scale = 12;
+                        store.state.coverDataList = res.mapResultDtos;
                         this.showMetroHouse(mpdata);
-                        break
+                        break;
                     case 6:
+                        store.state.mapData.scale = 15;
                     case 7:
                 }
             }
@@ -243,6 +255,7 @@ export default{ //很关键
         
     },
     showAreaHouse:function(data){
+        console.log("showAreaHouse")
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -252,6 +265,7 @@ export default{ //很关键
             }
             return;
         })
+        console.log(store.state.mapData)
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
         let mapData = store.state.mapData;
@@ -269,6 +283,59 @@ export default{ //很关键
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                 });
+
+                switch (data.levelType) {
+                    case 1:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,2);
+                            store.state.mapData.scale = 9;
+                        }
+                        ,false);
+                        break;
+                    case 2:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,3);
+                            store.state.mapData.scale = 11;
+                        }
+                        ,false);
+                        break;
+                    case 3:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,4);
+                            store.state.mapData.scale = 14;
+                        }
+                        ,false);
+                        break;
+                    case 4:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,4);
+                            store.state.mapData.scale = 15;
+                        }
+                        ,false);
+                        break;
+                    case 5:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,6);
+                            store.state.mapData.scale = 15;
+                        }
+                        ,false);
+                        break;
+                    case 6:
+                        myCompOverlay._div.addEventListener("click", 
+                        function (e) {
+                            fuzhi(e,6);
+                            store.state.mapData.scale = 15;
+                        }
+                        ,false);
+                        break;
+                    default:
+                        break;
+                }
                 if(data.levelType==4||data.levelType==6||data.levelType==7){
                     myCompOverlay._div.addEventListener("click", 
                     function (e) {
@@ -282,43 +349,27 @@ export default{ //很关键
                     }
                     ,false);
                 }else{
-                    myCompOverlay._div.addEventListener("click", 
-                    function (e) {
-                        store.state.mapScreen.levelType = data.levelType+1;
-                        store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
-                        store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
-                        store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
-                        store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
-                        switch (store.state.mapScreen.levelType) {
-                            case 1:
-                            case 2:
-                                store.state.mapData.scale = 11;
-                                break;
-                            case 3:
-                                store.state.mapData.scale = 14;
-                                break;
-                            case 4:
-                                store.state.mapData.scale = 15;
-                                break;
-                            case 5:
-                                store.state.mapData.scale = 12;
-                                break;
-                            case 6:
-                                store.state.mapData.scale = 15;
-                                break;
-                            case 7:
-                            default:
-                                break;
-                        }
-                        that.showHouse();
-                    }
-                    ,false);
+                   
                 }
                 
             }
             
             return;
         })
+
+
+        function fuzhi(e,levelType){
+            var json = data;
+            json.levelType = levelType;
+            json.latitude = e.target.parentNode.getAttribute("lat");
+            json.longitude = e.target.parentNode.getAttribute("lng");
+            store.state.mapScreen.levelType = levelType;
+            store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
+            store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
+            store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
+            store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+            that.showHouse(json);
+        }
     },
     showCeaHouse:function(data){
         let map = store.state.map;
@@ -460,9 +511,10 @@ export default{ //很关键
         // }
         map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
+        console.log("showMetroHouse")
         _state.coverDataList.map((val,index)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
-          var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+          var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
         //   myCompOverlay.disableMassClear();
           map.addOverlay(myCompOverlay);
           //覆盖物添加点击事件+
