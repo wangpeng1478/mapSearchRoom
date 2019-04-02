@@ -146,7 +146,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["assign"]),
+    ...mapMutations(["assign","searchCompelet"]),
     handleAcHistory(idx){
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
     },
@@ -240,29 +240,23 @@ export default {
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem(this.storageName, searchTagHistory);
-      this.assign({
-        key: "keywordsSearch",
-        value: tag
-      });
-      this.hotWordsCount();
+      this.searchCompelet(tag);
+      this.hotWordsCount(tag);
     },
     handleClearinput() {
       this.searchValue = "";
     },
     handleSearchResult(idx) {
-      this.assign({
-        key: "keywordsSearch",
-        value: this.searchResult[idx]
-      });
-      this.hotWordsCount();
+      this.searchCompelet(this.searchResult[idx]);
+      this.hotWordsCount(this.searchResult[idx]);
       console.log(this.searchResult[idx])
     },
-    hotWordsCount() {
+    hotWordsCount(keywordsSearch) {
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
         type: 3,
-        id: this.keywordsSearch.id,
-        keyword: this.keywordsSearch.keyWords
+        id: keywordsSearch.id,
+        keyword: keywordsSearch.keyWords
       });
       record(3,{
         keyType:2,
@@ -272,7 +266,7 @@ export default {
       this.backMap()
     },
     backMap(){
-      this.$router.push('/')
+      // this.$router.push('/')
     }
   },
   computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])

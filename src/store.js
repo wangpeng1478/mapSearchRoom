@@ -64,6 +64,33 @@ export default new Vuex.Store({
         state[key] = data[key]
       })
     },
+    searchCompelet(state,data){
+      state.mapData.latitude = data.latitude;
+      state.mapData.longitude = data.longitude;
+      let levelType;
+      switch (data.typeId){
+        case 1:
+        levelType = 4
+        break;
+        case 2:
+        levelType = 6
+        break;
+        case 3:
+        levelType = 5
+        break;
+        case 4:
+        levelType = 7
+        break;
+        case 6:
+        levelType = 3
+        break;
+        case 7:
+        levelType = 2
+        break;
+      }
+      data.levelType = levelType
+      state.keywordsSearch = data;
+    },
     resetAllState(state){
       state.keywordsSearch = {};
       state.region = {};
