@@ -86,7 +86,10 @@ export default {
             _state.mapScreen.radius = distance;
             _state.mapData.isOverLay = true;
             var json = {};
+            json.longitude = _state.mapData.longitude;
+            json.latitude = _state.mapData.latitude;
             Object.assign(json,_state.mapScreen,_state.screen)
+            console.log("json",json)
             this.$.showCoverHouse(json);
         })
     },
@@ -114,9 +117,24 @@ export default {
                     return;
                 })
                 mp.addOverlay(circle); //增加圆
+
+                var geoc = new BMap.Geocoder();
+                geoc.getLocation(point, function(rs){
+                    // console.log(rs)
+                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexOverlay",
+                    function(){
+                        _this.$router.push("/search");
+                    });
+                    mp.addOverlay(myCompOverlay);
+                }); 
                 store.state.mapData.isOverLay = true;
-                this.$.showCoverHouse();
                 this.$store.state.mapData.isInvFind = false;
+                var json = {};
+                json.longitude = _state.mapData.longitude;
+                json.latitude = _state.mapData.latitude;
+                Object.assign(json,_state.mapScreen,_state.screen)
+                console.log("json",json)
+                this.$.showCoverHouse(json);
             }
         },
         checkTime : function (params) {
