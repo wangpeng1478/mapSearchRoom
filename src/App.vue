@@ -13,13 +13,11 @@ import { mapState, mapMutations,mapActions } from "vuex";
 export default {
   name: "app",
   created: function() {
-    this.$nextTick(function() {
-      this.httpQueryCityList();
-      this.httpQueryMapBaseData();
-    });
+    this.httpQueryCityList();
+    this.httpQueryMapBaseData();
   },
   methods: {
-    ...mapMutations(["assign","mapBaseData"]),
+    ...mapMutations(["assign","mapBaseData","resetAllState"]),
     ...mapActions(['assignAsync']),
     httpQueryCityList: function() {
       let _this = this;
@@ -33,7 +31,7 @@ export default {
       });
     },
     httpQueryMapBaseData: function() {
-      axios.post(API["queryMapBaseData"], { cityId: 2 }).then(res => {
+      axios.post(API["queryMapBaseData"], { cityId: this.currentCity.cityId }).then(res => {
         if (res.data.code == 0) {
           this.mapBaseData(res.data.data)
            this.assignAsync({
@@ -45,6 +43,13 @@ export default {
       });
     },
     
+  },
+  computed:mapState(['currentCity']),
+  watch:{
+    currentCity(){
+      this.httpQueryMapBaseData();
+      this.resetAllState();
+    }
   }
 };
 </script>

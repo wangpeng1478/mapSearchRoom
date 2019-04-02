@@ -19,7 +19,6 @@ export default new Vuex.Store({
     data:{
       type:2,
       scale:11,
-      
     },
     mapData:{
       type:2,
@@ -63,6 +62,14 @@ export default new Vuex.Store({
       Object.keys(data).forEach((key)=>{
         state[key] = data[key]
       })
+    },
+    resetAllState(state){
+      state.keywordsSearch = {};
+      state.region = {};
+      state.regionTemp = {};
+      state.pointSearch = null;
+      state.screen = null;
+      state.screenTemp = null;
     }
   },
   actions: {
