@@ -45,6 +45,12 @@
         selected: [-1, -1, -1]
       };
     },
+    mounted(){
+      console.log(this.regionTemp)
+      if(this.regionTemp && this.regionTemp.selected){
+        this.selected = this.regionTemp.selected
+      }
+    },
     methods: {
       ...mapMutations(['assign']),
       hiddenRegion() {
@@ -67,7 +73,11 @@
               showRegion: cityName,
               key: "cityId",
               value: this.currentCity.cityId,
-              levelType:1
+              levelType:1,
+                latitudeAndLongitude:{
+                  latitude:this.currentCity.latitude,
+                  longitude:this.currentCity.longitude
+                }
             };
           }
           if (category == 2 && index == -1) {
@@ -77,7 +87,11 @@
                 showRegion: cityName + '-' + provincial.prcName,
                 key: "prcId",
                 value: provincial.prcId,
-                levelType:2
+                levelType:2,
+                latitudeAndLongitude:{
+                  latitude:provincial.latitude,
+                  longitude:provincial.longitude
+                }
               };
             }
             if (selected[0] == 1) {
@@ -97,7 +111,11 @@
                 showRegion: cityName + '-' + this.provincialList[selected[1]].prcName + '-' + cea.ceaName,
                 key: "ceaId",
                 value: cea.ceaId,
-                levelType:3
+                levelType:3,
+                latitudeAndLongitude:{
+                  latitude:cea.latitude,
+                  longitude:cea.longitude
+                }
               };
 
             }
@@ -107,10 +125,15 @@
                 showRegion: cityName + '-' + this.metroList[selected[1]].simpleName + '-' + metroStation.stationName,
                 key: "metroStationId",
                 value: metroStation.stationId,
-                levelType:6
+                levelType:6,
+                latitudeAndLongitude:{
+                  latitude:metroStation.latitude,
+                  longitude:metroStation.longitude
+                }
               };
             }
           }
+          data.selected = this.selected;
           this.assign({
             key: 'regionTemp',
             value: data
@@ -156,7 +179,8 @@
       "metroList",
       "provincialList",
       "mapBaseDataReady",
-      "currentCity"
+      "currentCity",
+      "regionTemp"
     ])
   };
 </script>
