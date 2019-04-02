@@ -65,8 +65,10 @@
     props:['villageId'],
     mounted() {
       this.vh = document.body.clientHeight / 100;
-      // let screen = JSON.parse(JSON.stringify(this.screen));
-      let params = {};
+    },
+    methods: {
+      loadRoomList(){
+        let params = {};
       if (this.screen) {
         params = {
           rentDays: this.screen.rentDays,
@@ -83,9 +85,7 @@
             this.roomList = res.data.data;
           }
         })
-    },
-    methods: {
-      test(e) {},
+      },
       handleRoomlistStart(e) {
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
         this.roomListTransition=false
@@ -113,7 +113,12 @@
         }
       }
     },
-    computed: mapState(['screen','currentCity'])
+    computed: mapState(['screen','currentCity']),
+    watch:{
+      villageId(){
+        this.loadRoomList();
+      }
+    }
   };
 </script>
 
