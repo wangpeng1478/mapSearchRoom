@@ -66,7 +66,8 @@
             data = {
               showRegion: cityName,
               key: "cityId",
-              value: this.currentCity.cityId
+              value: this.currentCity.cityId,
+              levelType:1
             };
           }
           if (category == 2 && index == -1) {
@@ -75,7 +76,8 @@
               data = {
                 showRegion: cityName + '-' + provincial.prcName,
                 key: "prcId",
-                value: provincial.prcId
+                value: provincial.prcId,
+                levelType:2
               };
             }
             if (selected[0] == 1) {
@@ -83,7 +85,8 @@
               data = {
                 showRegion: cityName + '-' + metro.simpleName,
                 key: "metroId",
-                value: metro.metroId
+                value: metro.metroId,
+                levelType:5
               };
             }
           }
@@ -93,7 +96,8 @@
               data = {
                 showRegion: cityName + '-' + this.provincialList[selected[1]].prcName + '-' + cea.ceaName,
                 key: "ceaId",
-                value: cea.ceaId
+                value: cea.ceaId,
+                levelType:3
               };
 
             }
@@ -102,7 +106,8 @@
               data = {
                 showRegion: cityName + '-' + this.metroList[selected[1]].simpleName + '-' + metroStation.stationName,
                 key: "metroStationId",
-                value: metroStation.stationId
+                value: metroStation.stationId,
+                levelType:6
               };
             }
           }

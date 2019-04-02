@@ -209,6 +209,14 @@ export default {
     },
     handelQuery() {
       let query = this.screenCondition();
+      if (!this.isOverLay){
+        if(this.regionTemp.levelType){
+          query.levelType = this.regionTemp.levelType;
+        }else{
+          query.levelType=1
+        }
+      }
+      console.log(query)
       this.assign({
         key: "screen",
         value: query
