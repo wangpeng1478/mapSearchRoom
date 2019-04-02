@@ -77,13 +77,6 @@
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
-        if(!this.currentCity.confirm==undefined){
-          this.assign({
-            key:'currentCity',
-            value:JSON.parse(localStorage.currentCity)
-          })
-          this.getLocation()
-        }
       })
     },
     methods : {
@@ -95,7 +88,6 @@
           return city.baiduCode == res.code;
         });
         if(this.cityList[localCity].cityId!=this.currentCity.cityId && localCity!=-1){
-          console.log(this.cityList[localCity].cityId)
           this.localCity = localCity
           this.showView.showModel=true;
           this.showView.showMask=true;
@@ -121,11 +113,9 @@
         //地图条件搜索
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        console.log(this.$store.state.screen)
         var json = {};
         let _screen = this.$store.state.screen;
         Object.assign(json,_screen)
-        console.log(this.$store.state.mapScreen)
   
         this.$.showScreenHouse(json)
       },
@@ -208,12 +198,14 @@
         this.$.showHouse(json);
       },
       loadCity(){
-        console.log(localStorage.currentCity)
-        if(localStorage.currentCity){
-          this.assign({
+        if(this.currentCity.confirm==undefined){
+          if(localStorage.currentCity==undefined){
+            this.assign({
             key:'currentCity',
             value:JSON.parse(localStorage.currentCity)
           })
+          }
+          this.getLocation()
         }
       },
       baiduMap: function () {
