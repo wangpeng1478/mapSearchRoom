@@ -55,6 +55,10 @@ export default new Vuex.Store({
     assign(state,data){
       state[data.key] = data.value
     },
+    mapDataChangelatitudeAndLongitude(state,data){
+      state.mapData.latitude = data.latitude;
+      state.mapData.longitude = data.longitude;
+    },
     mapBaseData(state,data){
       Object.keys(data).forEach((key)=>{
         state[key] = data[key]

@@ -111,7 +111,7 @@ export default {
     this.screenChange();
   },
   methods: {
-    ...mapMutations(["assign"]),
+    ...mapMutations(["assign","mapDataChangelatitudeAndLongitude"]),
     screenCondition() {
       let query = Object.assign(this.query);
       if (Object.keys(this.regionTemp).length != 0 && !this.isOverLay) {
@@ -211,8 +211,7 @@ export default {
       let query = this.screenCondition();
       if (!this.isOverLay){
         if(this.regionTemp.latitudeAndLongitude){
-          mapData.longitude = this.regionTemp.latitudeAndLongitude.longitude,
-           mapData.latitude = this.regionTemp.latitudeAndLongitude.latitude
+          this.mapDataChangelatitudeAndLongitude(this.regionTemp.latitudeAndLongitude)
         }
         if(this.regionTemp.levelType){
           query.levelType = this.regionTemp.levelType;
