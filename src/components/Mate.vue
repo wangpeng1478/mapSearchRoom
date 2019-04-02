@@ -2,7 +2,7 @@
     <div id="iMate">
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
-        <div class="imate"></div>
+        <div class="imate" @click="mateScreen"></div>
         <div class="individuality_mate">
             <div class="mate_icon">
                 <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
@@ -161,6 +161,9 @@ export default {
             })
             store.state.mapData.isOverLay = false;
             this.$emit("hiddenMate",hiddenMate)
+        },
+        mateScreen:function(){
+            this.$emit("mateScreen","showScreen")
         },
         choose :function (res) {
             let _this = this;
