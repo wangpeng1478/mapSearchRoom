@@ -60,6 +60,12 @@
         return this.$store.state.mapBaseDataReady;
       }
     },
+    watch:{
+      mapData(){
+        mapData.showRoomList;
+        console.log("showRoomList",mapData.showRoomList)
+      }
+    },
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
@@ -156,7 +162,12 @@
         });
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl);
-        this.$.showHouse();
+
+        var json = {};
+        json.cityId = this.$store.state.currentCity.cityId;
+        json.levelType = 2;
+        Object.assign(json,this.$store.state.screen)
+        this.$.showHouse(json);
       },
       baiduMap: function () {
         //模拟数据

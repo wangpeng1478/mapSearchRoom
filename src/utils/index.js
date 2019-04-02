@@ -235,20 +235,7 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-                    this.showAreaHouse();
-                    // switch (_state.mapScreen.levelType) {
-                    //     case 1:
-                    //     case 2:
-                    //     case 3:
-                    //     case 4:
-                    //         this.showAreaHouse();
-                    //         break
-                    //     case 5:
-                    //         this.showMetroHouse();
-                    //         break
-                    //     case 6:
-                    //     case 7:
-                    // }
+                    this.showVillageHouse(data);
                 }
             });
         }
@@ -312,8 +299,10 @@ export default{ //很关键
                     case 4:
                         myCompOverlay._div.addEventListener("click", 
                         function (e) {
-                            fuzhi(e,4);
+                            fuzhi(e,4,true);
                             store.state.mapData.scale = 15;
+                            store.state.mapData.showRoomList = true;
+                            console.log(store.state.mapData.showRoomList)
                         }
                         ,false);
                         break;
@@ -330,35 +319,20 @@ export default{ //很关键
                         function (e) {
                             fuzhi(e,6);
                             store.state.mapData.scale = 15;
+                            store.state.mapData.showRoomList = true;
                         }
                         ,false);
                         break;
                     default:
                         break;
                 }
-                if(data.levelType==4||data.levelType==6||data.levelType==7){
-                    myCompOverlay._div.addEventListener("click", 
-                    function (e) {
-                        store.state.mapScreen.levelType = data.levelType;
-                        store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
-                        store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
-                        store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
-                        store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
-                        store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
-                        store.state.mapData.showRoomList = true;
-                    }
-                    ,false);
-                }else{
-                   
-                }
-                
             }
             
             return;
         })
 
 
-        function fuzhi(e,levelType){
+        function fuzhi(e,levelType,flag){
             var json = data;
             json.levelType = levelType;
             json.latitude = e.target.parentNode.getAttribute("lat");
@@ -368,7 +342,10 @@ export default{ //很关键
             store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
             store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
             store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
-            that.showHouse(json);
+            if(!flag){
+                that.showHouse(json);
+            }
+            
         }
     },
     showCeaHouse:function(data){
@@ -433,8 +410,6 @@ export default{ //很关键
     },
     showVillageHouse:function(data){
         let map = store.state.map;
-        
-        let httpData = store.state.mapBaseData;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
@@ -450,44 +425,65 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
+        console.log("showVillageHouse")
+        console.log(store.state)
         let bounds = map.getBounds();
-        if(store.state.mapData.ceaId){
-            httpData.villageList.map((val,index)=>{
-                if(val.ceaId == store.state.mapData.ceaId){
-                    if(bounds.He < val.longitude&&val.longitude < bounds.Ce && bounds.Rd < val.latitude&&val.latitude < bounds.Pd){
-                        var txt = val.villageName, mouseoverTxt = val.roomCount + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
-                        map.addOverlay(myCompOverlay);
-                        //覆盖物添加点击事件+
-                        myCompOverlay._div.addEventListener('touchstart',function(){
-                        map.disableDragging();  //禁用地图拖拽功能
-                        });
-                        myCompOverlay._div.addEventListener("click", function () {
-                        // that.clickCea(val);
-                        alert(val.villageId,val.villageName)
-                        });
-                    }
-                }
-                return;
-                })
-        }else{
-            httpData.villageList.map((val,index)=>{
-                if(bounds.He < val.longitude&&val.longitude < bounds.Ce && bounds.Rd < val.latitude&&val.latitude < bounds.Pd){
-                    var txt = val.villageName, mouseoverTxt = val.roomCount + "间";
-                    var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+
+        store.state.coverDataList.map((val,index)=>{
+            if(val.ceaId == store.state.mapData.ceaId){
+                if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
+                    var txt = val.value, mouseoverTxt = val.count + "间";
+                    var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
                     map.addOverlay(myCompOverlay);
                     //覆盖物添加点击事件+
                     myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
                     });
                     myCompOverlay._div.addEventListener("click", function () {
-                    // that.clickCea(val);
-                    alert(val.villageId,val.villageName)
+                        store.state.mapData.showRoomList = true;
+                        console.log(store.state.mapData.showRoomList)
                     });
                 }
+            }
             return;
-            })
-        }
+        })
+        // if(store.state.mapData.ceaId){
+        //     store.state.coverDataList.map((val,index)=>{
+        //         if(val.ceaId == store.state.mapData.ceaId){
+        //             if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
+        //                 var txt = val.value, mouseoverTxt = val.count + "间";
+        //                 var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
+        //                 map.addOverlay(myCompOverlay);
+        //                 //覆盖物添加点击事件+
+        //                 myCompOverlay._div.addEventListener('touchstart',function(){
+        //                 map.disableDragging();  //禁用地图拖拽功能
+        //                 });
+        //                 myCompOverlay._div.addEventListener("click", function () {
+        //                 // that.clickCea(val);
+        //                 alert(val.villageId,val.villageName)
+        //                 });
+        //             }
+        //         }
+        //         return;
+        //         })
+        // }else{
+        //     store.state.coverDataList.map((val,index)=>{
+        //         if(bounds.He < val.longitude&&val.longitude < bounds.Ce && bounds.Rd < val.latitude&&val.latitude < bounds.Pd){
+        //             var txt = val.villageName, mouseoverTxt = val.roomCount + "间";
+        //             var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.longitude,val.latitude), txt,mouseoverTxt,"ComplexOverlay");
+        //             map.addOverlay(myCompOverlay);
+        //             //覆盖物添加点击事件+
+        //             myCompOverlay._div.addEventListener('touchstart',function(){
+        //             map.disableDragging();  //禁用地图拖拽功能
+        //             });
+        //             myCompOverlay._div.addEventListener("click", function () {
+        //             // that.clickCea(val);
+        //             alert(val.villageId,val.villageName)
+        //             });
+        //         }
+        //     return;
+        //     })
+        // }
         
         
     },
