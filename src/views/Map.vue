@@ -58,12 +58,14 @@
       ...mapState(['currentCity','keywordsSearch','mapData']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
+      },
+      aa(){
+        return this.$store.state.mapData.showRoomList;
       }
     },
     watch:{
-      mapData(){
-        mapData.showRoomList;
-        console.log("showRoomList",mapData.showRoomList)
+      aa(){
+        console.log("showRoomList",this.$store.state.mapData.showRoomList)
       }
     },
     mounted : function () {
