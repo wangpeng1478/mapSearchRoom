@@ -58,7 +58,6 @@ export default{ //很关键
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
-                console.log()
                 json.cityId = store.state.currentCity.cityId;
                 Object.assign(json,store.state.screen);
                 json.levelType = that.toLevelType(store.state.mapData.scale);
@@ -99,10 +98,8 @@ export default{ //很关键
     },
     showHouse:function(mpdata){
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
-            
             if (res.data.code == 0) {
                 res = res.data.data;
-                
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -122,9 +119,11 @@ export default{ //很关键
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
-                        store.state.coverDataList = res.mapResultDtos;
+                        store.state.coverDataList = res;
                         this.showAreaHouse(mpdata);
                     case 7:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
                         break;
                 }
             }
@@ -160,6 +159,8 @@ export default{ //很关键
                         break;
                     case 6:
                         store.state.mapData.scale = 15;
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
                     case 7:
                 }
             }
@@ -202,10 +203,23 @@ export default{ //很关键
         }
         let bounds = map.getBounds();
         _state.coverDataList.map((val,index)=>{
-            if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
-                var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
-                var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
-                map.addOverlay(myCompOverlay);
+            if(
+                (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
+                (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
+                (bounds.Rd < val.lat)||(bounds.Rd < val.villageLatitude)&&
+                (val.lat < bounds.Pd)||(val.villageLatitude < bounds.Pd)
+            ){
+                if(data.levelType==6){
+                    var price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
+                    var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
+                    map.addOverlay(myCompOverlay);
+                }else{
+                    var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
+                    var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
+                    map.addOverlay(myCompOverlay);
+                }
+                
+                
                 //覆盖物添加点击事件+
                 myCompOverlay._div.addEventListener('touchstart',function(){
                     map.disableDragging();  //禁用地图拖拽功能
@@ -259,6 +273,7 @@ export default{ //很关键
                         function (e) {
                             fuzhi(e,6);
                             store.state.mapData.scale = 15;
+                            store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
                             store.state.mapData.showRoomList = true;
                         }
                         ,false);
@@ -388,8 +403,6 @@ export default{ //很关键
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
-        console.log("showVillageHouse")
-        console.log(store.state)
         let bounds = map.getBounds();
 
         store.state.coverDataList.map((val,index)=>{
@@ -404,7 +417,6 @@ export default{ //很关键
                     });
                     myCompOverlay._div.addEventListener("click", function () {
                         store.state.mapData.showRoomList = true;
-                        console.log(store.state.mapData.showRoomList)
                     });
                 }
             }
@@ -470,7 +482,6 @@ export default{ //很关键
         // }
         map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
-        console.log("showMetroHouse")
         _state.coverDataList.map((val,index)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
@@ -482,7 +493,6 @@ export default{ //很关键
            map.disableDragging();  //禁用地图拖拽功能
           });
           myCompOverlay._div.addEventListener("click", function (e) {
-              console.log("地铁房源")
               var json = {};
               store.state.mapScreen.levelType =  6;
               store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
@@ -494,8 +504,6 @@ export default{ //很关键
               json.metroStationId = e.target.parentNode.getAttribute("key");
               json.levelType = 6;
               that.showHouse(json);
-              console.log(json)
-              console.log(store.state.mapData)
               store.state.mapData.isClickZoom = true;
               
             // that.showVillageHouse(val);
