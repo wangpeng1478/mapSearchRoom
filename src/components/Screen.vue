@@ -248,11 +248,11 @@ export default {
           roomTypeKeyword=item.statusName
         }
       })
-      
+      let priceTo = ''
       if(query.priceTo==''){
-        query.priceTo='不限'
+        priceTo='不限'
       }
-      let keyWords=`${this.regionName}-${roomFeatureKeyword}-${roomTypeKeyword}-${query.priceFrom}-${query.priceTo}元`
+      let keyWords=`${this.regionName}-${roomFeatureKeyword}-${roomTypeKeyword}-${query.priceFrom}-${priceTo}元`
       if(query.rentDays){
         keyWords=keyWords+'-'+query.rentDays+'日可租'
       }

@@ -115,13 +115,13 @@
       },
       recordInfo(category, index) {
         if (category == 0) {
-          if (index = -1) {
+          if (index == -1) {
             record(2, '入住区域不限')
           }
-          if (index = 0) {
+          if (index == 0) {
             record(2, '入住区域区域')
           }
-          if (index = 1) {
+          if (index == 1) {
             record(2, '入住区域地铁')
           }
         }
