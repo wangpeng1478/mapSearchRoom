@@ -149,6 +149,7 @@ export default {
     ...mapMutations(["assign","searchCompelet"]),
     handleAcHistory(idx){
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
+      backMap
     },
     clearPoint() {
       localStorage.removeItem(this.storageName);
@@ -167,7 +168,7 @@ export default {
             let point = res;
             point.name = _this.acResult[idx].business;
             _this.savePointStorage(point);
-            this.assign({key:'pointSearch',value:point})
+            _this.assign({key:'pointSearch',value:point})
           }
         },
         this.currentCity.cityName + "市"
