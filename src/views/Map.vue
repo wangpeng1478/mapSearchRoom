@@ -88,7 +88,7 @@
         Object.assign(json,_screen)
         console.log(this.$store.state.mapScreen)
   
-        this.$.showHouse(json)
+        this.$.showScreenHouse(json)
       },
       handelClearSearh(){
         this.assign({
@@ -263,10 +263,10 @@
         //     var mk = new BMap.Marker(r.point);
         //     map.addOverlay(mk);
         //     map.panTo(r.point);
-        //     // alert('您的位置：'+r.point.lng+','+r.point.lat);
+        //     alert('您的位置：'+r.point.lng+','+r.point.lat);
         //   }
         //   else {
-        //     // alert('failed'+this.getStatus());
+        //     alert('failed'+this.getStatus());
         //   }        
         // });
       },
