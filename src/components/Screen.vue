@@ -61,7 +61,7 @@
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
-      <button class="confirm" @click="handelQuery">确定（{{roomCount}}）</button>
+      <button class="confirm" @click="handleQuery">确定（{{roomCount}}）</button>
     </div>
   </div>
 </template>
@@ -207,9 +207,13 @@ export default {
       }
       this.screenChange('房间价格按钮');
     },
-    handelQuery() {
+    handleQuery() {
       let query = this.screenCondition();
       if (!this.isOverLay){
+        if(this.regionTemp.latitudeAndLongitude){
+          mapData.longitude = this.regionTemp.latitudeAndLongitude.longitude,
+           mapData.latitude = this.regionTemp.latitudeAndLongitude.latitude
+        }
         if(this.regionTemp.levelType){
           query.levelType = this.regionTemp.levelType;
         }else{
