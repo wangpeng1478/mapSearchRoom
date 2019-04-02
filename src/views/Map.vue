@@ -52,6 +52,7 @@
         showView:{},
         isFind:true,
         geolocationControl:null,
+        localCity:-1 //定位的城市索引
       }
     },
     components:{
@@ -62,7 +63,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       },
@@ -76,10 +77,42 @@
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
+        if(!this.currentCity.confirm==undefined){
+          this.assign({
+            key:'currentCity',
+            value:JSON.parse(localStorage.currentCity)
+          })
+          this.getLocation()
+        }
       })
     },
     methods : {
-      ...mapMutations(['assign']),
+      ...mapMutations(['assign','currentCityChange','currentCityAddConfirm']),
+      getLocation() {
+      var myCity = new BMap.LocalCity();
+      myCity.get(res => {
+        let localCity = this.cityList.findIndex(city => {
+          return city.baiduCode == res.code;
+        });
+        if(this.cityList[localCity].cityId!=this.currentCity.cityId && localCity!=-1){
+          console.log(this.cityList[localCity].cityId)
+          this.localCity = localCity
+          this.showView.showModel=true;
+          this.showView.showMask=true;
+        }
+      });
+    },
+    handleModel(res){
+        if(res){
+          this.currentCityChange(this.localCity)
+          this.showView.showModel=false;
+          this.showView.showMask=false;
+        }else{
+          this.currentCityAddConfirm()
+          this.showView.showModel=false;
+          this.showView.showMask=false;
+        }
+      },
       handleAddress(){
         record(2,'地图找房页面切换城市按钮')
         this.$router.push('/address')
@@ -174,7 +207,17 @@
         Object.assign(json,this.$store.state.screen)
         this.$.showHouse(json);
       },
+      loadCity(){
+        console.log(localStorage.currentCity)
+        if(localStorage.currentCity){
+          this.assign({
+            key:'currentCity',
+            value:JSON.parse(localStorage.currentCity)
+          })
+        }
+      },
       baiduMap: function () {
+        this.loadCity()
         //模拟数据
         let that = this;
         // let httpData = this.$store.state.coverDataList;
@@ -298,13 +341,6 @@
       },
       roomListDestroy(){
         store.state.mapData.showRoomList = false;
-      },
-      handleModel(res){
-        if(res){
-          console.error("没有取消函数")
-        }else{
-          console.error("没有确定函数")
-        }
       }
     }
   }

@@ -60,10 +60,15 @@ export default new Vuex.Store({
       state.toast = msg
     },
     currentCityChange(state,index){
-      let currentCity = state.cityList[index]
+      let currentCity = state.cityList[index];
+      localStorage.setItem("currentCity", JSON.stringify(currentCity));
+      currentCity.confirm = true;
       state.currentCity = currentCity;
       state.mapData.latitude = currentCity.latitude;
       state.mapData.longitude = currentCity.longitude;
+    },
+    currentCityAddConfirm(state){
+      state.currentCity.confirm = true;
     },
     mapDataChangelatitudeAndLongitude(state,data){
       state.mapData.latitude = data.latitude;
