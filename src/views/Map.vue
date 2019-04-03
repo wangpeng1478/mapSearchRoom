@@ -359,7 +359,8 @@
         this.showView.showMask=true;
       },
       viewSetDefault(){
-        if(this.mapData.isOverLay){
+        if(this.showView.showMask){
+          if(this.mapData.isOverLay){
             this.showView = {
               showMate: true,
               showScreen:false,
@@ -376,7 +377,7 @@
             showModel:false
           }
         }
-        
+        }
       },
       selectionArea(){
         this.showView.showRegionAndMetro=true;
