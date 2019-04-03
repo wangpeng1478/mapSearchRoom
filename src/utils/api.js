@@ -1,5 +1,4 @@
 
-
 const API = {
     queryCityList:'/mapsearch/queryCityList',
     queryMapBaseData:'/mapsearch/queryMapBaseData',

@@ -5,12 +5,14 @@
       class="slider"
       @touchstart="touchSlider('a',$event)"
       @touchmove="moveSlider('a',$event)"
+      @touchend='endSlider'
       :style="{left:sliderLeft.a+'px'}"
     ></span>
     <span
       class="slider"
       @touchstart="touchSlider('b',$event)"
       @touchmove="moveSlider('b',$event)"
+      @touchend='endSlider'
       :style="{left:sliderLeft.b+'px'}"
     ></span>
   </div>
@@ -56,6 +58,9 @@ export default {
         document.getElementsByClassName("slider-wrap")[0].offsetWidth /
         this.step;
       this.sliderChange();
+    },
+    endSlider(){
+      this.$emit("endSlider", [value.a, value.b]);
     },
     touchSlider: function(item, e) {
       this.temp = {

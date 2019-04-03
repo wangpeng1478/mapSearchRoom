@@ -82,11 +82,12 @@
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
+        this.loadCity()
         this.baiduMap();
       })
     },
     methods : {
-      ...mapMutations(['assign','currentCityChange','currentCityAddConfirm']),
+      ...mapMutations(['assign','currentCityChange','currentCityAddConfirm','mapDataChangelatitudeAndLongitude']),
       getLocation() {
       var myCity = new BMap.LocalCity();
       myCity.get(res => {
@@ -206,11 +207,14 @@
             value:JSON.parse(localStorage.currentCity)
           })
           }
+          this.mapDataChangelatitudeAndLongitude({
+            latitude:this.currentCity.latitude,
+            longitude:this.currentCity.longitude
+          })
           this.getLocation()
         }
       },
       baiduMap: function () {
-        this.loadCity()
         //模拟数据
         let that = this;
         // let httpData = this.$store.state.coverDataList;
