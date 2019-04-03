@@ -46,7 +46,6 @@
       };
     },
     mounted(){
-      console.log(this.regionTemp)
       if(this.regionTemp && this.regionTemp.selected){
         this.selected = this.regionTemp.selected
       }

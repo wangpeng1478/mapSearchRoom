@@ -60,7 +60,7 @@ export default {
       this.sliderChange();
     },
     endSlider(){
-      this.$emit("endSlider", [value.a, value.b]);
+      this.$emit("endSlider", [this.value.a, this.value.b]);
     },
     touchSlider: function(item, e) {
       this.temp = {

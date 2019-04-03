@@ -248,10 +248,8 @@ export default {
     },
     handleSearchResult(idx) {
       this.hotWordsCount(this.searchResult[idx]);
-      console.log(this.searchResult[idx])
     },
     hotWordsCount(keywordsSearch) {
-      console.log(keywordsSearch)
       if(keywordsSearch.typeId==0){
         //房间
         window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');

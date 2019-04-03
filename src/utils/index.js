@@ -99,7 +99,6 @@ export default{ //很关键
                     
                     var json = {};
                     json.cityId = store.state.currentCity.cityId;
-                    console.log(mapData.scale)
                     json.levelType = that.toLevelType(mapData.scale);
                     
                     Object.assign(json,store.state.screen)
@@ -213,7 +212,6 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
-        console.log(_state.coverDataList)
         _state.coverDataList.map((val,index)=>{
             if(
                 (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
@@ -265,7 +263,6 @@ export default{ //很关键
                     case 4:
                         myCompOverlay._div.addEventListener("click", 
                         function (e) {
-                            console.log("click")
                             fuzhi(e,4,true);
                             store.state.mapData.scale = 15;
                             store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
@@ -487,7 +484,6 @@ export default{ //很关键
         })
     },
     showCoverByCoordinate:function(data){
-        console.log("showCoverByCoordinate++++++")
         let map = store.state.map;
         let _state = store.state;
         let that = this;
@@ -523,7 +519,6 @@ export default{ //很关键
 
                 myCompOverlay._div.addEventListener("click", 
                 function (e) {
-                    console.log("click")
                     store.state.mapData.showRoomList = true;
                     store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
                 }

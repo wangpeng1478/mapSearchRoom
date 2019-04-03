@@ -227,7 +227,6 @@ export default {
           query.levelType=2
         }
       }
-      console.log(query)
       this.assign({
         key: "screen",
         value: query
