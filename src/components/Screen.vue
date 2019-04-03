@@ -33,7 +33,7 @@
       </div>
       <div class="screen-item" v-if="customPriceValue">
         <h4>房间价格（元）</h4>
-        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="customPrice"/>
+        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="sliderChange" @endSlider="customPrice"/>
         <p class="custom-price">
           {{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}} ——
           {{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}
@@ -155,6 +155,10 @@ export default {
       record(2,msg)
     },
     customPrice(e) {
+      this.customPriceValue = e;
+      this.priceRecomm = null;
+    },
+    sliderChange(e){
       this.customPriceValue = e;
       this.priceRecomm = null;
       this.screenChange('自定义价格筛选');
