@@ -213,6 +213,7 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
+        console.log(_state.coverDataList)
         _state.coverDataList.map((val,index)=>{
             if(
                 (bounds.He < val.lng||bounds.He < val.villageLongitude)&&

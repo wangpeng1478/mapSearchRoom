@@ -657,7 +657,7 @@ html,body,#app{
     line-height : 4vw;
     white-space : nowrap;
     -moz-user-select : none;
-    font-size : 4vw;
+    font-size : 3vw;
 }
 
 .label_arrow,.label_cea_arrow{

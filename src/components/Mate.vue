@@ -68,8 +68,11 @@ export default {
             }else{
                 distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
             }
+            _state.mapData.scale =11;
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
+
+            console.log(scale)
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             map.addOverlay(circle); //增加圆
@@ -77,7 +80,13 @@ export default {
             
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
-                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
+                var address = '';
+                if(rs.addressComponents.street){
+                    address = rs.addressComponents.street
+                }else{
+                    address = rs.addressComponents.district
+                }
+                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
                     _this.$router.push("/search");
                 });
@@ -115,6 +124,7 @@ export default {
                 }
                 
                 store.state.mapData.scale = scale;
+                
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{
