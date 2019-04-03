@@ -63,11 +63,11 @@ export default {
             lineA.style.width = lineLength;
             if(this.num!=num){
                 this.num = num;
-                this.$emit("moveStep",num)
+                
             }
         },
         endSlider : function () {
-            
+            this.$emit("moveStep",this.num)
             this.$store.state.mapData.isInvFind = false;
         }
     }

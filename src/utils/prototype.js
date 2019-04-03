@@ -6,6 +6,7 @@ function ComplexAreaOverlay(point,key,price, text, mouseoverText,type){
     this._point = point;
     this._price = price;
     this._key = key;
+    // this._parentkey = parentkey;
     this._text = text;
     this._overText = mouseoverText;
     this._type = type;

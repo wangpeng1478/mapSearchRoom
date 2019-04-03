@@ -62,9 +62,19 @@ export default{ //很关键
                 // if(store.state.screen){
                 //     json.levelType = that.toLevelType(store.state.mapData.scale);
                 // }
+                switch (mpdata.levelType) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 6:
+                    case 7:
+                        that.showAreaHouse(mpdata);
+                        break;
+                    case 5:
+                        that.showMetroHouse(mpdata);
+                        break;
+                }
                 
-                
-                that.showHouse(json)
                 
             }
             
@@ -180,8 +190,6 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-                    console.log("queryMapCoverByCoordinate")
-                    console.log(data)
                     this.showCoverByCoordinate();
                 }
             });
@@ -306,6 +314,7 @@ export default{ //很关键
                 that.showHouse(json);
                 store.state.mapData.isClickZoom = true;
             }
+            return json;
         }
     },
     toLevelType:function(scale){
@@ -477,7 +486,7 @@ export default{ //很关键
         })
     },
     showCoverByCoordinate:function(data){
-        console.log("showCoverByCoordinate")
+        console.log("showCoverByCoordinate++++++")
         let map = store.state.map;
         let _state = store.state;
         let that = this;
