@@ -231,6 +231,9 @@ export default {
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
       let tag = this[name][idx];
+      this.saveHistory(tag)
+    },
+    saveHistory(tag){
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;
@@ -241,15 +244,20 @@ export default {
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem(this.storageName, searchTagHistory);
+
       this.hotWordsCount(tag);
     },
-    handleClearinput() {
+    handleSearchResult(idx) {
+      this.saveHistory(this.searchResult[idx]);
+    },
+     handleClearinput() {
       this.searchValue = "";
     },
-    handleSearchResult(idx) {
-      this.hotWordsCount(this.searchResult[idx]);
-    },
     hotWordsCount(keywordsSearch) {
+      this.assign({
+        key:'keywordsSearch',
+        value:keywordsSearch
+      })
       if(keywordsSearch.typeId==0){
         //房间
         window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
