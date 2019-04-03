@@ -89,19 +89,19 @@
     methods : {
       ...mapMutations(['assign','currentCityChange','currentCityAddConfirm','mapDataChangelatitudeAndLongitude']),
       getLocation() {
-      var myCity = new BMap.LocalCity();
-      myCity.get(res => {
-        let localCity = this.cityList.findIndex(city => {
-          return city.baiduCode == res.code;
+        var myCity = new BMap.LocalCity();
+        myCity.get(res => {
+          let localCity = this.cityList.findIndex(city => {
+            return city.baiduCode == res.code;
+          });
+          if(this.cityList[localCity].cityId!=this.currentCity.cityId && localCity!=-1){
+            this.localCity = localCity
+            this.showView.showModel=true;
+            this.showView.showMask=true;
+          }
         });
-        if(this.cityList[localCity].cityId!=this.currentCity.cityId && localCity!=-1){
-          this.localCity = localCity
-          this.showView.showModel=true;
-          this.showView.showMask=true;
-        }
-      });
-    },
-    handleModel(res){
+      },
+      handleModel(res){
         if(res){
           this.currentCityChange(this.localCity)
           this.showView.showModel=false;
@@ -217,10 +217,9 @@
       baiduMap: function () {
         //模拟数据
         let that = this;
-        // let httpData = this.$store.state.coverDataList;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
-       
+      
         // 创建地图实例 
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
@@ -283,7 +282,7 @@
                 break;
               case 7:
                 json.levelType = 2;
-                 json.prcId  = _state.keywordsSearch.tableId;
+                json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
             
@@ -291,7 +290,7 @@
           this.$.showHouse(json);
           
         }
-         _state.map = map;
+        _state.map = map;
         
       
         
