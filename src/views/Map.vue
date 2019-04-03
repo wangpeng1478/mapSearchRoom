@@ -252,7 +252,6 @@
         json.levelType = 2;
         Object.assign(json,_state.screen)
         if(_state.mapData.isOverLay){
-          console.log(store.state.pointSearch)
           this.mapData.latitude = store.state.pointSearch.lat;
           this.mapData.longitude = store.state.pointSearch.lng;
           this.$.showHouse(json);

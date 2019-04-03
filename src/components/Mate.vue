@@ -72,7 +72,6 @@ export default {
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
 
-            console.log(scale)
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             map.addOverlay(circle); //增加圆
