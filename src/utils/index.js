@@ -62,16 +62,16 @@ export default{ //很关键
                 // if(store.state.screen){
                 //     json.levelType = that.toLevelType(store.state.mapData.scale);
                 // }
-                switch (mpdata.levelType) {
+                switch (json.levelType) {
                     case 1:
                     case 2:
                     case 3:
                     case 6:
                     case 7:
-                        that.showAreaHouse(mpdata);
+                        that.showAreaHouse(json);
                         break;
                     case 5:
-                        that.showMetroHouse(mpdata);
+                        that.showMetroHouse(json);
                         break;
                 }
                 
