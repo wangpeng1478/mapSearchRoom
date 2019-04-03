@@ -220,6 +220,7 @@ export default {
                   this.searchValue,
                   "<span>" + this.searchValue + "</span>"
                 );
+                result.showKeyWords+="<em> ("+result.roomCount+"间)</em>"
               });
               this.searchResult = searchResult;
             }
@@ -468,5 +469,8 @@ export default {
 
 .tangram-suggestion-main {
   display: none !important;
+}
+.search-result em{
+  font-style: normal;
 }
 </style>
