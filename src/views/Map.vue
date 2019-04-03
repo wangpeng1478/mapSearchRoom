@@ -22,12 +22,14 @@
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
-    <div class="model" v-if="showView.showModel">
+    <div class="model-wrap" v-if="showView.showModel">
+      <div class="model">
      <p class="context">您当前所在定位城市为[上海]，是否切换至当前城市</p>
      <div class="model-btn">
        <p class="cancel" @click="handleModel(false)">取消</p>
        <p class="confirm" @click="handleModel(true)">确定</p>
      </div>
+    </div>
     </div>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
@@ -89,6 +91,7 @@
     methods : {
       ...mapMutations(['assign','currentCityChange','currentCityAddConfirm','mapDataChangelatitudeAndLongitude']),
       getLocation() {
+        if(this.cityList){
       var myCity = new BMap.LocalCity();
       myCity.get(res => {
         let localCity = this.cityList.findIndex(city => {
@@ -100,16 +103,15 @@
           this.showView.showMask=true;
         }
       });
+      }
     },
     handleModel(res){
         if(res){
           this.currentCityChange(this.localCity)
           this.showView.showModel=false;
-          this.showView.showMask=false;
         }else{
           this.currentCityAddConfirm()
           this.showView.showModel=false;
-          this.showView.showMask=false;
         }
       },
       handleAddress(){
@@ -358,7 +360,6 @@
         this.showView.showMask=true;
       },
       viewSetDefault(){
-        if(this.showView.showMask){
           if(this.mapData.isOverLay){
             this.showView = {
               showMate: true,
@@ -375,7 +376,6 @@
             showMask:false,
             showModel:false
           }
-        }
         }
       },
       selectionArea(){
@@ -599,6 +599,14 @@
 }
 .roomlist-enter, .roomlist-leave-to{
   top: 100vh;
+}
+.model-wrap{
+  display: flex;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5)
 }
 .model{
   width:88vw;
