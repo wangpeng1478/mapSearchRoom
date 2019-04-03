@@ -1,8 +1,8 @@
-import systemInfo from './systemInfo';
+// import systemInfo from './systemInfo';
 import axios from 'axios';
 import API from '@/utils/api'
 
-let info = systemInfo()
+// let info = systemInfo()
 
 let routePath = {
     currentPage:null,
@@ -18,26 +18,26 @@ const routeName = {
 }
 
 const record = (eventType,value) => {
-    if(eventType==1){
-        routePath = {
-            currentPage:routeName[value.to],
-            prevPage:routeName[value.from],
-            cityId:value.cityId,
-            cityName:value.cityName
-        }
-        recordHttp(eventType)
-    }
-    if(eventType==2){
-        recordHttp(eventType,{
-            buttonName:value
-        })
-    }
-    if(eventType==3){
-        recordHttp(eventType,{
-            keyWords:value.keyWords,
-            keyType:value.keyType
-        })
-    }
+    // if(eventType==1){
+    //     routePath = {
+    //         currentPage:routeName[value.to],
+    //         prevPage:routeName[value.from],
+    //         cityId:value.cityId,
+    //         cityName:value.cityName
+    //     }
+    //     recordHttp(eventType)
+    // }
+    // if(eventType==2){
+    //     recordHttp(eventType,{
+    //         buttonName:value
+    //     })
+    // }
+    // if(eventType==3){
+    //     recordHttp(eventType,{
+    //         keyWords:value.keyWords,
+    //         keyType:value.keyType
+    //     })
+    // }
     
 }
 
