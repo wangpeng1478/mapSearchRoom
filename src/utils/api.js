@@ -1,18 +1,19 @@
 
+const DOMAIN = 'http://192.168.103.216:7080';
 const API = {
-    queryCityList:'/mapsearch/queryCityList',
-    queryMapBaseData:'/mapsearch/queryMapBaseData',
-    queryMapRoomCount:'/mapsearch/queryMapRoomCount', //筛选总房源个数
+    queryCityList:DOMAIN+'/mapsearch/queryCityList',
+    queryMapBaseData:DOMAIN+'/mapsearch/queryMapBaseData',
+    queryMapRoomCount:DOMAIN+'/mapsearch/queryMapRoomCount', //筛选总房源个数
     //搜索
-    hotSearch:'/unit/hotSearch',
-    keywordsSearch:'/unit/keywordsSearch',
-    hotWordsCount:'/unit/hotWordsCount',
+    hotSearch:DOMAIN+'/unit/hotSearch',
+    keywordsSearch:DOMAIN+'/unit/keywordsSearch',
+    hotWordsCount:DOMAIN+'/unit/hotWordsCount',
 
-    queryMapCoverData:'/mapsearch/queryMapCoverData',
-    queryRoomByVillage:'/mapsearch/queryRoomByVillage',
-    queryMapCoverByCoordinate:'/mapsearch/queryMapCoverByCoordinate',
+    queryMapCoverData:DOMAIN+'/mapsearch/queryMapCoverData',
+    queryRoomByVillage:DOMAIN+'/mapsearch/queryRoomByVillage',
+    queryMapCoverByCoordinate:DOMAIN+'/mapsearch/queryMapCoverByCoordinate',
     //埋点
-    record:'/behavioral/record'
+    record:DOMAIN+'/behavioral/record'
 }
 
 export default API;
