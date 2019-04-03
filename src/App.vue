@@ -136,4 +136,7 @@ button {
 .bottom48 {
   bottom: 48vw !important;
 }
+.anchorBL{
+  display:none;
+}
 </style>
