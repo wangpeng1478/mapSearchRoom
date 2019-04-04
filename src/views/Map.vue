@@ -114,7 +114,7 @@
         var json = {};
         json.cityId = _state.currentCity.cityId;
         json.levelType = 2;
-        store.state.mapData.scale = 10;
+        store.state.mapData.scale = 12;
         Object.assign(json,_state.screen)
         this.$.showHouse(json);
         
@@ -244,7 +244,7 @@
             }
             this.$.showSearchHouse(json)
           }else{
-            _state.mapData.scale = 12;
+            _state.mapData.scale = 13;
             this.$.showHouse(json);
           }
           
