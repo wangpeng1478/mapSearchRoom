@@ -86,6 +86,7 @@
         })
       },
       handleRoomlistStart(e) {
+        if (e) e.preventDefault()
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
         this.roomListTransition=false
       },
