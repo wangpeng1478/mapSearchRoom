@@ -193,7 +193,7 @@
 
         //定位图标
         let marker = new BMap.Marker(point);  // 创建标注
-        marker.disableMassClear();
+        // marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
 
         var json = {};

@@ -215,6 +215,12 @@ export default{ //很关键
         let bounds = map.getBounds();
         console.log(_state.coverDataList)
         console.log(data)
+        if(data.levelType==6||data.levelType==7){
+            console.log("metroPoint")
+            let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+            map.addOverlay(circle); //增加圆
+        }
         _state.coverDataList.map((val,index)=>{
             if(
                 (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
@@ -286,6 +292,7 @@ export default{ //很关键
                         ,false);
                         break;
                     case 6:
+                         
                         myCompOverlay._div.addEventListener("click", 
                         function (e) {
                             fuzhi(e,6);
@@ -296,6 +303,8 @@ export default{ //很关键
                             store.state.mapData.scale = 15;
                             store.state.mapData.villageId = target.getAttribute("key");
                             store.state.mapData.showRoomList = true;
+
+                           
                         }
                         ,false);
                         break;
@@ -499,6 +508,8 @@ export default{ //很关键
               that.showHouse(json);
               store.state.mapData.isClickZoom = true;
               
+
+              
             // that.showVillageHouse(val);
           });
           return;
@@ -545,6 +556,7 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
+                   
                     store.state.mapData.villageId = target.getAttribute("key");
                 }
                 ,false);

@@ -57,6 +57,10 @@ export default {
             let _state = store.state;
             let _this = this;
             let distance = 0;
+
+            console.log(map.getOverlays())
+            // map.enableMassClear()
+            map.clearOverlays();
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == _state.mapData.type){
                     _state.mapData.speed = val.speed
