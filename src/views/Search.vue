@@ -277,8 +277,14 @@ export default {
 <style scoped>
 .input-row {
   width: 96vw;
+  padding: 3.2vw 2vw 4vw;
+  background: #fff;
   overflow: hidden;
-  margin: 3.2vw 0 0 4vw;
+  position: fixed;
+  top: 0;
+  margin: auto;
+  left: 0;
+  right: 0;
 }
 
 .input-row input {
@@ -306,6 +312,12 @@ export default {
   color: #313131;
   line-height: 10.6vw;
   text-align: center;
+}
+
+.search-tag,.search-result,.local-result{
+  box-sizing: border-box;
+  padding-top: 17vw;
+  height: 100vh;
 }
 
 .tag-top {
@@ -365,12 +377,8 @@ export default {
   border-bottom: 4vw #f4f4f4 solid;
 }
 
-.search-result,
-.local-result {
-  margin-top: 2vw;
-}
-
 .search-result li {
+  width: 87vw;
   height: 12vw;
   border-bottom: 1px solid #e5e5e5;
   padding: 0 6.5vw;
@@ -403,6 +411,7 @@ export default {
 }
 
 .local-result li {
+  width: 87vw;
   height: 12vw;
   border-bottom: 1px solid #e5e5e5;
   padding: 4vw 6.5vw 0;
@@ -432,7 +441,7 @@ export default {
   width: 8vw;
   height: 10.6vw;
   position: absolute;
-  left: 77vw;
+  left: 74vw;
   font-size: 3vw;
   line-height: 10.6vw;
   text-align: center;
