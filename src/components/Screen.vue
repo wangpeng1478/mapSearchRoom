@@ -15,7 +15,7 @@
           <li
             v-for="roomFeature in roomFeatureList"
             :key="roomFeature.roomFeatureId"
-            :class="query.roomFeatureId.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
+            :class="query.roomFeatureIds.indexOf(roomFeature.roomFeatureId)==-1? '' : 'select'"
             @click="handleRoomFeature(roomFeature.roomFeatureId)"
           >{{roomFeature.roomFeatureName}}</li>
         </ul>
@@ -79,7 +79,7 @@ export default {
       customPriceValue: null,
       priceRecomm: null,
       query: {
-        roomFeatureId: [],
+        roomFeatureIds: [],
         rentDays: null,
         roomType: null
       },
@@ -142,6 +142,7 @@ export default {
     },
     screenChange(msg) {
       let query = this.screenCondition();
+      console.log(query)
       axios.post(API["queryMapRoomCount"], query).then(res => {
         if (res.data.code == 0) {
           let roomCount = res.data.data.roomCount;
@@ -168,7 +169,7 @@ export default {
     },
     handleReset() {
       this.query = {
-        roomFeatureId: [],
+        roomFeatureIds: [],
         rentDays: null,
         roomType: null
       };
@@ -184,12 +185,12 @@ export default {
       this.customPriceValue = [0, 27];
       this.$refs.slider.reset();
     },
-    handleRoomFeature(selectRroomFeatureId) {
-      let roomFeatureId = this.query.roomFeatureId;
-      let roomFeatureIdIndex = roomFeatureId.indexOf(selectRroomFeatureId);
+    handleRoomFeature(selectRoomFeatureId) {
+      let roomFeatureIds = this.query.roomFeatureIds;
+      let roomFeatureIdIndex = roomFeatureIds.indexOf(selectRoomFeatureId);
       roomFeatureIdIndex == -1
-        ? roomFeatureId.push(selectRroomFeatureId)
-        : roomFeatureId.splice(roomFeatureIdIndex, 1);
+        ? roomFeatureIds.push(selectRoomFeatureId)
+        : roomFeatureIds.splice(roomFeatureIdIndex, 1);
       this.screenChange('房间特色按钮');
     },
     handleroomType(selectroomTypeStatus) {
@@ -251,10 +252,10 @@ export default {
       this.$emit('screen')
     },
     recordInfo(query){
-      let roomFeatureId = JSON.parse(JSON.stringify(this.query.roomFeatureId));
+      let roomFeatureIds = JSON.parse(JSON.stringify(this.query.roomFeatureIds));
       let roomFeatureKeyword = ''
       this.roomFeatureList.forEach(item=>{
-        roomFeatureId.forEach(id=>{
+        roomFeatureIds.forEach(id=>{
           if(item.roomFeatureId==id){
             roomFeatureKeyword=roomFeatureKeyword+'-'+item.roomFeatureName
           }
@@ -311,21 +312,20 @@ export default {
 .screen {
   position: fixed;
   width: 84vw;
-  top: 0;
   bottom: 0;
+  top: 0;
   right: 0;
   z-index: 10;
   background: #fff;
   box-sizing: border-box;
-  height: 100vh;
-  padding-bottom: 13.3vw;
   overflow: hidden;
 }
 
 .screen-list {
-  height: 100vh;
-  box-sizing: border-box;
-  padding-bottom: 14vw;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 14vw;
   overflow: auto;
 }
 
@@ -335,7 +335,7 @@ export default {
   width: 84vw;
   background: #e5e5e5;
   bottom: 0;
-  left: 0;
+  right: 0;
 }
 
 .bottom-button button {

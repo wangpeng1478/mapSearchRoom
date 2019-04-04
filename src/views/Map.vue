@@ -440,6 +440,7 @@
     right: 0;
   }
   .screen-btn{
+    padding: 0;
     width: 16vw;
     height: 12vw;
     float: right;
