@@ -111,7 +111,7 @@ export default {
           if (res.data.code == 0) {
             this.hotSearch = res.data.data;
           }
-        });
+        })
 
       if (localStorage[this.storageName]) {
         this.searchTagHistory = JSON.parse(localStorage[this.storageName]);

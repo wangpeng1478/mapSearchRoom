@@ -4,7 +4,8 @@ import router from './router'
 import store from './store'
 import  $  from "./utils/index.js"
 import  http  from "./utils/data.js"
-// import './utils/console';
+import 'url-search-params-polyfill'
+import './utils/console'
 Vue.prototype.$ = $
 Vue.prototype.http = http
 Vue.config.productionTip = false

@@ -209,12 +209,9 @@ export default{ //很关键
         // 创建点坐标 
         let mapData = store.state.mapData;
         if(!mapData.isOverLay){
-            console.log("point",point)
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
-        console.log(_state.coverDataList)
-        console.log(data)
         if(data.levelType==6||data.levelType==7){
             console.log("metroPoint")
             let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
