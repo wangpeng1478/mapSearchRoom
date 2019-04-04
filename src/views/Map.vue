@@ -209,7 +209,6 @@
           this.$.showHouse(json);
           this.showMateFun();
         }else{
-          
           if(_state.keywordsSearch.tableId){
             switch(_state.keywordsSearch.typeId){
               case 1:
@@ -240,6 +239,7 @@
             }
             this.$.showSearchHouse(json)
           }else{
+            _state.mapData.scale = 12;
             this.$.showHouse(json);
           }
           

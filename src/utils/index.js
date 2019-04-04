@@ -10,7 +10,6 @@ export default{ //很关键
         var that = this;
         
         obj.addEventListener("locationSuccess", function(e){
-
             let map = store.state.map;
             // 定位成功事件
             store.state.mapData.latitude = e.point.lat;
