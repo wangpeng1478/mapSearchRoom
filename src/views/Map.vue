@@ -219,10 +219,9 @@
       baiduMap: function () {
         //模拟数据
         let that = this;
-        // let httpData = this.$store.state.coverDataList;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
-       
+      
         // 创建地图实例 
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
@@ -285,7 +284,7 @@
                 break;
               case 7:
                 json.levelType = 2;
-                 json.prcId  = _state.keywordsSearch.tableId;
+                json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
             
@@ -293,7 +292,7 @@
           this.$.showHouse(json);
           
         }
-         _state.map = map;
+        _state.map = map;
         
       
         

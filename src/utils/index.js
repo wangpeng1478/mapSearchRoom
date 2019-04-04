@@ -209,9 +209,12 @@ export default{ //很关键
         // 创建点坐标 
         let mapData = store.state.mapData;
         if(!mapData.isOverLay){
+            console.log("point",point)
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
+        console.log(_state.coverDataList)
+        console.log(data)
         _state.coverDataList.map((val,index)=>{
             if(
                 (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
@@ -264,8 +267,12 @@ export default{ //很关键
                         myCompOverlay._div.addEventListener("click", 
                         function (e) {
                             fuzhi(e,4,true);
+                            var target = e.target;
+                            if(!target.getAttribute("key")){
+                                target = target.parentNode;
+                            }
                             store.state.mapData.scale = 15;
-                            store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
+                            store.state.mapData.villageId = target.getAttribute("key");
                             store.state.mapData.showRoomList = true;
                         }
                         ,false);
@@ -282,8 +289,12 @@ export default{ //很关键
                         myCompOverlay._div.addEventListener("click", 
                         function (e) {
                             fuzhi(e,6);
+                            var target = e.target;
+                            if(!target.getAttribute("key")){
+                                target = target.parentNode;
+                            }
                             store.state.mapData.scale = 15;
-                            store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
+                            store.state.mapData.villageId = target.getAttribute("key");
                             store.state.mapData.showRoomList = true;
                         }
                         ,false);
@@ -299,14 +310,20 @@ export default{ //很关键
 
         function fuzhi(e,levelType,flag){
             var json = data;
-            json.latitude = e.target.parentNode.getAttribute("lat");
-            json.longitude = e.target.parentNode.getAttribute("lng");
+            var target = e.target;
+            if(!target.getAttribute("key")){
+                target = target.parentNode;
+            }
+            json.latitude = target.getAttribute("lat");
+            json.longitude = target.getAttribute("lng");
             store.state.mapScreen.levelType = levelType;
-            store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
-            store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
-            store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
-            store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+            store.state.mapScreen.latitude = target.getAttribute("lat");
+            store.state.mapScreen.longitude = target.getAttribute("lng");
+            store.state.mapData.latitude = target.getAttribute("lat");
+            store.state.mapData.longitude = target.getAttribute("lng");
             Object.assign(json,store.state.screen);
+
+            console.log("click",store.state.mapData)
             json.levelType = levelType;
             if(!flag){
                 that.showHouse(json);
@@ -466,14 +483,18 @@ export default{ //很关键
           });
           myCompOverlay._div.addEventListener("click", function (e) {
               var json = {};
+              var target = e.target;
+                if(!target.getAttribute("key")){
+                    target = target.parentNode;
+                }
               store.state.mapScreen.levelType =  6;
-              store.state.mapScreen.latitude = e.target.parentNode.getAttribute("lat");
-              store.state.mapScreen.longitude = e.target.parentNode.getAttribute("lng");
-              store.state.mapData.latitude = e.target.parentNode.getAttribute("lat");
-              store.state.mapData.longitude = e.target.parentNode.getAttribute("lng");
+              store.state.mapScreen.latitude = target.getAttribute("lat");
+              store.state.mapScreen.longitude = target.getAttribute("lng");
+              store.state.mapData.latitude = target.getAttribute("lat");
+              store.state.mapData.longitude = target.getAttribute("lng");
               store.state.mapData.scale = 15;
               Object.assign(json,store.state.screen);
-              json.metroStationId = e.target.parentNode.getAttribute("key");
+              json.metroStationId = target.getAttribute("key");
               json.levelType = 6;
               that.showHouse(json);
               store.state.mapData.isClickZoom = true;
@@ -520,7 +541,11 @@ export default{ //很关键
                 myCompOverlay._div.addEventListener("click", 
                 function (e) {
                     store.state.mapData.showRoomList = true;
-                    store.state.mapData.villageId = e.target.parentNode.getAttribute("key");
+                    var target = e.target;
+                    if(!target.getAttribute("key")){
+                        target = target.parentNode;
+                    }
+                    store.state.mapData.villageId = target.getAttribute("key");
                 }
                 ,false);
             }
