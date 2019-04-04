@@ -86,12 +86,10 @@
         })
       },
       handleRoomlistStart(e) {
-        if (e) e.preventDefault()
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
         this.roomListTransition=false
       },
       handleRoomlistScroll(e) {
-        if (e) e.preventDefault()
         let translateY = e.changedTouches[0].clientY - this.touchStartY;
         if (translateY > -this.vh * 40) {
           this.translateY = translateY;
