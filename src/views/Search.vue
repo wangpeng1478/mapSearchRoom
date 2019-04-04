@@ -244,14 +244,14 @@ export default {
       this.searchValue = "";
     },
     hotWordsCount(keywordsSearch) {
-      this.assign({
-        key:'keywordsSearch',
-        value:keywordsSearch
-      })
       if(keywordsSearch.typeId==0){
         //房间
         window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
       }else{
+        this.assign({
+        key:'keywordsSearch',
+        value:keywordsSearch
+      })
         this.searchCompelet(keywordsSearch);
       }
       let params = new URLSearchParams({
