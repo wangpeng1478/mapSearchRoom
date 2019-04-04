@@ -90,8 +90,11 @@ export default new Vuex.Store({
       })
     },
     searchCompelet(state,data){
-      state.mapData.latitude = data.latitude;
-      state.mapData.longitude = data.longitude;
+      if(data.typeId!=3){
+        //地铁线没有经纬度
+        state.mapData.latitude = data.latitude;
+        state.mapData.longitude = data.longitude;
+      }
       let levelType;
       switch (data.typeId){
         case 1:
