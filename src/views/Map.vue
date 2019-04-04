@@ -110,6 +110,7 @@
         var json = {};
         json.cityId = _state.currentCity.cityId;
         json.levelType = 2;
+        store.state.mapData.scale = 10;
         Object.assign(json,_state.screen)
         this.$.showHouse(json);
         record(2,'地图页面清除搜索框按钮')
@@ -235,9 +236,11 @@
                 json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
-            
+            this.$.showSearchHouse(json)
+          }else{
+            this.$.showHouse(json);
           }
-          this.$.showHouse(json);
+          
           
         }
         _state.map = map;
