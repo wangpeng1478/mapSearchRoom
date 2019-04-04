@@ -33,6 +33,9 @@
         bottom: 0;
         background: rgba(0, 0, 0, 0.5);
         z-index: 99;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .model {
@@ -41,11 +44,6 @@
         overflow: hidden;
         background: #fff;
         border-radius: 3vw;
-        position: fixed;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
         margin: auto;
         z-index: 20;
     }
@@ -53,7 +51,7 @@
     .model .context {
         height: 30vw;
         box-sizing: border-box;
-        padding: 10vw;
+        padding: 10vw 10vw 8vw;
         text-align: center;
         font-size: 4.5vw;
         box-sizing: border-box;
