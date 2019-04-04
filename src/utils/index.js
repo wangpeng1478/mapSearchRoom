@@ -258,8 +258,6 @@ export default{ //很关键
         }
         let bounds = map.getBounds();
         if(data.levelType==6||data.levelType==7){
-            console.log("metroPoint")
-            console.log(localStorage.getItem("circle"))
             if(store.state.circleObj){
 
             }else{
