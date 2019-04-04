@@ -168,6 +168,8 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
+        store.state.mapData.showRoomList = false;
+        this.showView.showMate = false;
         //模拟数据
         let that = this;
         let map = new BMap.Map("allmap");
