@@ -256,9 +256,9 @@ export default {
       }
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
-        type: 3,
         id: keywordsSearch.id,
-        keyword: keywordsSearch.keyWords
+        keyWords: keywordsSearch.keyWords,
+        typeId:keywordsSearch.typeId
       });
       record(3,{
         keyType:2,
