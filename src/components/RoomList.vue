@@ -6,8 +6,6 @@
       <button class="retract"></button>
       <div class="village-info">
         <p>{{roomList[0].villageName}}（{{roomList.length}}间）</p>
-        <!-- TODO -->
-        <span>距{{roomList[0].metroStationName}}约{{roomList[0].metroDistance }}米</span>
       </div>
     </div>
 
@@ -92,6 +90,7 @@
         this.roomListTransition=false
       },
       handleRoomlistScroll(e) {
+        if (e) e.preventDefault()
         let translateY = e.changedTouches[0].clientY - this.touchStartY;
         if (translateY > -this.vh * 40) {
           this.translateY = translateY;
@@ -172,17 +171,8 @@
     font-size: 4.5vw;
     font-weight: bold;
     line-height: 1;
-    float: left;
   }
-
-  .village-info span {
-    display: block;
-    float: right;
-    line-height: 1;
-    font-size: 3.467vw;
-    margin-top: 1vw;
-  }
-
+  
   .roomlist {
     width: 100%;
     overflow: hidden;
@@ -267,7 +257,6 @@
     color: #303030;
     letter-spacing: 1px;
     line-height: 1.4;
-    margin-bottom: 0.75vw;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
