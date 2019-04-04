@@ -13,7 +13,7 @@
       <router-link to="/">取消</router-link>
     </div>
     <div class="search-tag" v-show="searchValue==''">
-      <div class="search-tag-list" v-if="isRegion">
+      <div class="search-tag-list" v-if="isRegion && searchTagHistory.length!=0">
         <div class="tag-top">
           <p class="tag-tit">搜索历史</p>
           <p class="clear" @click="clearHistory">
@@ -21,20 +21,16 @@
             <i class="iconfont icon-lajitong"></i>
           </p>
         </div>
-        <ul class="tag-list" v-if="searchTagHistory.length!=0">
+        <ul class="tag-list">
           <li
             @click="handleSearchTag(index,'searchTagHistory')"
             v-for="(historyTag,index) in searchTagHistory"
             :key="index"
           >{{historyTag.keyWords}}</li>
         </ul>
-        <div v-else class="nolist">
-          <img src="../assets/images/none.png">
-          <p>暂无搜索历史</p>
-        </div>
       </div>
       <!-- //个性找房历史 -->
-      <div class="search-tag-list" v-if="!isRegion">
+      <div class="search-tag-list" v-if="!isRegion && pointTagHistory.length!=0">
         <div class="tag-top">
           <p class="tag-tit">搜索历史</p>
           <p class="clear" @click="clearPoint">
@@ -42,29 +38,21 @@
             <i class="iconfont icon-lajitong"></i>
           </p>
         </div>
-        <ul class="tag-list" v-if="pointTagHistory.length!=0">
+        <ul class="tag-list">
           <li v-for="(pointTag,index) in pointTagHistory" :key="index" @click="handleAcHistory(index)">{{pointTag.name}}</li>
         </ul>
-        <div v-else class="nolist">
-          <img src="../assets/images/none.png">
-          <p>暂无搜索历史</p>
-        </div>
       </div>
-      <div class="search-tag-list" v-if="isRegion">
+      <div class="search-tag-list" v-if="isRegion && hotSearch.length!=0">
         <div class="tag-top">
           <p class="tag-tit">热门搜索</p>
         </div>
-        <ul class="tag-list" v-if="hotSearch.length!=0">
+        <ul class="tag-list">
           <li
             @click="handleSearchTag(index,'hotSearch')"
             v-for="(hotTag,index) in hotSearch"
             :key="index"
           >{{hotTag.keyWords}}</li>
         </ul>
-        <div v-else class="nolist">
-          <img src="../assets/images/none.png">
-          <p>暂无热门搜索</p>
-        </div>
       </div>
     </div>
 
@@ -450,17 +438,6 @@ export default {
   font-weight: bold;
 }
 
-.nolist img {
-  display: block;
-  width: 8vw;
-  margin: 10vw auto 1vw;
-}
-
-.nolist p {
-  text-align: center;
-  font-size: 4vw;
-  color: #888;
-}
 </style>
 <style>
 .search-result li p span {
