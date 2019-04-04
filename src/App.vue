@@ -2,6 +2,7 @@
 <template>
   <div id="app">
     <router-view/>
+    <Model v-if="showModel" :content="cityList ? cityList[localCity].cityName : ''" @handelModel='handelModel' />
     <p class="toast" v-if="toast">{{toast}}</p>
   </div>
 </template>
@@ -9,17 +10,27 @@
 <script>
 import axios from "axios";
 import API from "@/utils/api";
+import Model from '@/components/Model'
 import { mapState, mapMutations,mapActions } from "vuex";
 import { setTimeout } from 'timers';
 
 export default {
   name: "app",
+  data(){
+    return{
+      showModel:false
+    }
+  },
+  components:{
+    Model,
+    localCity:-1 //定位的城市索引
+  },
   created: function() {
     this.httpQueryCityList();
     this.httpQueryMapBaseData();
   },
   methods: {
-    ...mapMutations(["assign","mapBaseData","resetAllState"]),
+    ...mapMutations(["assign","mapBaseData","resetAllState","mapDataChangelatitudeAndLongitude",'currentCityChange','currentCityAddConfirm']),
     ...mapActions(['assignAsync']),
     httpQueryCityList: function() {
       let _this = this;
@@ -29,6 +40,7 @@ export default {
             key: "cityList",
             value: res.data.data
           });
+          _this.loadCity()
         }
       });
     },
@@ -43,9 +55,45 @@ export default {
         }
       });
     },
-    
+    handelModel(e){
+      this.showModel = false;
+      if(e){
+        //点击确定
+        this.currentCityChange(this.localCity)
+      }else{
+        //点击取消
+         this.currentCityAddConfirm()
+      }
+    },
+    loadCity() {
+      if (this.currentCity.confirm == undefined) {
+          if (localStorage.currentCity != undefined) {
+              this.assign({
+                  key: 'currentCity',
+                  value: JSON.parse(localStorage.currentCity)
+              })
+          }
+          this.mapDataChangelatitudeAndLongitude({
+              latitude: this.currentCity.latitude,
+              longitude: this.currentCity.longitude
+          })
+          this.getLocation()
+      }
   },
-  computed:mapState(['currentCity','toast']),
+    getLocation() {
+        var myCity = new BMap.LocalCity();
+        myCity.get(res => {
+            let localCity = this.cityList.findIndex(city => {
+                return city.baiduCode == res.code;
+            });
+            if (this.cityList[localCity].cityId != this.currentCity.cityId && localCity != -1) {
+                this.localCity = localCity;
+                this.showModel = true;
+            }
+        });
+    }
+  },
+  computed:mapState(['currentCity','toast','cityList']),
   watch:{
     currentCity(){
       this.httpQueryMapBaseData();

@@ -61,7 +61,7 @@
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
-      <button class="confirm" :class="roomCount==0 ? 'gray' : ''" @click="handleQuery">确定（{{roomCount}}）</button>
+      <button class="confirm" :class="roomCount==0 ? 'gray' : ''" @click="handleQuery">确定<span v-if="roomCount!=null">（{{roomCount}}）</span></button>
     </div>
   </div>
 </template>

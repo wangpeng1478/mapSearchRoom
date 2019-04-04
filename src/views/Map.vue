@@ -22,15 +22,6 @@
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
-    <div class="model-wrap" v-if="showView.showModel">
-      <div class="model">
-     <p class="context">您当前所在定位城市为[上海]，是否切换至当前城市</p>
-     <div class="model-btn">
-       <p class="cancel" @click="handleModel(false)">取消</p>
-       <p class="confirm" @click="handleModel(true)">确定</p>
-     </div>
-    </div>
-    </div>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
   </div>
 </template>
@@ -53,8 +44,7 @@
       return{
         showView:{},
         isFind:true,
-        geolocationControl:null,
-        localCity:-1 //定位的城市索引
+        geolocationControl:null
       }
     },
     components:{
@@ -84,36 +74,11 @@
     mounted : function () {
       this.viewSetDefault()
       this.$nextTick(function(){
-        this.loadCity()
         this.baiduMap();
       })
     },
     methods : {
-      ...mapMutations(['assign','currentCityChange','currentCityAddConfirm','mapDataChangelatitudeAndLongitude']),
-      getLocation() {
-        if(this.cityList){
-      var myCity = new BMap.LocalCity();
-      myCity.get(res => {
-        let localCity = this.cityList.findIndex(city => {
-          return city.baiduCode == res.code;
-        });
-        if(this.cityList[localCity].cityId!=this.currentCity.cityId && localCity!=-1){
-          this.localCity = localCity
-          this.showView.showModel=true;
-          this.showView.showMask=true;
-        }
-      });
-      }
-    },
-    handleModel(res){
-        if(res){
-          this.currentCityChange(this.localCity)
-          this.showView.showModel=false;
-        }else{
-          this.currentCityAddConfirm()
-          this.showView.showModel=false;
-        }
-      },
+      ...mapMutations(['assign']),
       handleAddress(){
         record(2,'地图找房页面切换城市按钮')
         this.$router.push('/address')
@@ -201,21 +166,6 @@
         Object.assign(json,this.$store.state.screen)
         this.$.showHouse(json);
       },
-      loadCity(){
-        if(this.currentCity.confirm==undefined){
-          if(localStorage.currentCity!=undefined){
-            this.assign({
-            key:'currentCity',
-            value:JSON.parse(localStorage.currentCity)
-          })
-          }
-          this.mapDataChangelatitudeAndLongitude({
-            latitude:this.currentCity.latitude,
-            longitude:this.currentCity.longitude
-          })
-          this.getLocation()
-        }
-      },
       baiduMap: function () {
         //模拟数据
         let that = this;
@@ -231,8 +181,6 @@
         map.addEventListener("touchmove", function () {
           map.enableDragging();
         });
-
-
         let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT});
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl); 
@@ -599,53 +547,6 @@
 .roomlist-enter, .roomlist-leave-to{
   top: 100vh;
 }
-.model-wrap{
-  display: flex;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5)
-}
-.model{
-  width:88vw;
-  height: 45vw;
-  overflow: hidden;
-  background: #fff;
-  border-radius: 3vw;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  z-index: 20;
-}
-.model .context{
-  height: 30vw;
-  box-sizing: border-box;
-  padding: 10vw;
-  text-align: center;
-  font-size: 4.5vw;
-  box-sizing: border-box;
-  border-bottom: 1px solid #e3e3e3;
-}
-.model .model-btn p{
-  width: 44vw;
-  float: left;
-  text-align: center;
-  height: 15vw;
-  line-height: 15vw;
-  font-size: 4vw;
-}
-.model .model-btn .cancel{
-  color: #333;
-  box-sizing: border-box;
-  border-right: 1px solid #e3e3e3;
-}
-.model .model-btn .confirm{
-  color: #ff9900;
-}
 </style>
 
 <style>
@@ -654,8 +555,6 @@ html,body,#app{
   height: 100%;
   width: 100%;
 }
-
-
 .location_label,.location_cea_label{
     position : absolute;
     /* background : #0fb896; */
