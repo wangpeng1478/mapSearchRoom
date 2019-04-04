@@ -193,7 +193,7 @@
 
         //定位图标
         let marker = new BMap.Marker(point);  // 创建标注
-        // marker.disableMassClear();
+        marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
 
         var json = {};
@@ -557,9 +557,9 @@ html,body,#app{
 }
 .location_label,.location_cea_label{
     position : absolute;
-    background : #0fb896;
+    /* background : #0fb896; */
     color : white;
-    padding : 1vw;
+    /* padding : 1vw; */
     line-height : 4vw;
     white-space : nowrap;
     -moz-user-select : none;
@@ -567,16 +567,16 @@ html,body,#app{
 }
 
 .label_arrow,.label_cea_arrow{
-    position : absolute;
-    width : 0px;
+    position : relative;
+    /* width : 0px;
     height : 0px;
     top : 10vw;
-    left : 0px;
+    left : 0px; */
     overflow : hidden;
 }
 
 .label_area_name,.label_area_cea_name{
-  position : absolute;
+  position : relative;
   margin : 0px;
   min-width:19vw;
   height : 5vw;
@@ -584,7 +584,6 @@ html,body,#app{
   padding : 0vw 2vw;
   background : #ff9900;
   border-radius : 1vw;
-  margin-top : 4vw;
   text-align : center;
   transform : translate(-22.5%)
 }
