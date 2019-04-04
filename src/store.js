@@ -56,6 +56,9 @@ export default new Vuex.Store({
     assign(state,data){
       state[data.key] = data.value
     },
+    assignMapData(state,data){
+      state.mapData[data.key] = data.value
+    },
     showToast(state,msg){
       state.toast = msg
     },

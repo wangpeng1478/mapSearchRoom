@@ -134,7 +134,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["assign","searchCompelet"]),
+    ...mapMutations(["assign","searchCompelet","assignMapData"]),
     handleAcHistory(idx){
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
       this.backMap()
@@ -238,6 +238,7 @@ export default {
     },
     handleSearchResult(idx) {
       this.saveHistory(this.searchResult[idx]);
+      this.assignMapData({isClickZoom:true})
     },
      handleClearinput() {
       this.searchValue = "";
