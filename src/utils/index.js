@@ -46,9 +46,13 @@ export default{ //很关键
                 store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
-                json.levelType = that.toLevelType(store.state.mapData.scale);
-                Object.assign(json);
-                console.log("moving",store.state.mapData.scale)
+                if(store.state.keywordsSearch.tableId){
+                    json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
+                }else{
+                    json.levelType = that.toLevelType(store.state.mapData.scale);
+                }
+               
+                console.log("moving",json.levelType)
                 switch (json.levelType) {
                     case 1:
                     case 2:
@@ -72,31 +76,32 @@ export default{ //很关键
         obj.addEventListener("zoomend", function(e){
             let zoom = e.currentTarget.getZoom();
             store.state.mapData.scale =  zoom;
-            if(!store.state.mapData.isClickZoom){
-                let map = store.state.map;
-                let mapData = store.state.mapData;
-                if(mapData.isOverLay){
-                    var json = {};
-                    json = store.state.mapData;
+            let map = store.state.map;
+            let mapData = store.state.mapData;
+            console.log("isOverLay",mapData.isOverLay)
+            if( store.state.mapData.isClickZoom){
+
+            }else  if(mapData.isOverLay){
+                var json = {};
+                json = store.state.mapData;
+            }else{
+                
+                var cp = obj.getCenter();
+                store.state.mapData.latitude = cp.lat;
+                store.state.mapData.longitude = cp.lng;
+                
+                var json = {};
+                json.cityId = store.state.currentCity.cityId;
+                json.levelType = that.toLevelType(mapData.scale);
+                
+                Object.assign(json,store.state.screen)
+                if(store.state.keywordsSearch.levelType){
+                    console.log("store.state.keywordsSearch++++++++++++++++++++++++++++++")
                 }else{
-                    
-                    var cp = obj.getCenter();
-                    store.state.mapData.latitude = cp.lat;
-                    store.state.mapData.longitude = cp.lng;
-                    
-                    var json = {};
-                    json.cityId = store.state.currentCity.cityId;
-                    json.levelType = that.toLevelType(mapData.scale);
-                    
-                    Object.assign(json,store.state.screen)
-                    if(store.state.keywordsSearch.levelType){}else{
-                        that.showHouse(json) 
-                        }
-                    // console.log("keywordsSearch",store.state.keywordsSearch)
-                    // 
+                    that.showHouse(json) 
                 }
-                store.state.mapData.isClickZoom = false;
             }
+            store.state.mapData.isClickZoom = false;
         });
     },
 
@@ -105,6 +110,7 @@ export default{ //很关键
             if (res.data.code == 0) {
                 res = res.data.data;
                 console.log("mpdata.levelType",mpdata.levelType)
+                console.log(mpdata)
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -253,11 +259,17 @@ export default{ //很关键
         let bounds = map.getBounds();
         if(data.levelType==6||data.levelType==7){
             console.log("metroPoint")
+            console.log(localStorage.getItem("circle"))
+            if(store.state.circleObj){
+
+            }else{
+                let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                // localStorage.setItem("circle",JSON.stringify(metroCircle)); 
+                store.state.circleObj = metroCircle;
+                map.addOverlay(metroCircle); //增加圆
+            }
             
-            let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-            localStorage.setItem("circle",metroCircle); 
-            map.addOverlay(metroCircle); //增加圆
         }
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
@@ -383,6 +395,31 @@ export default{ //很关键
             }
             return json;
         }
+    },
+    //tyepId 转 层级类型
+    typeIdToLevelType:function(typeId){
+        var levelType = 2;
+        switch(typeId){
+            case 1: 
+                levelType = 4;
+            break;
+            case 2: 
+            levelType = 6;
+            break;
+            case 3: 
+            levelType = 5;
+            break;
+            case 4: 
+            levelType = 7;
+            break;
+            case 6: 
+            levelType = 3;
+            break;
+            case 7: 
+            levelType = 2;
+            break;
+        }
+        return levelType;
     },
     toLevelType:function(scale){
         var levelType = 2;
