@@ -9,7 +9,6 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "mobile-detect": "^1.4.3",
     "url-search-params-polyfill": "^5.1.0",
     "vue": "^2.6.6",
     "vue-router": "^3.0.2",

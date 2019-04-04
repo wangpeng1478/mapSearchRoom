@@ -63,6 +63,7 @@ export default {
       this.$emit("endSlider", [this.value.a, this.value.b]);
     },
     touchSlider: function(item, e) {
+      if (e) e.preventDefault()
       this.temp = {
         startX: e.changedTouches[0].clientX,
         value: this.value[item]
