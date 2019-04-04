@@ -30,6 +30,8 @@ export default {
     this.httpQueryMapBaseData();
   },
   mounted(){
+    this.location();
+
         var lastTouchEnd = 0;
     document.addEventListener('touchstart', function(event) {
         if (event.touches.length > 1) {
@@ -52,6 +54,19 @@ export default {
   methods: {
     ...mapMutations(["assign","mapBaseData","resetAllState","mapDataChangelatitudeAndLongitude",'currentCityChange','currentCityAddConfirm']),
     ...mapActions(['assignAsync']),
+    location(){
+      if(navigator.geolocation){  //判断是否支持Geolocation API
+	    navigator.geolocation.getCurrentPosition(res=>{
+        console.log(res)
+      },err=>{
+        console.log(err)
+      },{ 
+enableHighAccuracy:true, //设置提升定位的精准度
+	maximumAge:0,  //禁用缓存
+	timeout:30000  //开始获取定位信息30秒后超时
+      })
+    }
+    },
     httpQueryCityList: function() {
       let _this = this;
       axios.post(API["queryCityList"]).then(res => {
