@@ -10,7 +10,6 @@ export default{ //很关键
         var that = this;
         
         obj.addEventListener("locationSuccess", function(e){
-
             let map = store.state.map;
             // 定位成功事件
             store.state.mapData.latitude = e.point.lat;
@@ -19,7 +18,7 @@ export default{ //很关键
             store.state.mapData.scale = store.state.map.getZoom();
             var json = {};
             json.cityId = store.state.currentCity.cityId;
-            json.levelType = that.toLevelType(store.state.mapData.scale);
+            json.levelType = 4;
             Object.assign(json,store.state.screen);
             that.showHouse(json)
 
@@ -36,6 +35,8 @@ export default{ //很关键
             let map = store.state.map;
             let _state = store.state;
             let mapData = store.state.mapData;
+
+            console.log("getZoom",store.state.map.getZoom());
             if(mapData.isOverLay){
 
             }else{
@@ -46,7 +47,8 @@ export default{ //很关键
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                Object.assign(json,store.state.screen);
+                Object.assign(json);
+                console.log("moving",store.state.mapData.scale)
                 switch (json.levelType) {
                     case 1:
                     case 2:
@@ -87,17 +89,59 @@ export default{ //很关键
                     json.levelType = that.toLevelType(mapData.scale);
                     
                     Object.assign(json,store.state.screen)
-    
-                    that.showHouse(json)
+                    if(store.state.keywordsSearch.levelType){}else{
+                        that.showHouse(json) 
+                        }
+                    // console.log("keywordsSearch",store.state.keywordsSearch)
+                    // 
                 }
                 store.state.mapData.isClickZoom = false;
             }
         });
     },
+
     showHouse:function(mpdata){
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
+                console.log("mpdata.levelType",mpdata.levelType)
+                switch (mpdata.levelType) {
+                    case 1:
+                    case 2:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 3:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 4:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 5:
+                        store.state.coverDataList = res.mapResultDtos;
+                        this.showMetroHouse(mpdata);
+                        break;
+                    case 6:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                    case 7:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                }
+            }
+        });
+    },
+    //搜索后显示房源
+    showSearchHouse:function(mpdata){
+        console.log("showSearchHouse")
+        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+            if (res.data.code == 0) {
+                res = res.data.data;
+                console.log("mpdata.levelType",mpdata.levelType)
+                store.state.mapData.scale=this.toScale(mpdata.levelType);
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -311,9 +355,7 @@ export default{ //很关键
                 return;
             })
         }else{
-            // $store.commit("showToast","暂未找到符合条件的房源");
             store.state.toast = "暂未找到符合条件的房源"
-            // this.$store.showToast("暂未找到符合条件的房源")
         }
         
 
@@ -344,6 +386,8 @@ export default{ //很关键
     },
     toLevelType:function(scale){
         var levelType = 2;
+        let _state = store.state;
+        console.log("scale",_state.keywordsSearch)
         switch (scale) {
             case 1:
             case 2:
@@ -353,23 +397,50 @@ export default{ //很关键
             case 6:
             case 7:
             case 8:
-            case 9:
-                levelType = 1;
-                break;
+            case 9: 
             case 10:
+            levelType = 1;
+                break;
             case 11:
             case 12:
+                
+            case 13:
                 levelType = 2;
                 break;
-            case 13:
             case 14:
-                levelType = 3;
+            case 15:
+            levelType = 3;
                 break;
             default:
                 levelType = 4;
                 break;
         }
-        if(store.state.screen){
+        if(_state.keywordsSearch.tableId){
+            if(_state.keywordsSearch.typeId == 3){
+                switch (scale) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                    case 13:
+                    case 14:
+                    case 15:
+                    levelType = 5;
+                        break;
+                    default:
+                        levelType = 6;
+                        break;
+                }
+            }
+        }else if(store.state.screen){
             if(store.state.screen.levelType == 5||store.state.screen.levelType ==6){
                 switch (scale) {
                     case 1:
@@ -381,14 +452,16 @@ export default{ //很关键
                     case 7:
                     case 8:
                     case 9:
-                        levelType = 1;
-                        break;
+                        
                     case 10:
+                    levelType = 1;
+                        break;
                     case 11:
                     case 12:
                     case 13:
                     case 14:
-                        levelType = 5;
+                    case 15:
+                    levelType = 5;
                         break;
                     default:
                         levelType = 6;
@@ -396,6 +469,8 @@ export default{ //很关键
                 }
             }
         }
+        
+        
         return levelType;
     },
     toScale:function(levelType){
@@ -473,8 +548,16 @@ export default{ //很关键
             }
             return;
         })
+        if(_state.mapData.longitude == "" ||  _state.mapData.latitude == ""){
+            _state.mapData.longitude =  _state.coverDataList[0].lng;
+            _state.mapData.latitude =  _state.coverDataList[0].lat;
+        }
+        
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         store.state.mapData.scale = 13;
+
+        console.log("showMetroHouse")
+        console.log(point)
         // 创建点坐标  
         // let mapData = store.state.mapData; 
         // if(!mapData.isOverLay){
