@@ -22,24 +22,35 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     div.setAttribute("key",this._key);
     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
     div.style.width = "14vw";
-    div.style.height = "8vw";
+    div.style.height = "9vw";
 
     var p = this._p = document.createElement("p");
     p.style.margin = "0px";
     p.style.textAlign = "center";
     p.style.overflow = "hidden";
+    p.style.width = "12vw";
+    p.style.height = "5vw";
+    p.style.background = "#0fb896";
+    p.style.padding = "1vw 1vw 0vw";
     div.appendChild(p);
     p.appendChild(document.createTextNode("¥"+this._price+"+"));
     var p2 = this._p = document.createElement("p");
     p2.style.margin = "0px";
     p2.style.textAlign = "center";
+    p2.style.width = "12vw";
+    p2.style.height = "4vw";
+    p2.style.padding = "0vw 1vw"
+    p2.style.background = "#0fb896";
+    p2.style.marginTop = "-1px";
     div.appendChild(p2);
     p2.appendChild(document.createTextNode(_this._overText));
 
     var arrow = this._arrow = document.createElement("div");
     arrow.className = "label_arrow";
-    arrow.style.border = "8vw solid transparent";
+    arrow.style.border = "7vw solid transparent";
+    arrow.style.borderBottom = "0";
     arrow.style.borderTop = "3vw solid #0fb896";
+    arrow.style.marginTop = "-1px";
     div.appendChild(arrow);
 
     var p3 = this.p3 = document.createElement("p");
