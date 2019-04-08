@@ -113,10 +113,11 @@ export default {
   methods: {
     ...mapMutations(["assign","mapDataChangelatitudeAndLongitude"]),
     screenCondition() {
-      let query = Object.assign(this.query);
+      let query = JSON.parse(JSON.stringify(this.query));
       if (Object.keys(this.regionTemp).length != 0 && !this.isOverLay) {
         query[this.regionTemp.key] = this.regionTemp.value;
       }
+      
       let customPriceValue = this.customPriceValue;
       if (this.customPriceValue != [0, 27]) {
         query.priceFrom =
@@ -149,7 +150,6 @@ export default {
             this.roomCount = roomCount;
           } else {
             let roomCountStr = roomCount.toString()
-            console.log(roomCount.toString())
             this.roomCount = roomCountStr.charAt(0)+'0'.repeat(roomCountStr.length-1)+'+'
           }
         }
