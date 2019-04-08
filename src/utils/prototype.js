@@ -306,6 +306,7 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
     div.setAttribute("lat",this._point.lat);
     div.setAttribute("lng",this._point.lng);
     div.setAttribute("key",this._key);
+    div.setAttribute("text",this._text);
 
     var p2 = this._p = document.createElement("p");
     p2.style.margin = "0px";
