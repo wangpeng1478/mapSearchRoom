@@ -33,11 +33,11 @@
       </div>
       <div class="screen-item" v-if="customPriceValue">
         <h4>房间价格（元）</h4>
-        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="sliderChange" @endSlider="customPrice"/>
         <p class="custom-price">
           {{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}} ——
           {{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}
         </p>
+        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="sliderChange" @endSlider="customPrice"/>
         <ul>
           <li
             v-for="(price,index) in priceList"
@@ -233,7 +233,8 @@ export default {
         this.customPriceValue=val;
         this.$refs.slider.changeDefaultValue(val);
       }else{
-        this.$refs.slider.reset();
+        this.customPriceValue=[0,27];
+        this.$refs.slider.changeDefaultValue([0,27]);
       }
       this.screenChange('房间价格按钮');
     },
@@ -385,6 +386,7 @@ export default {
   border-bottom: 1px solid #e5e5e5;
   padding: 0 4vw;
   overflow: hidden;
+  position: relative;
 }
 
 .region h4 {
@@ -458,6 +460,9 @@ export default {
   font-size: 4vw;
   margin: 2vw 0 4vw;
   color: #ff9900;
+  position: absolute;
+  right: 5vw;
+  top: 1vw;
 }
 .gray{
   background: #666;
