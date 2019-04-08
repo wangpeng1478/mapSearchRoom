@@ -148,7 +148,9 @@ export default {
           if (roomCount < 100) {
             this.roomCount = roomCount;
           } else {
-            this.roomCount = Math.floor(roomCount / 100) + "00+";
+            let roomCountStr = roomCount.toString()
+            console.log(roomCount.toString())
+            this.roomCount = roomCountStr.charAt(0)+'0'.repeat(roomCountStr.length-1)+'+'
           }
         }
       });
@@ -228,7 +230,6 @@ export default {
         if(priceTo){
           val[1]=priceTo/100-4;
         }
-        console.log(val)
         this.customPriceValue=val;
         this.$refs.slider.changeDefaultValue(val);
       }else{
@@ -330,7 +331,7 @@ export default {
 </script>
 <style scoped>
 .screen {
-  position: fixed;
+  position: absolute;
   width: 84vw;
   bottom: 0;
   top: 0;
