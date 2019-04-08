@@ -85,9 +85,13 @@
       },
       mapScreen(){
         //地图条件搜索
+        // localStorage.removeItem("circle");
+        let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
+
+        store.state.circleObj = null;
         if(this.mapData.isOverLay){
             json.longitude = this.mapData.longitude;
             json.latitude = this.mapData.latitude;
@@ -99,7 +103,7 @@
           Object.assign(json,_screen)
           this.$.showScreenHouse(json)
         }
-        
+        console.log('地图条件搜索')
       },
       handelClearSearh(){
         this.assign({
@@ -110,9 +114,10 @@
         var json = {};
         json.cityId = _state.currentCity.cityId;
         json.levelType = 2;
-        store.state.mapData.scale = 10;
+        store.state.mapData.scale = 12;
         Object.assign(json,_state.screen)
         this.$.showHouse(json);
+        
         record(2,'地图页面清除搜索框按钮')
       },
       handelList(){
@@ -239,7 +244,7 @@
             }
             this.$.showSearchHouse(json)
           }else{
-            _state.mapData.scale = 12;
+            _state.mapData.scale = 13;
             this.$.showHouse(json);
           }
           
@@ -252,40 +257,6 @@
         // this.$.showMetroStationHouse(_state.mapData);
 
         
-
-
-
-
-        
-        // showOver();
-        // var canvasLayer = new BMap.CanvasLayer({
-        //         update: update
-        //     });
-        // function update() {
-        //         var ctx = this.canvas.getContext("2d");
-
-        //         if (!ctx) {
-        //             return;
-        //         }
-
-        //         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
-        //         var temp = {};
-        //         ctx.fillStyle = "rgba(50, 50, 255, 0.7)";
-        //         ctx.beginPath();
-        //         var data = [
-        //             new BMap.Point(116.3964,39.9093),
-        //         ];
-
-        //         for (var i = 0, len = data.length; i < len; i++) {
-        //             var pixel = map.pointToPixel(data[i]);
-        //             ctx.fillRect(pixel.x, pixel.y, 30, 30);
-        //         }
-        //     }
-
-        // mp.addOverlay(canvasLayer);
-
-        // var overlay=[canvasLayer,myCompOverlay];
         
 
           //定位

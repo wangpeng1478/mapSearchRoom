@@ -57,10 +57,9 @@ export default {
             let _state = store.state;
             let _this = this;
             let distance = 0;
-
-            console.log(map.getOverlays())
+            map.removeOverlay(localStorage.getItem("circle"));
             // map.enableMassClear()
-            map.clearOverlays();
+            // map.clearOverlays();
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == _state.mapData.type){
                     _state.mapData.speed = val.speed
@@ -72,6 +71,7 @@ export default {
             }else{
                 distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
             }
+            _state.mapData.isOverLay = true;
             _state.mapData.scale =11;
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
@@ -79,7 +79,9 @@ export default {
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             map.addOverlay(circle); //增加圆
-            
+            console.log(circle)
+            localStorage.setItem("circle",circle); 
+            console.log(localStorage.getItem("circle"))
             
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
@@ -96,12 +98,12 @@ export default {
                 map.addOverlay(myCompOverlay);
             }); 
             _state.mapScreen.radius = distance;
-            _state.mapData.isOverLay = true;
-            var json = {};
-            json.longitude = _state.mapData.longitude;
-            json.latitude = _state.mapData.latitude;
-            Object.assign(json,_state.mapScreen,_state.screen)
-            this.$.showCoverHouse(json);
+            
+            // var json = {};
+            // json.longitude = _state.mapData.longitude;
+            // json.latitude = _state.mapData.latitude;
+            // Object.assign(json,_state.mapScreen,_state.screen)
+            // this.$.showCoverHouse(json);
         })
     },
     methods:{
@@ -109,8 +111,11 @@ export default {
            
             if(this.speed!=0){
                 var mp = store.state.map;
-
-
+                console.log(localStorage.getItem("circle"))
+                if(localStorage.getItem("circle")){
+                    map.removeOverlay(localStorage.getItem("circle"));
+                }
+                
                  mp.getOverlays().map((val)=>{
                     if(val._type=="ComplexCoverOverlay"){
                     mp.removeOverlay(val)
@@ -125,9 +130,8 @@ export default {
                 if(this.$store.state.mapData.isInvFind){
                     scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
                 }
-                
+                store.state.mapData.isOverLay = true;
                 store.state.mapData.scale = scale;
-                
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{
@@ -137,6 +141,7 @@ export default {
                     }
                     return;
                 })
+                localStorage.setItem("circle",circle); 
                 mp.addOverlay(circle); //增加圆
 
                 var geoc = new BMap.Geocoder();
@@ -147,13 +152,14 @@ export default {
                     });
                     mp.addOverlay(myCompOverlay);
                 }); 
-                store.state.mapData.isOverLay = true;
+                
                 this.$store.state.mapData.isInvFind = false;
                 var json = {};
                 json.longitude = _state.mapData.longitude;
                 json.latitude = _state.mapData.latitude;
                 Object.assign(json,_state.mapScreen,_state.screen)
-                this.$.showCoverHouse(json);
+                
+                // this.$.showCoverHouse(json);
             }
         },
         checkTime : function (params) {

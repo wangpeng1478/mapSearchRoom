@@ -35,7 +35,8 @@ export default new Vuex.Store({
       isInvFind:false,    //是否使用滑块改变scale
       isClickZoom:false,      //是否点击缩放
     },
-    map:"",
+    map:"",     //map对象
+    circleObj:null,     //阴影圆对象
     cityList:null,
     mapScreen:{},
     screen:null, //筛选条件
