@@ -17,7 +17,7 @@
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
     <transition name="screen">
-      <Screen v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
+      <Screen ref="screen" v-if="showView.showScreen" @selectionArea="selectionArea" @screen='mapScreen'/>
     </transition>
     <transition name="screen">
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
@@ -307,6 +307,8 @@
       },
       hiddenRegion(msg){
         this.showView.showRegionAndMetro=false;
+        // screenChange()
+        // this.$refs.screen.screenChange();
       },
       roomListDestroy(){
         store.state.mapData.showRoomList = false;
@@ -325,6 +327,9 @@
 #map{
   height: 100%;
   width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
 .baidumap{

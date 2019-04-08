@@ -33,11 +33,11 @@
       </div>
       <div class="screen-item" v-if="customPriceValue">
         <h4>房间价格（元）</h4>
-        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="sliderChange" @endSlider="customPrice"/>
         <p class="custom-price">
           {{customPriceValue[0]==0 ? 0 : customPriceValue[0]*100+400}} ——
           {{customPriceValue[1]==27 ? '不限' : customPriceValue[1]*100+400}}
         </p>
+        <Slider ref="slider" :defaultValue="customPriceValue" step="27" @sliderChange="sliderChange" @endSlider="customPrice"/>
         <ul>
           <li
             v-for="(price,index) in priceList"
@@ -113,10 +113,11 @@ export default {
   methods: {
     ...mapMutations(["assign","mapDataChangelatitudeAndLongitude"]),
     screenCondition() {
-      let query = Object.assign(this.query);
+      let query = JSON.parse(JSON.stringify(this.query));
       if (Object.keys(this.regionTemp).length != 0 && !this.isOverLay) {
         query[this.regionTemp.key] = this.regionTemp.value;
       }
+      
       let customPriceValue = this.customPriceValue;
       if (this.customPriceValue != [0, 27]) {
         query.priceFrom =
@@ -142,14 +143,14 @@ export default {
     },
     screenChange(msg) {
       let query = this.screenCondition();
-      console.log(query)
       axios.post(API["queryMapRoomCount"], query).then(res => {
         if (res.data.code == 0) {
           let roomCount = res.data.data.roomCount;
           if (roomCount < 100) {
             this.roomCount = roomCount;
           } else {
-            this.roomCount = Math.floor(roomCount / 100) + "00+";
+            let roomCountStr = roomCount.toString()
+            this.roomCount = roomCountStr.charAt(0)+'0'.repeat(roomCountStr.length-1)+'+'
           }
         }
       });
@@ -158,11 +159,11 @@ export default {
     customPrice(e) {
       this.customPriceValue = e;
       this.priceRecomm = null;
+      this.screenChange('自定义价格筛选');
     },
     sliderChange(e){
       this.customPriceValue = e;
       this.priceRecomm = null;
-      this.screenChange('自定义价格筛选');
     },
     selectionArea() {
       this.$emit("selectionArea");
@@ -208,11 +209,32 @@ export default {
       this.screenChange('可租日期按钮');
     },
     handlePriceRecomm(priceContent) {
-      this.$refs.slider.reset();
+      
       let priceRecomm = this.priceRecomm;
       this.priceRecomm = priceRecomm == priceContent ? null : priceContent;
       if (this.priceRecomm) {
-        this.sliderReset();
+        let priceRecomm = this.priceRecomm;
+        let priceRecommValue = priceRecomm.split("-");
+        let priceFrom,priceTo;
+        if(priceRecommValue.length==1 && priceRecommValue[0]==500){
+          priceTo = priceRecommValue[0];
+          priceFrom =0
+        }else{
+          priceFrom = priceRecommValue[0];
+          priceTo = priceRecommValue[1];
+        }
+        let val=[0,27];
+        if(priceFrom!=0){
+          val[0]=priceFrom/100-4;
+        }
+        if(priceTo){
+          val[1]=priceTo/100-4;
+        }
+        this.customPriceValue=val;
+        this.$refs.slider.changeDefaultValue(val);
+      }else{
+        this.customPriceValue=[0,27];
+        this.$refs.slider.changeDefaultValue([0,27]);
       }
       this.screenChange('房间价格按钮');
     },
@@ -310,7 +332,7 @@ export default {
 </script>
 <style scoped>
 .screen {
-  position: fixed;
+  position: absolute;
   width: 84vw;
   bottom: 0;
   top: 0;
@@ -364,6 +386,7 @@ export default {
   border-bottom: 1px solid #e5e5e5;
   padding: 0 4vw;
   overflow: hidden;
+  position: relative;
 }
 
 .region h4 {
@@ -437,6 +460,9 @@ export default {
   font-size: 4vw;
   margin: 2vw 0 4vw;
   color: #ff9900;
+  position: absolute;
+  right: 5vw;
+  top: 1vw;
 }
 .gray{
   background: #666;

@@ -116,7 +116,6 @@
                 },
                 levelType:4
               };
-
             }
             if (selected[0] == 1) {
               let metroStation = this.metroList[selected[1]].metroStationList[selected[2]]
