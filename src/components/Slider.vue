@@ -59,6 +59,14 @@ export default {
         this.step;
       this.sliderChange();
     },
+    changeDefaultValue(valueArr){
+      console.log(valueArr)
+      this.value = {
+        a: valueArr[0],
+        b: valueArr[1]
+      };
+      this.sliderChange();
+    },
     endSlider(){
       this.$emit("endSlider", [this.value.a, this.value.b]);
     },

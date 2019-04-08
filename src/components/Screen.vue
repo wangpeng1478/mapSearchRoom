@@ -142,7 +142,6 @@ export default {
     },
     screenChange(msg) {
       let query = this.screenCondition();
-      console.log(query)
       axios.post(API["queryMapRoomCount"], query).then(res => {
         if (res.data.code == 0) {
           let roomCount = res.data.data.roomCount;
@@ -158,11 +157,11 @@ export default {
     customPrice(e) {
       this.customPriceValue = e;
       this.priceRecomm = null;
+      this.screenChange('自定义价格筛选');
     },
     sliderChange(e){
       this.customPriceValue = e;
       this.priceRecomm = null;
-      this.screenChange('自定义价格筛选');
     },
     selectionArea() {
       this.$emit("selectionArea");
@@ -208,11 +207,32 @@ export default {
       this.screenChange('可租日期按钮');
     },
     handlePriceRecomm(priceContent) {
-      this.$refs.slider.reset();
+      
       let priceRecomm = this.priceRecomm;
       this.priceRecomm = priceRecomm == priceContent ? null : priceContent;
       if (this.priceRecomm) {
-        this.sliderReset();
+        let priceRecomm = this.priceRecomm;
+        let priceRecommValue = priceRecomm.split("-");
+        let priceFrom,priceTo;
+        if(priceRecommValue.length==1 && priceRecommValue[0]==500){
+          priceTo = priceRecommValue[0];
+          priceFrom =0
+        }else{
+          priceFrom = priceRecommValue[0];
+          priceTo = priceRecommValue[1];
+        }
+        let val=[0,27];
+        if(priceFrom!=0){
+          val[0]=priceFrom/100-4;
+        }
+        if(priceTo){
+          val[1]=priceTo/100-4;
+        }
+        console.log(val)
+        this.customPriceValue=val;
+        this.$refs.slider.changeDefaultValue(val);
+      }else{
+        this.$refs.slider.reset();
       }
       this.screenChange('房间价格按钮');
     },
