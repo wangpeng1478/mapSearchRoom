@@ -86,23 +86,16 @@
       mapScreen(){
         //地图条件搜索
         // localStorage.removeItem("circle");
+        console.log("地图筛选搜索")
         let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
+        console.log(this.$store.state.screen)
+        Object.assign(json,this.$store.state.screen)
+        this.$.showHouse(json);
 
-        store.state.circleObj = null;
-        if(this.mapData.isOverLay){
-            json.longitude = this.mapData.longitude;
-            json.latitude = this.mapData.latitude;
-            Object.assign(json,this.$store.state.mapScreen,this.$store.state.screen)
-          this.$.showCoverHouse(json);
-        }else{
-        
-          let _screen = this.$store.state.screen;
-          Object.assign(json,_screen)
-          this.$.showScreenHouse(json)
-        }
+        store.state.mapData.isClickZoom =true;
         console.log('地图条件搜索')
       },
       handelClearSearh(){
@@ -281,6 +274,7 @@
         record(2,'地图页面筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
+        store.state.mapData.showRoomList = false;
       },
       viewSetDefault(){
           if(this.mapData.isOverLay){
