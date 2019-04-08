@@ -124,7 +124,7 @@
 <style scoped>
   .roomlist-wrap {
     background: #fff;
-    position: fixed;
+    position: absolute;
     z-index: 5;
     top: 60vh;
     width: 100%;
