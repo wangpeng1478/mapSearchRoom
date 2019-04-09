@@ -249,6 +249,9 @@ export default {
         }else{
           query.levelType=2
         }
+        if(this.regionTemp.metroId){
+          query.metroId=this.regionTemp.metroId
+        }
       }
       this.assign({
         key: "screen",
