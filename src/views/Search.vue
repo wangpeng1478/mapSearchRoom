@@ -59,7 +59,7 @@
     <ul class="search-result" v-if="searchValue!='' && isRegion">
       <li v-for="(result,index) in searchResult" :key="index" @click="handleSearchResult(index)">
         <p v-html="result.showKeyWords"></p>
-        <span>{{result.typeName}}</span>
+        <span>{{result.typeId==2? result.remark+'-' : ''}}{{result.typeName}}</span>
       </li>
     </ul>
     <ul class="local-result" v-if="searchValue!='' && !isRegion">
@@ -388,7 +388,7 @@ export default {
 }
 
 .search-result li p {
-  width: 70vw;
+  width: 57vw;
   height: 12vw;
   float: left;
   font-size: 3.733vw;
@@ -400,7 +400,7 @@ export default {
 
 .search-result li span {
   display: block;
-  width: 16vw;
+  width: 30vw;
   height: 12vw;
   color: #a8a8a8;
   font-size: 3.733vw;
