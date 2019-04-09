@@ -528,7 +528,7 @@
   transition: all .3s linear;
 }
 .roomlist-enter, .roomlist-leave-to{
-  top: 100vh;
+  bottom: -70vh;
 }
 </style>
 
