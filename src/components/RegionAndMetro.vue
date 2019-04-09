@@ -127,7 +127,8 @@
                 latitudeAndLongitude:{
                   latitude:metroStation.latitude,
                   longitude:metroStation.longitude
-                }
+                },
+                metroId:metroStation.metroId
               };
             }
           }
@@ -184,7 +185,7 @@
 </script>
 <style scoped>
   .region-wrap {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
@@ -193,10 +194,10 @@
   }
 
   .region {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
-    height: 100vh;
+    bottom: 0;
     overflow: hidden;
     z-index: 10;
   }
@@ -213,7 +214,7 @@
 
   .region ul {
     overflow: auto;
-    height: 100vh;
+    height: 100%;
     float: right;
     transition: all 0.3s linear;
   }

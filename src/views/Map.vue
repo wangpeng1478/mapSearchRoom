@@ -7,7 +7,7 @@
     <div class="top-bar" v-if="!mapData.isOverLay">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="/search" class="search" @click="record(2,'点击搜索框')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
-      <i class="iconfont icon-guanbi" @click="handelClearSearh"></i>
+      <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handelClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     </transition>
@@ -325,11 +325,11 @@
 <style scoped>
 
 #map{
-  height: 100%;
-  width: 100%;
   position: fixed;
   top: 0;
   left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .baidumap{
@@ -528,7 +528,7 @@
   transition: all .3s linear;
 }
 .roomlist-enter, .roomlist-leave-to{
-  top: 100vh;
+  bottom: -70vh;
 }
 </style>
 
