@@ -60,7 +60,6 @@ export default {
       this.sliderChange();
     },
     changeDefaultValue(valueArr){
-      console.log(valueArr)
       this.value = {
         a: valueArr[0],
         b: valueArr[1]

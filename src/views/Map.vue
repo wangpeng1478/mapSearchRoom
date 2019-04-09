@@ -86,7 +86,6 @@
       mapScreen(){
         //地图条件搜索
         // localStorage.removeItem("circle");
-        console.log("地图筛选搜索")
         let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
@@ -96,14 +95,12 @@
             map.removeOverlay(store.state.circleObj);
             store.state.circleObj = null;
         }
-        console.log(this.$store.state.screen)
         Object.assign(json,this.$store.state.screen)
 
         store.state.mapData.scale = this.$.toScale(json.levelType)
         this.$.showHouse(json);
 
         store.state.mapData.isClickZoom =true;
-        console.log('地图条件搜索')
       },
       handelClearSearh(){
         this.assign({

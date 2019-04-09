@@ -252,7 +252,6 @@ export default {
         key:'keywordsSearch',
         value:keywordsSearch
       })
-      console.log(keywordsSearch)
       //清空筛选条件
       this.clearScreen()
       this.searchCompelet(keywordsSearch);

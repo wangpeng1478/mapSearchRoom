@@ -145,7 +145,6 @@ export default {
       let query = this.screenCondition();
       query.metroStationId=query.stationId;
       delete query['stationId']
-      console.log(query)
       axios.post(API["queryMapRoomCount"], query).then(res => {
         if (res.data.code == 0) {
           let roomCount = res.data.data.roomCount;
@@ -256,7 +255,6 @@ export default {
           query.metroId=this.regionTemp.metroId
         }
       }
-      console.log(this.regionTemp)
       this.assign({
         key: "screen",
         value: {

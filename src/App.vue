@@ -56,7 +56,6 @@ export default {
     location(){
       if(navigator.geolocation){  //判断是否支持Geolocation API
 	    navigator.geolocation.getCurrentPosition(res=>{
-        console.log(res)
       },err=>{
         console.log(err)
       },{ 

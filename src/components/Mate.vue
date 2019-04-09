@@ -79,9 +79,7 @@ export default {
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             map.addOverlay(circle); //增加圆
-            console.log(circle)
             localStorage.setItem("circle",circle); 
-            console.log(localStorage.getItem("circle"))
             
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
@@ -111,7 +109,6 @@ export default {
            
             if(this.speed!=0){
                 var mp = store.state.map;
-                console.log(localStorage.getItem("circle"))
                 if(localStorage.getItem("circle")){
                     map.removeOverlay(localStorage.getItem("circle"));
                 }
