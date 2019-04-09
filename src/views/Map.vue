@@ -96,13 +96,17 @@
             map.removeOverlay(store.state.circleObj);
             store.state.circleObj = null;
         }
-        console.log(this.$store.state.screen)
-        Object.assign(json,this.$store.state.screen)
+        console.log(this.$store.state.screen);
+        Object.assign(json,this.$store.state.screen);
+        delete json["latitude"];
+        delete json["longitude"];
+        store.state.mapData.scale = this.$.toScale(json.levelType);
+        store.state.mapData.levelType = json.levelType;
 
-        store.state.mapData.scale = this.$.toScale(json.levelType)
+          store.state.mapData.isClickZoom =true;
         this.$.showHouse(json);
 
-        store.state.mapData.isClickZoom =true;
+      
         console.log('地图条件搜索')
       },
       handelClearSearh(){

@@ -91,12 +91,12 @@ export default{ //很关键
                 json.cityId = store.state.currentCity.cityId;
                 
                 console.log("scale",mapData.scale)
-                console.log("levelType",json.levelType)
+                
                 
                 Object.assign(json,store.state.screen)
                 json.levelType = that.toLevelType(zoom);
                 mapData.levelType = json.levelType;
-
+                console.log("levelType",json.levelType)
                 that.showHouse(json);
                 // if(store.state.keywordsSearch.levelType){
                 // }else {
@@ -115,7 +115,9 @@ export default{ //很关键
     },
 
     showHouse:function(mpdata){
-        let map = store.state.map
+        let map = store.state.map;
+        let isClickZoom = store.state.mapData.isClickZoom;
+        console.log("isClickZoom",isClickZoom)
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -142,10 +144,18 @@ export default{ //很关键
                         store.state.coverDataList = res;
 
                         //重新画圆
-                        let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-                        let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-                        store.state.circleObj = metroCircle;
-                        map.addOverlay(metroCircle); //增加圆
+                        if(isClickZoom){
+                            let metroPoint;
+                            if(store.state.screen.levelType == 6){
+                                metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
+                            }else{
+                                metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                            }
+                            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }
+                        
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -415,9 +425,10 @@ export default{ //很关键
         return levelType;
     },
     toLevelType:function(scale){
-        var levelType = 2;
+        var levelType;
         let _state = store.state;
         if(_state.mapData.levelType==5||_state.mapData.levelType==6){
+            console.log("metro")
             switch (scale) {
                 case 1:
                 case 2:
