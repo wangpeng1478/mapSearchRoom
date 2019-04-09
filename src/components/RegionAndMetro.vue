@@ -213,7 +213,7 @@
 
   .region ul {
     overflow: auto;
-    height: 100vh;
+    height: 100%;
     float: right;
     transition: all 0.3s linear;
   }
