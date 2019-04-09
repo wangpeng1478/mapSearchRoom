@@ -215,7 +215,7 @@
                 break;
               case 2:
                 json.levelType = 6;
-                json.metroStationId = _state.keywordsSearch.tableId;
+                json.stationId = _state.keywordsSearch.tableId;
                 break;
               case 3:
                 json.levelType = 5;

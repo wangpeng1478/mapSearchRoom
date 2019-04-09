@@ -121,7 +121,7 @@
               let metroStation = this.metroList[selected[1]].metroStationList[selected[2]]
               data = {
                 showRegion: cityName + '-' + this.metroList[selected[1]].simpleName + '-' + metroStation.stationName,
-                key: "metroStationId",
+                key: "stationId",
                 value: metroStation.stationId,
                 levelType:6,
                 latitudeAndLongitude:{

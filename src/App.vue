@@ -13,7 +13,6 @@ import API from "@/utils/api";
 import Model from '@/components/Model'
 import { mapState, mapMutations,mapActions } from "vuex";
 import { setTimeout } from 'timers';
-
 export default {
   name: "app",
   data(){

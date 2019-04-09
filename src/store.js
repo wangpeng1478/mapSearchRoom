@@ -10,6 +10,7 @@ export default new Vuex.Store({
       cityName:'上海',
       latitude: 31.2363429624,
       longitude: 121.4803295328,
+      cityPinyin:'sh',
       url: "https://www.qk365.com"
     },
     keywordsSearch:{},//搜索关键词
@@ -57,6 +58,12 @@ export default new Vuex.Store({
     //state赋值公共方法
     assign(state,data){
       state[data.key] = data.value
+    },
+    clearScreen(state){ //搜索后青客筛选条件
+      state.screen = null;
+      state.screenTemp = null;
+      state.region = {};
+      state.regionTemp = {};
     },
     assignMapData(state,data){
       state.mapData[data.key] = data.value

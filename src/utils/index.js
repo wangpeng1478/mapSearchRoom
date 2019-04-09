@@ -99,7 +99,7 @@ export default{ //很关键
                 }else{
                     console.log(json.levelType)
                     if(json.levelType == 5){
-                        json.metroStationId = null;
+                        json.stationId = null;
                         that.showHouse(json);
                     }else{
                         that.showHouse(json) 
@@ -634,7 +634,7 @@ export default{ //很关键
               store.state.mapData.longitude = target.getAttribute("lng");
               store.state.mapData.scale = 16;
               Object.assign(json,store.state.screen);
-              store.state.screen.metroStationId = target.getAttribute("key");
+              store.state.screen.stationId = target.getAttribute("key");
 
               //赋值给筛选条件
               store.state.region.showRegion += "-"+target.getAttribute("text");
@@ -647,9 +647,9 @@ export default{ //很关键
                   return 
               })
               store.state.region.value = target.getAttribute("key");
-              store.state.region.key = "metroStationId";
+              store.state.region.key = "stationId";
               store.state.region.levelType = 6;
-              json.metroStationId = target.getAttribute("key");
+              json.stationId = target.getAttribute("key");
               json.levelType = 6;
 
 

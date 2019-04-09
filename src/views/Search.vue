@@ -134,7 +134,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["assign","searchCompelet","assignMapData"]),
+    ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen"]),
     handleAcHistory(idx){
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
       this.backMap()
@@ -252,7 +252,10 @@ export default {
         key:'keywordsSearch',
         value:keywordsSearch
       })
-        this.searchCompelet(keywordsSearch);
+      console.log(keywordsSearch)
+      //清空筛选条件
+      this.clearScreen()
+      this.searchCompelet(keywordsSearch);
       }
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
