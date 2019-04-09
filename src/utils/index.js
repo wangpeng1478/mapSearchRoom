@@ -43,14 +43,14 @@ export default{ //很关键
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
-                // store.state.mapData.scale = store.state.map.getZoom();
+                store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
-                // if(store.state.keywordsSearch.tableId){
-                //     json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
-                // }else{
-                //     json.levelType = that.toLevelType(store.state.mapData.scale);
-                // }
+                if(store.state.keywordsSearch.tableId){
+                    json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
+                }else{
+                    json.levelType = that.toLevelType(store.state.mapData.scale);
+                }
                
                 console.log("moving",json.levelType)
                 switch (json.levelType) {
@@ -92,9 +92,7 @@ export default{ //很关键
                 
                 console.log("scale",mapData.scale)
                 
-                if(store.state.keywordsSearch.tableId){
-
-                }
+                
                 Object.assign(json,store.state.screen);
                 if(store.state.keywordsSearch.tableId){
                     switch(store.state.keywordsSearch.typeId){
@@ -180,7 +178,7 @@ export default{ //很关键
                         store.state.coverDataList = res;
 
                         //重新画圆
-                        if(isClickZoom){
+                        // if(isClickZoom){
                             let metroPoint;
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
 
@@ -194,7 +192,7 @@ export default{ //很关键
                             let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
-                        }
+                        // }
                         
                         this.showAreaHouse(mpdata);
                         break;
