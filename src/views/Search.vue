@@ -220,9 +220,11 @@ export default {
     handleSearchTag(idx, name) {
       //点击历史或者热门的tag
       let tag = this[name][idx];
-      this.saveHistory(tag)
+      this.saveHistory(tag);
+      
     },
     saveHistory(tag){
+      this.assignMapData({key:"isClickZoom",value:true})
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;

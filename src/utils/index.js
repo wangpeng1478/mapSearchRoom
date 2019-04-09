@@ -92,10 +92,44 @@ export default{ //很关键
                 
                 console.log("scale",mapData.scale)
                 
-                
-                Object.assign(json,store.state.screen)
+                if(store.state.keywordsSearch.tableId){
+
+                }
+                Object.assign(json,store.state.screen);
+                if(store.state.keywordsSearch.tableId){
+                    switch(store.state.keywordsSearch.typeId){
+                        case 1:
+                          json.levelType = 4;
+                          json.villageId = store.state.keywordsSearch.tableId;
+                          break;
+                        case 2:
+                          json.levelType = 6;
+                          json.metroId  = store.state.keywordsSearch.parentId;
+                          json.stationId = store.state.keywordsSearch.tableId;
+                          break;
+                        case 3:
+                          json.levelType = 5;
+                          json.metroId  = store.state.keywordsSearch.tableId;
+                          break;
+                        case 4:
+          
+                          //公交站点
+                          json.levelType = 4;
+                          break;
+                        case 6:
+                          json.levelType = 3;
+                          json.ceaId  = store.state.keywordsSearch.tableId;
+                          json.prcId  = store.state.keywordsSearch.parentId;
+                          break;
+                        case 7:
+                          json.levelType = 2;
+                          json.prcId  = store.state.keywordsSearch.tableId;
+                          break;
+                    }
+                }
                 json.levelType = that.toLevelType(zoom);
                 mapData.levelType = json.levelType;
+                console.log(store.state.keywordsSearch)
                 console.log("levelType",json.levelType)
                 that.showHouse(json);
                 // if(store.state.keywordsSearch.levelType){
@@ -127,6 +161,7 @@ export default{ //很关键
                     map.removeOverlay(store.state.circleObj);
                     store.state.circleObj = null;
                 }
+                console.log("showMetroHouse",mpdata.levelType)
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -138,6 +173,7 @@ export default{ //很关键
                         break;
                     case 5:
                         store.state.coverDataList = res.mapResultDtos;
+                        console.log("showMetroHouse")
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -146,7 +182,11 @@ export default{ //很关键
                         //重新画圆
                         if(isClickZoom){
                             let metroPoint;
-                            if(store.state.screen.levelType == 6){
+                            if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+
+                                console.log("keywordsSearch")
+                                metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                            }else if(store.state.screen.levelType == 6){
                                 metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
                             }else{
                                 metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
@@ -163,42 +203,49 @@ export default{ //很关键
         });
     },
     //搜索后显示房源
-    // showSearchHouse:function(mpdata){
-    //     console.log("showSearchHouse")
-    //     axios.post(API["queryMapCoverData"], mpdata).then(res => {
-    //         if (res.data.code == 0) {
-    //             res = res.data.data;
-    //             console.log("mpdata.levelType",mpdata.levelType)
-    //             store.state.mapData.scale=this.toScale(mpdata.levelType);
-    //             switch (mpdata.levelType) {
-    //                 case 1:
-    //                 case 2:
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 3:
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 4:
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 5:
-    //                     store.state.coverDataList = res.mapResultDtos;
-    //                     this.showMetroHouse(mpdata);
-    //                     break;
-    //                 case 6:
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                 case 7:
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //             }
-    //         }
-    //     });
-    // },
+    showSearchHouse:function(mpdata){
+        console.log("showSearchHouse")
+        let map = store.state.map;
+        
+        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+            if (res.data.code == 0) {
+                res = res.data.data;
+                console.log("mpdata.levelType",mpdata.levelType)
+                store.state.mapData.scale=this.toScale(mpdata.levelType);
+                switch (mpdata.levelType) {
+                    case 1:
+                    case 2:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 3:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 4:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 5:
+                        store.state.coverDataList = res.mapResultDtos;
+                        this.showMetroHouse(mpdata);
+                        break;
+                    case 6:
+                        store.state.coverDataList = res;
+                        let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                        let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                        store.state.circleObj = metroCircle;
+                        map.addOverlay(metroCircle); //增加圆
+                        this.showAreaHouse(mpdata);
+                        break;
+                    case 7:
+                        store.state.coverDataList = res;
+                        this.showAreaHouse(mpdata);
+                        break;
+                }
+            }
+        });
+    },
     showScreenHouse:function(mpdata){
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
@@ -626,21 +673,21 @@ export default{ //很关键
               store.state.mapData.longitude = target.getAttribute("lng");
               store.state.mapData.scale = 14;
               Object.assign(json,store.state.screen);
-              store.state.screen.stationId = target.getAttribute("key");
+            //   store.state.screen.stationId = target.getAttribute("key");
 
               //赋值给筛选条件
-              store.state.region.showRegion += "-"+target.getAttribute("text");
-              store.state.region.selected[2] = -1;
-              console.log(store.state.metroList[store.state.region.selected[1]])
-              store.state.metroList[store.state.region.selected[1]].metroStationList.map(function(val,index){
-                  if(val.stationId == target.getAttribute("key")){
-                    store.state.region.selected[2] = index;
-                  }
-                  return 
-              })
-              store.state.region.value = target.getAttribute("key");
-              store.state.region.key = "stationId";
-              store.state.region.levelType = 6;
+            //   store.state.region.showRegion += "-"+target.getAttribute("text");
+            //   store.state.region.selected[2] = -1;
+            //   console.log(store.state.metroList[store.state.region.selected[1]])
+            //   store.state.metroList[store.state.region.selected[1]].metroStationList.map(function(val,index){
+            //       if(val.stationId == target.getAttribute("key")){
+            //         store.state.region.selected[2] = index;
+            //       }
+            //       return 
+            //   })
+            //   store.state.region.value = target.getAttribute("key");
+            //   store.state.region.key = "stationId";
+            //   store.state.region.levelType = 6;
               json.stationId = target.getAttribute("key");
               json.levelType = 6;
               json.metroId = data.metroId;
@@ -648,8 +695,9 @@ export default{ //很关键
 
 
               store.state.mapScreen = json;
-              that.showHouse(json);
               store.state.mapData.isClickZoom = true;
+              that.showHouse(json);
+              
               
 
               
