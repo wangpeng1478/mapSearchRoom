@@ -46,11 +46,12 @@ export default{ //很关键
                 store.state.mapData.scale = store.state.map.getZoom();
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
-                if(store.state.keywordsSearch.tableId){
-                    json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
-                }else{
-                    json.levelType = that.toLevelType(store.state.mapData.scale);
-                }
+                json.levelType = that.toLevelType(store.state.mapData.scale);
+                // if(store.state.keywordsSearch.tableId){
+                //     json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
+                // }else{
+                //     json.levelType = that.toLevelType(store.state.mapData.scale);
+                // }
                
                 console.log("moving",json.levelType)
                 switch (json.levelType) {
@@ -522,37 +523,7 @@ export default{ //很关键
                     break;
             }
         }
-        
-        // if(_state.keywordsSearch.tableId){
-        //     if(_state.keywordsSearch.typeId == 3){
-                
-        //     }
-        // }else if(store.state.screen){
-        //     if(store.state.screen.levelType == 5||store.state.screen.levelType ==6){
-        //         switch (scale) {
-        //             case 1:
-        //             case 2:
-        //             case 3:
-        //             case 4:
-        //             case 5:
-        //             case 6:
-        //             case 7:
-        //             case 8:
-        //             case 9:
-        //             case 10:
-        //             case 11:
-        //             case 12:
-        //             case 13:
-        //             levelType = 5;
-        //                 break;
-                    
-        //             default:
-        //                 levelType = 6;
-        //                 break;
-        //         }
-        //     }
-        // }
-        
+    
         
         return levelType;
     },
@@ -631,21 +602,11 @@ export default{ //很关键
             }
             return;
         })
-        // if(_state.mapData.longitude == "" ||  _state.mapData.latitude == ""){
-        //     _state.mapData.longitude =  _state.coverDataList[0].lng;
-        //     _state.mapData.latitude =  _state.coverDataList[0].lat;
-        // }
-        
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         store.state.mapData.scale = 12;
 
         console.log("showMetroHouse")
         console.log(point)
-        // 创建点坐标  
-        // let mapData = store.state.mapData; 
-        // if(!mapData.isOverLay){
-        //     map.centerAndZoom(point,store.state.mapData.scale);
-        // }
         map.centerAndZoom(point,store.state.mapData.scale);
         let bounds = map.getBounds();
         _state.coverDataList.map((val,index)=>{
@@ -665,41 +626,31 @@ export default{ //很关键
                     target = target.parentNode;
                 }
               store.state.mapData.levelType =  6;
-            //   store.state.mapScreen.latitude = target.getAttribute("lat");
-            //   store.state.mapScreen.longitude = target.getAttribute("lng");
               store.state.mapData.latitude = target.getAttribute("lat");
               store.state.mapData.longitude = target.getAttribute("lng");
               store.state.mapData.scale = 14;
               Object.assign(json,store.state.screen);
-            //   store.state.screen.stationId = target.getAttribute("key");
 
-              //赋值给筛选条件
-            //   store.state.region.showRegion += "-"+target.getAttribute("text");
-            //   store.state.region.selected[2] = -1;
-            //   console.log(store.state.metroList[store.state.region.selected[1]])
-            //   store.state.metroList[store.state.region.selected[1]].metroStationList.map(function(val,index){
-            //       if(val.stationId == target.getAttribute("key")){
-            //         store.state.region.selected[2] = index;
-            //       }
-            //       return 
-            //   })
-            //   store.state.region.value = target.getAttribute("key");
-            //   store.state.region.key = "stationId";
-            //   store.state.region.levelType = 6;
               json.stationId = target.getAttribute("key");
               json.levelType = 6;
-              json.metroId = data.metroId;
+              if(store.state.screen&&store.state.screen.metroId){
+                json.metroId = store.state.screen.metroId;
+              }else{
+                  if(store.state.keywordsSearch.typeId == 2){
+                    json.metroId  = store.state.keywordsSearch.parentId;
+                  }else if(store.state.keywordsSearch.typeId == 3){
+                    json.metroId  = store.state.keywordsSearch.tableId;
+                  }
+              }
+              
 
 
-
+            console.log(json)
               store.state.mapScreen = json;
               store.state.mapData.isClickZoom = true;
               that.showHouse(json);
               
-              
-
-              
-            // that.showVillageHouse(val);
+            
           });
           return;
         })
