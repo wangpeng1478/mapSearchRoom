@@ -184,7 +184,7 @@
 </script>
 <style scoped>
   .region-wrap {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
@@ -193,10 +193,10 @@
   }
 
   .region {
-    position: fixed;
+    position: absolute;
     top: 0;
     right: 0;
-    height: 100vh;
+    bottom: 0;
     overflow: hidden;
     z-index: 10;
   }
