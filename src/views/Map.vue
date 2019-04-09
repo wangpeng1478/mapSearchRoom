@@ -95,12 +95,18 @@
             map.removeOverlay(store.state.circleObj);
             store.state.circleObj = null;
         }
-        Object.assign(json,this.$store.state.screen)
-
-        store.state.mapData.scale = this.$.toScale(json.levelType)
-        this.$.showHouse(json);
+        console.log(this.$store.state.screen);
+        Object.assign(json,this.$store.state.screen);
+        delete json["latitude"];
+        delete json["longitude"];
+        store.state.mapData.scale = this.$.toScale(json.levelType);
+        store.state.mapData.levelType = json.levelType;
 
         store.state.mapData.isClickZoom =true;
+        this.$.showHouse(json);
+
+      
+        console.log('地图条件搜索')
       },
       handelClearSearh(){
         this.assign({
@@ -170,13 +176,16 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
+        console.log("开始++++++++++++++++++++++++++")
+        console.log("isClickZoom+++++++++++++++++",store.state.mapData.isClickZoom)
+        
         store.state.mapData.showRoomList = false;
         this.showView.showMate = false;
         //模拟数据
         let that = this;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
-      
+      console.log(map.getOverlays())
         // 创建地图实例 
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
@@ -200,7 +209,7 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-
+        _state.map = map;
         var json = {};
         json.cityId = _state.currentCity.cityId;
         json.levelType = 2;
@@ -212,6 +221,7 @@
           this.showMateFun();
         }else{
           if(_state.keywordsSearch.tableId){
+            
             switch(_state.keywordsSearch.typeId){
               case 1:
                 json.levelType = 4;
@@ -219,6 +229,7 @@
                 break;
               case 2:
                 json.levelType = 6;
+                json.metroId  = _state.keywordsSearch.parentId;
                 json.stationId = _state.keywordsSearch.tableId;
                 break;
               case 3:
@@ -226,8 +237,10 @@
                 json.metroId  = _state.keywordsSearch.tableId;
                 break;
               case 4:
-                json.levelType = 7;
-                json.busStationId  = _state.keywordsSearch.tableId;
+
+                //公交站点
+                json.levelType = 4;
+                // json.busStationId  = _state.keywordsSearch.tableId;
                 break;
               case 6:
                 json.levelType = 3;
@@ -239,6 +252,8 @@
                 json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
+            store.state.mapData.levelType = json.levelType;
+            console.log("getOverlays",map.getOverlays())
             this.$.showSearchHouse(json)
           }else{
             _state.mapData.scale = 13;
@@ -247,7 +262,7 @@
           
           
         }
-        _state.map = map;
+       
         
       
         

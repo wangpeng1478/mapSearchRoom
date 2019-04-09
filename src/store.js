@@ -29,14 +29,17 @@ export default new Vuex.Store({
       longitude:121.4803295328,
       scale:11,
       levelType:2,
+      
       isOverLay:false,    //显示覆盖物里的房源
       isInvFind:false,    //是否使用滑块改变scale
       isClickZoom:false,      //是否点击缩放
     },
     map:"",     //map对象
+    
     circleObj:null,     //阴影圆对象
     cityList:null,
     mapScreen:{},
+    // submitScreen:null,   //点击确定筛选条件
     screen:null, //筛选条件
     screenTemp:null,//筛选条件缓存
     mapBaseDataReady:false,
