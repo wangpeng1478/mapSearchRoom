@@ -17,10 +17,6 @@ export default new Vuex.Store({
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
-    // data:{
-    //   type:2,
-    //   scale:11,
-    // },
     mapData:{
       type:2,
       cityId:2,
@@ -32,6 +28,7 @@ export default new Vuex.Store({
       latitude:31.2363429624,
       longitude:121.4803295328,
       scale:11,
+      levelType:2,
       isOverLay:false,    //显示覆盖物里的房源
       isInvFind:false,    //是否使用滑块改变scale
       isClickZoom:false,      //是否点击缩放

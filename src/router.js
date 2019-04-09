@@ -6,8 +6,10 @@ import store from '@/store'
 Vue.use(Router)
 
  const router = new Router({
-  mode:'hash',
+  mode:'history',
+  base:'/map',
   routes: [
+    
     {
       path: '/',
       name: 'Map',
@@ -20,6 +22,11 @@ Vue.use(Router)
       path:'/search',
       name:'Search',
       component: () => import('./views/Search.vue')
+    },
+    { 
+      path: '*', 
+      name: 'Map',
+      component: Map ,
     }
   ]
 })
