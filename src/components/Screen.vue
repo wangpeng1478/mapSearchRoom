@@ -259,6 +259,45 @@
             if (this.regionTemp.metroId) {
               query.metroId = this.regionTemp.metroId
             }
+          } else if (Object.keys(this.keywordsSearch).length != 0) {
+
+            console.log(this.keywordsSearch)
+            if(this.keywordsSearch.latitude){
+              query.latitude=this.keywordsSearch.latitude;
+              query.longitude=this.keywordsSearch.longitude;
+            }
+            let tableId=this.keywordsSearch.tableId;
+            switch (this.keywordsSearch.typeId) {
+              case 1:
+                query.levelType = 4;
+                query.villageId=tableId
+                break;
+              case 2:
+                query.levelType = 6
+                query.MetroStationId=tableId
+                break;
+              case 3:
+                query.levelType = 5
+                query.metroId=tableId
+                break;
+              case 4:
+                query.levelType = 7
+                query.busStationId=tableId
+                break;
+              case 6:
+                query.levelType = 3
+                query.ceaId=tableId
+                break;
+              case 7:
+                query.levelType = 2
+                query.prcId=tableId
+                break;
+            }
+
+
+
+
+
           }
         }
         this.assign({
