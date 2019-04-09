@@ -91,8 +91,15 @@
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
+        //去除圆形阴影
+        if(store.state.circleObj){
+            map.removeOverlay(store.state.circleObj);
+            store.state.circleObj = null;
+        }
         console.log(this.$store.state.screen)
         Object.assign(json,this.$store.state.screen)
+
+        store.state.mapData.scale = this.$.toScale(json.levelType)
         this.$.showHouse(json);
 
         store.state.mapData.isClickZoom =true;
