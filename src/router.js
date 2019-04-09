@@ -7,7 +7,6 @@ Vue.use(Router)
 
  const router = new Router({
   mode:'history',
-  base:'/map',
   routes: [
     
     {
@@ -26,7 +25,7 @@ Vue.use(Router)
     { 
       path: '*', 
       name: 'Map',
-      component: Map ,
+      redirect:'/'
     }
   ]
 })

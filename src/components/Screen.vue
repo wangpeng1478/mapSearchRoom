@@ -243,8 +243,14 @@ export default {
     handleQuery() {
       let query = this.screenCondition();
       if (!this.isOverLay){
+        console.log(this.regionTemp)
         if(this.regionTemp.latitudeAndLongitude){
           this.mapDataChangelatitudeAndLongitude(this.regionTemp.latitudeAndLongitude)
+        }else if(Object.keys(this.regionTemp).length==0){
+          this.mapDataChangelatitudeAndLongitude({
+            latitude:this.currentCity.latitude,
+            longitude:this.currentCity.longitude
+          })
         }
         if(this.regionTemp.levelType){
           query.levelType = this.regionTemp.levelType;
