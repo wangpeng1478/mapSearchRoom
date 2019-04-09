@@ -127,7 +127,8 @@
                 latitudeAndLongitude:{
                   latitude:metroStation.latitude,
                   longitude:metroStation.longitude
-                }
+                },
+                metroId:metroStation.metroId
               };
             }
           }

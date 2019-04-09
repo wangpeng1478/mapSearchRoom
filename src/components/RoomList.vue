@@ -126,10 +126,9 @@
     background: #fff;
     position: absolute;
     z-index: 5;
-    top: 60vh;
+    bottom: -40vh;
     width: 100%;
-    height: 80vh;
-    overflow: hidden;
+    height: 70vh;
   }
 
   .roomlist-transition {
@@ -139,6 +138,7 @@
   .village {
     position: absolute;
     height: 21vw;
+    top: -21vw;
     overflow: hidden;
     border-bottom: 1.333vw solid #f4f4f4;
     width: 100%;
@@ -174,15 +174,12 @@
   
   .roomlist {
     width: 100%;
-    overflow: hidden;
-    height: 40vh;
-    box-sizing: border-box;
-    padding-top: 21vw;
+    height: 30vh;
     overflow: auto;
   }
 
   .height80 {
-    height: 80vh;
+    height: 70vh;
   }
 
   .roomlist a {
@@ -343,6 +340,6 @@
     color: #999;
     font-size: 12px;
     text-align: center;
-    margin: 2vw 0;
+    margin: 2vw 0 10vw;
   }
 </style>
