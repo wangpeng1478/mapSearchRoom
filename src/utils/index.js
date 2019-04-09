@@ -119,7 +119,6 @@ export default{ //很关键
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
-
                 //去掉圆
                 if(store.state.circleObj){
                     map.removeOverlay(store.state.circleObj);
