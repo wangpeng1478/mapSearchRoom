@@ -101,6 +101,12 @@
         store.state.mapData.levelType = json.levelType;
 
         store.state.mapData.isClickZoom =true;
+        if(json.ceaId){
+          delete json["ceaId"];
+        }
+        if(json.prcId){
+          delete json["prcId"];
+        }
         this.$.showHouse(json);
 
       
@@ -237,12 +243,12 @@
                 break;
               case 6:
                 json.levelType = 3;
-                json.ceaId  = _state.keywordsSearch.tableId;
-                json.prcId  = _state.keywordsSearch.parentId;
+                // json.ceaId  = _state.keywordsSearch.tableId;
+                // json.prcId  = _state.keywordsSearch.parentId;
                 break;
               case 7:
                 json.levelType = 2;
-                json.prcId  = _state.keywordsSearch.tableId;
+                // json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
             store.state.mapData.levelType = json.levelType;

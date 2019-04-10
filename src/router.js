@@ -7,6 +7,7 @@ Vue.use(Router)
 
  const router = new Router({
   mode:'hash',
+  base:"/sh/map",
   routes: [
     
     {
