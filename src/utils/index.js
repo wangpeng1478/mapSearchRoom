@@ -69,7 +69,6 @@ export default{ //很关键
             store.state.mapData.scale =  zoom;
             let map = store.state.map;
             let mapData = store.state.mapData;
-            console.log("zoomendEvent",store.state.mapData.isClickZoom)
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
                     var cp = obj.getCenter();
@@ -128,7 +127,6 @@ export default{ //很关键
                               break;
                         }
                     }
-                    console.log("zoomendEvent",store.state.mapData.levelType)
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     that.showHouse(json);
@@ -176,7 +174,6 @@ export default{ //很关键
                         store.state.coverDataList = res;
                         let metroPoint;
                         //重新画圆
-                        console.log("showHouse circle",store.state.keywordsSearch)
                         if(isClickZoom){
                             
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
@@ -245,7 +242,6 @@ export default{ //很关键
                         break;
                     case 6:
                     case 7:
-                    console.log("paintCircle+++++++")
                         store.state.coverDataList = res;
                         let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
                         let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
@@ -308,7 +304,6 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-                    console.log("showCoverHouse",store.state.mapData)
                     this.showCoverByCoordinate(json);
                 }
             });
@@ -335,7 +330,6 @@ export default{ //很关键
         }
         
         let bounds = map.getBounds();
-        console.log("showAreaHouse",data)
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
                 if(
@@ -504,7 +498,6 @@ export default{ //很关键
     toLevelType:function(scale){
         var levelType;
         let _state = store.state;
-        console.log("toLevelType",store.state.mapData.levelType)
         if(_state.mapData.levelType==5||_state.mapData.levelType==6){
             switch (scale) {
                 case 1:

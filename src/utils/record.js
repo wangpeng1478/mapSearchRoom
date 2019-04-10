@@ -80,9 +80,6 @@ const recordHttp = (eventType, otherParams) => {
     }
 
     axios.post(API['record'], params)
-        .then(res=>{
-            console.log(res)
-        })
 
 }
 

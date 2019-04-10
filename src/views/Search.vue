@@ -273,7 +273,6 @@ export default {
         keyWords: keywordsSearch.keyWords,
         typeId:keywordsSearch.typeId
       });
-      console.log(keywordsSearch)
       recordSearch({
           keyType:2,
           keyWords:this.currentCity.cityName+'-'+keywordsSearch.keyWords+'-'+keywordsSearch.typeName
