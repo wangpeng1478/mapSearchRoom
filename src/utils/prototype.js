@@ -301,7 +301,7 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
     div.id = 
     div.className = "location_metro_label";
     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-    div.style.width = "10vw";
+    // div.style.width = "10vw";
     div.style.height = "3vw";
     div.setAttribute("lat",this._point.lat);
     div.setAttribute("lng",this._point.lng);
@@ -313,7 +313,7 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
     p2.style.textAlign = "center";
     p2.style.zIndex = "10";
     div.appendChild(p2);
-    p2.appendChild(document.createTextNode(_this._overText));
+    p2.appendChild(document.createTextNode(this._text + " " + _this._overText));
 
     var arrow = this._arrow = document.createElement("div");
     arrow.className = "label_metro_arrow";
@@ -331,7 +331,9 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
 ComplexMetroStationOverlay.prototype.draw = function(){
     var map = this._map;
     var pixel = map.pointToOverlayPixel(this._point);
-    this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
+    console.log(this._div.offsetWidth);
+    this._div.style.left = (pixel.x- parseFloat(this._div.offsetWidth/2))/window.innerWidth*100 + "vw";
+    // this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
     this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
 }
 

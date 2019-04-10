@@ -62,6 +62,7 @@ export default{ //很关键
             
         });
     },
+    //层级改变
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
@@ -136,7 +137,7 @@ export default{ //很关键
             store.state.mapData.isClickZoom = false;
         });
     },
-
+    //显示房源
     showHouse:function(mpdata){
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
@@ -253,52 +254,51 @@ export default{ //很关键
             }
         });
     },
-    showScreenHouse:function(mpdata){
-        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+    // showScreenHouse:function(mpdata){
+    //     axios.post(API["queryMapCoverData"], mpdata).then(res => {
             
-            if (res.data.code == 0) {
-                res = res.data.data;
+    //         if (res.data.code == 0) {
+    //             res = res.data.data;
                 
-                switch (mpdata.levelType) {
-                    case 1:
-                    case 2:
-                        store.state.mapData.scale = 14;
-                        store.state.coverDataList = res;
-                        this.showAreaHouse(mpdata);
-                        break;
-                    case 3:
-                        store.state.mapData.scale = 16;
-                        store.state.coverDataList = res;
-                        this.showAreaHouse(mpdata);
-                        break;
-                    case 4:
-                        store.state.mapData.scale = 17;
-                        store.state.coverDataList = res;
-                        this.showAreaHouse(mpdata);
-                        break;
-                    case 5:
-                        store.state.mapData.scale = 14;
-                        store.state.coverDataList = res.mapResultDtos;
-                        this.showMetroHouse(mpdata);
-                        break;
-                    case 6:
-                        store.state.mapData.scale = 17;
-                        store.state.coverDataList = res;
-                        this.showAreaHouse(mpdata);
-                        break;
-                    case 7:
-                        store.state.mapData.scale = 17;
-                        store.state.coverDataList = res;
-                        this.showAreaHouse(mpdata);
-                        break;
-                }
-            }
-        });
-    },
-    //个性找房
+    //             switch (mpdata.levelType) {
+    //                 case 1:
+    //                 case 2:
+    //                     store.state.mapData.scale = 14;
+    //                     store.state.coverDataList = res;
+    //                     this.showAreaHouse(mpdata);
+    //                     break;
+    //                 case 3:
+    //                     store.state.mapData.scale = 16;
+    //                     store.state.coverDataList = res;
+    //                     this.showAreaHouse(mpdata);
+    //                     break;
+    //                 case 4:
+    //                     store.state.mapData.scale = 17;
+    //                     store.state.coverDataList = res;
+    //                     this.showAreaHouse(mpdata);
+    //                     break;
+    //                 case 5:
+    //                     store.state.mapData.scale = 14;
+    //                     store.state.coverDataList = res.mapResultDtos;
+    //                     this.showMetroHouse(mpdata);
+    //                     break;
+    //                 case 6:
+    //                     store.state.mapData.scale = 17;
+    //                     store.state.coverDataList = res;
+    //                     this.showAreaHouse(mpdata);
+    //                     break;
+    //                 case 7:
+    //                     store.state.mapData.scale = 17;
+    //                     store.state.coverDataList = res;
+    //                     this.showAreaHouse(mpdata);
+    //                     break;
+    //             }
+    //         }
+    //     });
+    // },
+    //个性找房 
     showCoverHouse:function(data){
         let _state = store.state;
-        console.log("showCoverHouse",_state.mapData.isOverLay)
         if(_state.mapData.isOverLay){
             var json = data;
             axios.post(API["queryMapCoverByCoordinate"], json).then(res => {
@@ -311,6 +311,7 @@ export default{ //很关键
         }
         
     },
+    //显示 区域房源
     showAreaHouse:function(data){
         let map = store.state.map;
         let _state = store.state;
@@ -495,7 +496,7 @@ export default{ //很关键
         }
         return levelType;
     },
-    
+    //地图层级 转 层级类型
     toLevelType:function(scale){
         var levelType;
         let _state = store.state;
@@ -557,6 +558,7 @@ export default{ //很关键
         
         return levelType;
     },
+    //层级类型 转 地图层级
     toScale:function(levelType){
         var scale = 12;
         switch (levelType) {
@@ -621,6 +623,7 @@ export default{ //很关键
     //         return;
     //     })
     // },
+    // 地铁线路房源
     showMetroHouse:function(data){
         //地铁房源
         let map = store.state.map;
@@ -694,6 +697,7 @@ export default{ //很关键
           return;
         })
     },
+    //个性找房房源
     showCoverByCoordinate:function(data){
         let map = store.state.map;
         let _state = store.state;
