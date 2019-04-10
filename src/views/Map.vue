@@ -6,7 +6,7 @@
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
       <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="recordButton('地图页面点击列表')">列表</a>
-      <router-link to="/search" class="search" @click="recordButton('地图页面点击搜索')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
+      <router-link to="search" append class="search" @click="recordButton('地图页面点击搜索')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
       <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handleClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
@@ -80,7 +80,7 @@
     methods : {
       ...mapMutations(['assign']),
       handleAddress(){
-        this.$router.push('/address')
+        this.$router.push('address')
       },
       mapScreen(){
         //地图条件搜索

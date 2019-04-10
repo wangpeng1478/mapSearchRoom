@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/" class="close" @click="recordButton('城市切换页面关闭按钮')"></router-link>
+    <p to="index" class="close" append @click="handleClose"></p>
     <p class="tit">当前定位城市</p>
     <div class="location">
       <i :class="{'refresh-rotate' : positionState==1}" class="refresh"></i>
@@ -32,10 +32,14 @@ export default {
   },
   methods: {
     ...mapMutations(['assign','currentCityChange']),
+    handleClose(){
+      recordButton('城市切换页面关闭按钮')
+      this.$router.go(-1);
+    },
     chooseCity(idx){
       recordButton('城市切换页面点击城市')
       this.currentCityChange(idx);
-      this.$router.push('/')
+      this.$router.go(-1);
     },
     //获取当前城市
     getLocation() {

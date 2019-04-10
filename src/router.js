@@ -2,29 +2,29 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
 import {getPageInfo,recordPage} from '@/utils/record'
+import store from '@/store'
 Vue.use(Router)
 
  const router = new Router({
   mode:'hash',
-  base:"/sh/map",
   routes: [
     {
-      path: '/',
+      path: '/:cityPY/map',
       name: 'Map',
       component: Map ,
     },{
-      path:'/address',
+      path:'/:cityPY/map/address',
       name:'Address',
       component: () => import('./views/Address.vue')
     },{
-      path:'/search',
+      path:'/:cityPY/map/search',
       name:'Search',
       component: () => import('./views/Search.vue')
     },
     { 
       path: '*', 
       name: 'Map',
-      redirect:'/'
+      redirect:'/sh/map'
     }
   ]
 })

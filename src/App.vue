@@ -29,13 +29,9 @@
       Model,
       localCity: -1 //定位的城市索引
     },
-    created: function () {
+    mounted() {
       this.httpQueryCityList();
       this.httpQueryMapBaseData();
-      
-    },
-    mounted() {
-      console.log(this.$router)
       this.location();
 
       var lastTouchEnd = 0;

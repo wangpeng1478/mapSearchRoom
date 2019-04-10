@@ -10,7 +10,7 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <router-link to="/" @click="recordButton('搜索页面点击取消')">取消</router-link>
+      <a href="javacript:;" @click="handleCancle">取消</a>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion && searchTagHistory.length!=0">
@@ -135,6 +135,10 @@ export default {
   },
   methods: {
     ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen"]),
+    handleCancle(){
+      recordButton('搜索页面点击取消');
+      this.$router.go(-1);
+    },
     handleAcHistory(idx){
       recordButton('搜索页面点击位置')
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
@@ -278,7 +282,7 @@ export default {
       this.backMap()
     },
     backMap(){
-      this.$router.push('/')
+      this.$router.go(-1);
     }
   },
   computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])

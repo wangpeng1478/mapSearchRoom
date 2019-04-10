@@ -90,7 +90,7 @@ export default {
                 }
                 var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
-                    _this.$router.push("/search");
+                    _this.$router.push('search');
                 });
                 map.addOverlay(myCompOverlay);
             }); 
@@ -189,7 +189,7 @@ export default {
                 geoc.getLocation(point, function(rs){
                     var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
                     function(){
-                        _this.$router.push("/search");
+                        _this.$router.push("search");
                     });
                     mp.addOverlay(myCompOverlay);
                 }); 
