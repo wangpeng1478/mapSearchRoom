@@ -74,7 +74,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
-import {recordButton} from '@/utils/record'
+import {recordButton,recordSearch} from '@/utils/record'
 export default {
   name: "Search",
   data() {
@@ -269,6 +269,11 @@ export default {
         keyWords: keywordsSearch.keyWords,
         typeId:keywordsSearch.typeId
       });
+      console.log(keywordsSearch)
+      recordSearch({
+          keyType:2,
+          keyWords:this.currentCity.cityName+'-'+keywordsSearch.keyWords+'-'+keywordsSearch.typeName
+        })
       axios.post(API["hotWordsCount"], params)
       this.backMap()
     },

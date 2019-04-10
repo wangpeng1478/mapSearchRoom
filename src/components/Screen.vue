@@ -135,13 +135,11 @@
       },
       screenChange() {
         let query = this.screenCondition();
-        console.log(query)
         if(query.stationId){
           query.metroStationId = query.stationId;
           delete query['stationId']
         }
         if(Object.keys(this.keywordsSearch).length!=0){
-          console.log(this.keywordsSearch)
             let tableId=this.keywordsSearch.tableId;
             switch (this.keywordsSearch.typeId) {
               case 1:
@@ -314,8 +312,6 @@
               query.metroId = this.regionTemp.metroId
             }
           } else if (Object.keys(this.keywordsSearch).length != 0) {
-
-            console.log(this.keywordsSearch)
             if(this.keywordsSearch.latitude){
               query.latitude=this.keywordsSearch.latitude;
               query.longitude=this.keywordsSearch.longitude;

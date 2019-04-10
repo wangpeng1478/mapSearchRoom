@@ -22,7 +22,6 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             that.showHouse(json)
 
-            console.log("locationSuccess  success---------------")
             let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
             let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             localStorage.setItem("circle",metroCircle); 
@@ -35,8 +34,6 @@ export default{ //很关键
             let map = store.state.map;
             let _state = store.state;
             let mapData = store.state.mapData;
-
-            console.log("getZoom",store.state.map.getZoom());
             if(mapData.isOverLay){
 
             }else{
@@ -47,7 +44,6 @@ export default{ //很关键
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                console.log("moving",json.levelType)
                 switch (json.levelType) {
                     case 1:
                     case 2:
@@ -75,7 +71,6 @@ export default{ //很关键
             store.state.mapData.scale =  zoom;
             let map = store.state.map;
             let mapData = store.state.mapData;
-            console.log("isClickZoom",store.state.mapData.isClickZoom)
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
                     var cp = obj.getCenter();
@@ -97,9 +92,6 @@ export default{ //很关键
                     
                     var json = {};
                     json.cityId = store.state.currentCity.cityId;
-                    
-                    console.log("scale",mapData.scale)
-                    
                     
                     Object.assign(json,store.state.screen);
                     if(store.state.keywordsSearch.tableId){
@@ -133,8 +125,6 @@ export default{ //很关键
                     }
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
-                    console.log(store.state.keywordsSearch)
-                    console.log("levelType",json.levelType)
                     that.showHouse(json);
                 }
             }
@@ -146,7 +136,6 @@ export default{ //很关键
     showHouse:function(mpdata){
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
-        console.log("isClickZoom",isClickZoom)
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -166,7 +155,6 @@ export default{ //很关键
                         break;
                     case 5:
                         store.state.coverDataList = res.mapResultDtos;
-                        console.log("showMetroHouse")
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -176,8 +164,6 @@ export default{ //很关键
                         if(isClickZoom){
                             
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
-
-                                console.log("keywordsSearch")
                                 metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
                             }else if(store.state.screen.levelType == 6){
                                 metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
@@ -211,13 +197,11 @@ export default{ //很关键
     },
     //搜索后显示房源
     showSearchHouse:function(mpdata){
-        console.log("showSearchHouse")
         let map = store.state.map;
         
         axios.post(API["queryMapCoverData"], mpdata).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
-                console.log("mpdata.levelType",mpdata.levelType)
                 store.state.mapData.scale=this.toScale(mpdata.levelType);
                 switch (mpdata.levelType) {
                     case 1:
@@ -298,7 +282,6 @@ export default{ //很关键
     //个性找房
     showCoverHouse:function(data){
         let _state = store.state;
-        console.log("showCoverHouse")
         if(_state.mapData.isOverLay){
             var json = data;
             axios.post(API["queryMapCoverByCoordinate"], json).then(res => {
@@ -331,10 +314,8 @@ export default{ //很关键
         }
         
         let bounds = map.getBounds();
-        console.log("showAreaHouse")
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
-                console.log(bounds.He < val.lng)
                 if(
                     (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
                     (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
@@ -487,7 +468,6 @@ export default{ //很关键
         var levelType;
         let _state = store.state;
         if(_state.mapData.levelType==5||_state.mapData.levelType==6){
-            console.log("metro")
             switch (scale) {
                 case 1:
                 case 2:
@@ -617,11 +597,7 @@ export default{ //很关键
         })
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // store.state.mapData.scale = 12;
-
-        console.log("showMetroHouse")
-        console.log(point)
         map.centerAndZoom(point,store.state.mapData.scale);
-        console.log("centerAndZoom",store.state.mapData.scale)
         let bounds = map.getBounds();
 
 
@@ -696,36 +672,27 @@ export default{ //很关键
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
         let mapData = store.state.mapData;
-        console.log("mapData.scale",mapData.scale)
         if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         
         let bounds = map.getBounds();
-        console.log(bounds)
         
         if(_state.coverDataList.length > 0){
 
 
             _state.coverDataList.map((val,index)=>{
-                console.log(bounds.He , parseFloat(val.lng))
-                console.log(bounds.He < parseFloat(val.lng))
-
-
-                
                 if(
                     (bounds.He < parseFloat(val.lng)||bounds.He < parseFloat(val.villageLongitude)||bounds.He < parseFloat(val.longitude))&&
                     (parseFloat(val.lng) < bounds.Ce||parseFloat(val.villageLongitude) < bounds.Ce||parseFloat(val.longitude) < bounds.Ce) &&
                     (bounds.Rd < parseFloat(val.lat)||bounds.Rd < parseFloat(val.villageLatitude)||bounds.Rd < parseFloat(val.latitude))&&
                     (parseFloat(val.lat) < bounds.Pd||parseFloat(val.villageLatitude) < bounds.Pd||parseFloat(val.latitude) < bounds.Pd)
                 ){
-                    console.log("coverDataList")
                     if(data.levelType==6){
                         var price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
                         map.addOverlay(myCompOverlay);
                     }else{
-                        console.log(val)
                         var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                         map.addOverlay(myCompOverlay);

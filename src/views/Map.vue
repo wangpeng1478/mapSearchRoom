@@ -94,7 +94,6 @@
             map.removeOverlay(store.state.circleObj);
             store.state.circleObj = null;
         }
-        console.log(this.$store.state.screen);
         Object.assign(json,this.$store.state.screen);
         delete json["latitude"];
         delete json["longitude"];
@@ -109,9 +108,6 @@
           delete json["prcId"];
         }
         this.$.showHouse(json);
-
-      
-        console.log('地图条件搜索')
       },
       handleClearSearh(){
         recordButton('地图页面清空搜索')
@@ -178,16 +174,12 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
-        console.log("开始++++++++++++++++++++++++++")
-        console.log("isClickZoom+++++++++++++++++",store.state.mapData.isClickZoom)
-        
         store.state.mapData.showRoomList = false;
         this.showView.showMate = false;
         //模拟数据
         let that = this;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
-      console.log(map.getOverlays())
         // 创建地图实例 
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // 创建点坐标  
@@ -255,7 +247,6 @@
                 break;
             }
             store.state.mapData.levelType = json.levelType;
-            console.log("getOverlays",map.getOverlays())
             this.$.showSearchHouse(json)
           }else{
             _state.mapData.scale = 13;
