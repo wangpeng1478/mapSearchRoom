@@ -91,6 +91,9 @@ export default {
                 }else{
                     address = rs.addressComponents.district
                 }
+                if(_this.$store.state.pointSearch){
+                    address = _this.$store.state.pointSearch.name;
+                }
                 var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
                     _this.$router.push("/search");
@@ -155,6 +158,7 @@ export default {
            
             if(this.speed!=0){
                 var mp = store.state.map;
+                var _this = this;
                 if(store.state.circleObj){
                     mp.removeOverlay(store.state.circleObj);
                 }
@@ -190,7 +194,11 @@ export default {
 
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
-                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
+                    var address =  rs.addressComponents.street;
+                    if(_this.$store.state.pointSearch){
+                        address = _this.$store.state.pointSearch.name;
+                    }
+                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
                         _this.$router.push("/search");
                     });
@@ -233,6 +241,7 @@ export default {
             this.$store.state.mapData.levelType = 2;
             this.$store.state.mapData.scale = 11;
             this.$store.state.mapData.isOverLay = false;
+            this.$store.state.pointSearch = null;
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){

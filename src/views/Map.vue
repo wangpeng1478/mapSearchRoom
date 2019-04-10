@@ -189,7 +189,9 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
+        console.log("store.state.pointSearch",this.$store.state)
         store.state.mapData.showRoomList = false;
+        this.$store.state.mapData.isClickZoom = true;
         this.showView.showMate = false;
         //模拟数据
         let that = this;
@@ -224,9 +226,8 @@
         json.levelType = 2;
         Object.assign(json,_state.screen)
         if(_state.mapData.isOverLay){
-          this.mapData.latitude = store.state.pointSearch.lat;
-          this.mapData.longitude = store.state.pointSearch.lng;
-          this.$.showHouse(json);
+          this.mapData.latitude = this.$store.state.pointSearch.lat;
+          this.mapData.longitude = this.$store.state.pointSearch.lng;
           this.showMateFun();
         }else{
           if(_state.keywordsSearch.tableId){
@@ -246,39 +247,23 @@
                 json.metroId  = _state.keywordsSearch.tableId;
                 break;
               case 4:
-
                 //公交站点
                 json.levelType = 7;
-                // json.busStationId  = _state.keywordsSearch.tableId;
                 break;
               case 6:
                 json.levelType = 3;
-                // json.ceaId  = _state.keywordsSearch.tableId;
-                // json.prcId  = _state.keywordsSearch.parentId;
                 break;
               case 7:
                 json.levelType = 2;
-                // json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
             store.state.mapData.levelType = json.levelType;
             this.$.showSearchHouse(json)
           }else{
-            _state.mapData.scale = 13;
+            _state.mapData.scale = 11;
             this.$.showHouse(json);
           }
-          
-          
         }
-       
-        
-      
-        
-        // this.$.showMetroStationHouse(_state.mapData);
-
-        
-        
-
           //定位
         // var geolocation = new BMap.Geolocation();
         // geolocation.enableSDKLocation();

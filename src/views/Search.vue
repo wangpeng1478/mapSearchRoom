@@ -159,10 +159,14 @@ export default {
             point.name = _this.acResult[idx].business;
             _this.savePointStorage(point);
             _this.assign({key:'pointSearch',value:point})
+            console.log(point)
+            console.log(_this.$store.state.pointSearch)
           }
         },
         this.currentCity.cityName + "市"
       );
+      
+      
       this.backMap()
     },
     savePointStorage(point) {
