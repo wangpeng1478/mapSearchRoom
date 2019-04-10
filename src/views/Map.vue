@@ -241,7 +241,7 @@
               case 4:
 
                 //公交站点
-                json.levelType = 4;
+                json.levelType = 7;
                 // json.busStationId  = _state.keywordsSearch.tableId;
                 break;
               case 6:
