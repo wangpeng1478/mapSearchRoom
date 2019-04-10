@@ -5,9 +5,9 @@
     <p class="currentcity iconfont icon-dingwei" @click="handleAddress"><i/>{{currentCity.cityName}}</p>
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
-      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
-      <router-link to="/search" class="search" @click="record(2,'点击搜索框')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
-      <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handelClearSearh"></i>
+      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list">列表</a>
+      <router-link to="/search" class="search">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
+      <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handleClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     </transition>
@@ -37,7 +37,6 @@
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
   import {mapState,mapMutations} from 'vuex'
-  import record from '@/utils/record'
   export default {
     name: 'Map',
     data () {
@@ -80,7 +79,6 @@
     methods : {
       ...mapMutations(['assign']),
       handleAddress(){
-        record(2,'地图找房页面切换城市按钮')
         this.$router.push('/address')
       },
       mapScreen(){
@@ -108,7 +106,8 @@
       
         console.log('地图条件搜索')
       },
-      handelClearSearh(){
+      handleClearSearh(){
+        this.roomListDestroy()
         this.assign({
           key:'keywordsSearch',
           value:{}
@@ -120,11 +119,6 @@
         store.state.mapData.scale = 12;
         Object.assign(json,_state.screen)
         this.$.showHouse(json);
-        
-        record(2,'地图页面清除搜索框按钮')
-      },
-      handelList(){
-        record(2,'地图找房页面列表按钮')
       },
       findHouse:function(){
         let map = store.state.map;
@@ -140,7 +134,6 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
-        record(2,'地图找房页面个性找房按钮')
         let map = this.$store.state.map;
         let that = this;
         this.isFind = false;
@@ -290,7 +283,6 @@
         this.handleComponentView(msg)
       },
       handleComponentView(component){
-        record(2,'地图页面筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
         store.state.mapData.showRoomList = false;

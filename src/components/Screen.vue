@@ -62,7 +62,6 @@
   } from "vuex";
   import axios from "axios";
   import API from "@/utils/api";
-  import record from '@/utils/record'
   export default {
     data() {
       return {
@@ -148,7 +147,6 @@
             }
           }
         });
-        record(2, msg)
       },
       customPrice(e) {
         this.customPriceValue = e;
@@ -323,37 +321,7 @@
             value: this.regionTemp
           });
         }
-        this.recordInfo(query)
         this.$emit('screen')
-      },
-      recordInfo(query) {
-        let roomFeatureIds = JSON.parse(JSON.stringify(this.query.roomFeatureIds));
-        let roomFeatureKeyword = ''
-        this.roomFeatureList.forEach(item => {
-          roomFeatureIds.forEach(id => {
-            if (item.roomFeatureId == id) {
-              roomFeatureKeyword = roomFeatureKeyword + '-' + item.roomFeatureName
-            }
-          })
-        })
-        let roomTypeKeyword = '';
-        this.roomTypeList.forEach(item => {
-          if (this.query.roomType == item.status) {
-            roomTypeKeyword = item.statusName
-          }
-        })
-        let priceTo = ''
-        if (query.priceTo == '') {
-          priceTo = '不限'
-        }
-        let keyWords = `${this.regionName}-${roomFeatureKeyword}-${roomTypeKeyword}-${query.priceFrom}-${priceTo}元`
-        if (query.rentDays) {
-          keyWords = keyWords + '-' + query.rentDays + '日可租'
-        }
-        record(3, {
-          keyWords,
-          keyType: 1
-        })
       },
       showRegion() {
         if (Object.keys(this.regionTemp).length == 0) {

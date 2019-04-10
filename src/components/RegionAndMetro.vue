@@ -38,7 +38,6 @@
     mapState,
     mapMutations
   } from "vuex";
-  import record from '@/utils/record';
   export default {
     data() {
       return {
@@ -63,7 +62,6 @@
         this.selected = selected;
 
         if (category == 2 || index == -1) {
-          this.recordInfo()
           //返回数据
           let data;
           let cityName = this.currentCity.cityName;
@@ -138,39 +136,6 @@
             value: data
           })
           this.$emit("hiddenRegion");
-        }
-      },
-      recordInfo(category, index) {
-        if (category == 0) {
-          if (index == -1) {
-            record(2, '入住区域不限')
-          }
-          if (index == 0) {
-            record(2, '入住区域区域')
-          }
-          if (index == 1) {
-            record(2, '入住区域地铁')
-          }
-        }
-        if(category==1){
-          if(this.selected[0]==0){
-            record(2, '入住区域点击行政区'+this.provincialList[index].prcName)
-          }
-          if(this.selected[0]==1){
-            record(2, '入住区域点击地铁线'+this.metroList[index].metroName)
-          }
-        }
-        if(category==2){
-          if(this.selected[0]==0 && index!=-1){
-            record(2, '入住区域点击商圈'+this.provincialList[this.selected[1]].ceaList[index].ceaName)
-          }else if(this.selected[0]==0 && index==-1){
-            record(2, '入住区域点击行政区'+this.provincialList[this.selected[1]].prcName)
-          }
-          if(this.selected[0]==1 && index!=-1){
-            record(2, '入住区域点击地铁站'+this.metroList[this.selected[1]].metroStationList[index].stationName)
-          }else if(this.selected[0]==1 && index==-1){
-            record(2, '入住区域点击地铁线'+this.metroList[this.selected[1]].metroName)
-          }
         }
       }
     },
