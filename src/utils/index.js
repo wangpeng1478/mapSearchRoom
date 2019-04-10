@@ -47,19 +47,15 @@ export default{ //很关键
                 var json = {};
                 json.cityId = store.state.currentCity.cityId;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                // if(store.state.keywordsSearch.tableId){
-                //     json.levelType = that.typeIdToLevelType(store.state.keywordsSearch.typeId);
-                // }else{
-                //     json.levelType = that.toLevelType(store.state.mapData.scale);
-                // }
-               
                 console.log("moving",json.levelType)
                 switch (json.levelType) {
                     case 1:
                     case 2:
                     case 3:
+                    case 4:
                     case 6:
                     case 7:
+                    
                         that.showAreaHouse(json);
                         break;
                     case 5:
@@ -93,7 +89,7 @@ export default{ //很关键
                     that.showCoverHouse(json);
                 }
             }else{
-                if( !store.state.mapData.isClickZoom){
+                if(!store.state.mapData.isClickZoom){
                     
                     var cp = obj.getCenter();
                     store.state.mapData.latitude = cp.lat;
@@ -110,7 +106,6 @@ export default{ //很关键
                         switch(store.state.keywordsSearch.typeId){
                             case 1:
                                 store.state.mapData.levelType = 4;
-                            //   json.villageId = store.state.keywordsSearch.tableId;
                               break;
                             case 2:
                             store.state.mapData.levelType = 6;
@@ -122,7 +117,6 @@ export default{ //很关键
                               json.metroId  = store.state.keywordsSearch.tableId;
                               break;
                             case 4:
-              
                               //公交站点
                               store.state.mapData.levelType = 4;
                               break;
@@ -142,9 +136,6 @@ export default{ //很关键
                     console.log(store.state.keywordsSearch)
                     console.log("levelType",json.levelType)
                     that.showHouse(json);
-                    // if(zoom==10 || zoom==11 ||zoom==13 ||zoom==14 ||zoom==15 ||zoom==16){ 
-                       
-                    // }
                 }
             }
             
@@ -180,10 +171,10 @@ export default{ //很关键
                         break;
                     case 6:
                         store.state.coverDataList = res;
-
+                        let metroPoint;
                         //重新画圆
-                        // if(isClickZoom){
-                            let metroPoint;
+                        if(isClickZoom){
+                            
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
 
                                 console.log("keywordsSearch")
@@ -196,7 +187,21 @@ export default{ //很关键
                             let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
-                        // }
+                        }else{
+                            if(store.state.screen && store.state.screen.levelType == 6){
+                                if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+
+                                    metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                                }else if(store.state.screen.levelType == 6){
+                                    metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
+                                }else{
+                                    metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                                }
+                                let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                                store.state.circleObj = metroCircle;
+                                map.addOverlay(metroCircle); //增加圆
+                            }
+                        }
                         
                         this.showAreaHouse(mpdata);
                         break;
@@ -326,8 +331,10 @@ export default{ //很关键
         }
         
         let bounds = map.getBounds();
+        console.log("showAreaHouse")
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
+                console.log(bounds.He < val.lng)
                 if(
                     (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
                     (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
@@ -339,6 +346,7 @@ export default{ //很关键
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
                         map.addOverlay(myCompOverlay);
                     }else{
+                        
                         var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                         map.addOverlay(myCompOverlay);
@@ -615,6 +623,21 @@ export default{ //很关键
         map.centerAndZoom(point,store.state.mapData.scale);
         console.log("centerAndZoom",store.state.mapData.scale)
         let bounds = map.getBounds();
+
+
+        //标出 地铁线路
+        // var transit = new BMap.TransitRoute(map, { 
+        //     renderOptions: { 
+        //         map: map, 
+        //         autoViewport: false
+                
+        //     },
+        //     // 配置跨城公交的交通方式策略为地铁优先
+        //     transitTypePolicy: BMAP_TRANSIT_POLICY_FIRST_SUBWAYS
+        // });
+        // var start = new BMap.Point(121.30768, 31.19531);
+        // var end = new BMap.Point(121.81360, 31.15518);
+        // transit.search(start, end);
         _state.coverDataList.map((val,index)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
@@ -682,9 +705,14 @@ export default{ //很关键
         console.log(bounds)
         
         if(_state.coverDataList.length > 0){
+
+
             _state.coverDataList.map((val,index)=>{
                 console.log(bounds.He , parseFloat(val.lng))
                 console.log(bounds.He < parseFloat(val.lng))
+
+
+                
                 if(
                     (bounds.He < parseFloat(val.lng)||bounds.He < parseFloat(val.villageLongitude)||bounds.He < parseFloat(val.longitude))&&
                     (parseFloat(val.lng) < bounds.Ce||parseFloat(val.villageLongitude) < bounds.Ce||parseFloat(val.longitude) < bounds.Ce) &&

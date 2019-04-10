@@ -102,6 +102,12 @@
         store.state.mapData.levelType = json.levelType;
 
         store.state.mapData.isClickZoom =true;
+        if(json.ceaId){
+          delete json["ceaId"];
+        }
+        if(json.prcId){
+          delete json["prcId"];
+        }
         this.$.showHouse(json);
 
       
@@ -240,12 +246,12 @@
                 break;
               case 6:
                 json.levelType = 3;
-                json.ceaId  = _state.keywordsSearch.tableId;
-                json.prcId  = _state.keywordsSearch.parentId;
+                // json.ceaId  = _state.keywordsSearch.tableId;
+                // json.prcId  = _state.keywordsSearch.parentId;
                 break;
               case 7:
                 json.levelType = 2;
-                json.prcId  = _state.keywordsSearch.tableId;
+                // json.prcId  = _state.keywordsSearch.tableId;
                 break;
             }
             store.state.mapData.levelType = json.levelType;
@@ -622,10 +628,10 @@ html,body,#app{
     background : #0fb896;
     color : white;
     padding : 1vw;
-    line-height : 4vw;
+    line-height : 3vw;
     white-space : nowrap;
     -moz-user-select : none;
-    font-size : 4vw;
+    font-size : 12px;
     z-index: 100;
   }
 
@@ -633,10 +639,21 @@ html,body,#app{
     position : absolute;
     width : 0px;
     height : 0px;
-    top : 5vw;
-    left : 5vw;
+    top : 4vw;
+    left : 3vw;
     overflow : hidden;
 }
+
+  .label_metro_circle{
+    position: relative;
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #39AC6A;
+    margin-left: 3vw;
+    margin-top: 2vw;
+  }
 </style>
 
 
