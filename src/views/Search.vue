@@ -10,7 +10,7 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <router-link to="/">取消</router-link>
+      <router-link to="/" @click="recordButton('搜索页面点击取消')">取消</router-link>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion && searchTagHistory.length!=0">
@@ -74,6 +74,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
+import {recordButton} from '@/utils/record'
 export default {
   name: "Search",
   data() {
@@ -135,10 +136,12 @@ export default {
   methods: {
     ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen"]),
     handleAcHistory(idx){
+      recordButton('搜索页面点击位置')
       this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
       this.backMap()
     },
     clearPoint() {
+      recordButton('搜索页面清空坐标历史');
       localStorage.removeItem(this.storageName);
       this.pointTagHistory = [];
     },
@@ -176,6 +179,7 @@ export default {
       localStorage.setItem(this.storageName, pointTagHistory);
     },
     clearHistory() {
+      recordButton('搜索页面清空搜索历史')
       localStorage.removeItem(this.storageName);
       this.searchTagHistory = [];
     },
@@ -217,6 +221,7 @@ export default {
       }
     },
     handleSearchTag(idx, name) {
+      recordButton('搜索页面点击标签')
       //点击历史或者热门的tag
       let tag = this[name][idx];
       this.saveHistory(tag);
@@ -242,6 +247,7 @@ export default {
       this.assignMapData({isClickZoom:true})
     },
      handleClearinput() {
+       recordButton('搜索页面清空输入框')
       this.searchValue = "";
     },
     hotWordsCount(keywordsSearch) {

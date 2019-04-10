@@ -62,6 +62,7 @@
   } from "vuex";
   import axios from "axios";
   import API from "@/utils/api";
+  import {recordButton,recordSearch} from '@/utils/record'
   export default {
     data() {
       return {
@@ -134,6 +135,7 @@
       },
       screenChange() {
         let query = this.screenCondition();
+        console.log(query)
         if(query.stationId){
           query.metroStationId = query.stationId;
           delete query['stationId']
@@ -162,6 +164,7 @@
                 break;
             }
         }
+        this.recordSearchInfo(query)//埋点
 
         axios.post(API["queryMapRoomCount"], query).then(res => {
           if (res.data.code == 0) {
@@ -174,6 +177,30 @@
             }
           }
         });
+      },
+      recordSearchInfo(query){
+        let keyWords='';
+        keyWords+=this.currentCity.cityName+'-';
+        keyWords+=((this.keywordsSearch.keyWords&&Object.keys(this.regionTemp).length==0) ? this.keywordsSearch.keyWords : this.regionName)+'-'
+        if(query.roomType==1) keyWords+='独卫-';
+        if(query.roomType==2) keyWords+='单间-';
+        if(query.roomType==3) keyWords+='整租-';
+        if(query.priceFrom) keyWords+='价格最小值-'+query.priceFrom+'-';
+        if(query.priceTo) keyWords+='价格最大值-'+query.priceTo+'-';
+        if(query.rentDays) keyWords+='可租日期'+query.rentDays+"-";
+        if(query.roomFeatureIds){
+          if(query.roomFeatureIds.indexOf(1)!=-1) keyWords+='近地铁-'
+          if(query.roomFeatureIds.indexOf(2)!=-1) keyWords+='特价房-'
+          if(query.roomFeatureIds.indexOf(3)!=-1) keyWords+='精装修-'
+          if(query.roomFeatureIds.indexOf(4)!=-1) keyWords+='飘窗-'
+          if(query.roomFeatureIds.indexOf(5)!=-1) keyWords+='阳台-'
+          if(query.roomFeatureIds.indexOf(6)!=-1) keyWords+='房东原装-'
+          if(query.roomFeatureIds.indexOf(7)!=-1) keyWords+='优选-'
+        }
+        recordSearch({
+          keyType:1,
+          keyWords
+        })
       },
       customPrice(e) {
         this.customPriceValue = e;
@@ -188,6 +215,7 @@
         this.$emit("selectionArea");
       },
       handleReset() {
+        recordButton('地图页面点击筛选中的重置');
         this.query = {
           roomFeatureIds: [],
           rentDays: null,
@@ -258,6 +286,7 @@
         this.screenChange();
       },
       handleQuery() {
+        recordButton('地图页面点击筛选中的确定');
         let query = this.screenCondition();
         if (!this.isOverLay) {
 

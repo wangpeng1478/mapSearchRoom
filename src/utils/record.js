@@ -56,8 +56,8 @@ const recordButton = (buttonName) => {
     recordHttp(2,{buttonName})
 }
 
-const recordSearch = () => {
-    recordHttp(3)
+const recordSearch = (searchInfo) => {
+    recordHttp(3,searchInfo)
 
 }
 
@@ -71,7 +71,6 @@ const recordHttp = (eventType,otherParams) => {
     }
     if(eventType!=1){
         Object.assign(params,otherParams)
-        console.log(params)
     }
 
     axios.post(API['record'], params)

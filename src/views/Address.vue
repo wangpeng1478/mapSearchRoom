@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link to="/" class="close"></router-link>
+    <router-link to="/" class="close" @click="recordButton('城市切换页面关闭按钮')"></router-link>
     <p class="tit">当前定位城市</p>
     <div class="location">
       <i :class="{'refresh-rotate' : positionState==1}" class="refresh"></i>
@@ -18,6 +18,7 @@
 </template>
 <script>
 import {mapState,mapMutations} from 'vuex'
+import {recordButton} from '@/utils/record';
 export default {
   name: "Address",
   data() {
@@ -32,6 +33,7 @@ export default {
   methods: {
     ...mapMutations(['assign','currentCityChange']),
     chooseCity(idx){
+      recordButton('城市切换页面点击城市')
       this.currentCityChange(idx);
       this.$router.push('/')
     },

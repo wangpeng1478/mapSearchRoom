@@ -5,8 +5,8 @@
     <p class="currentcity iconfont icon-dingwei" @click="handleAddress"><i/>{{currentCity.cityName}}</p>
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
-      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list">列表</a>
-      <router-link to="/search" class="search">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
+      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="recordButton('地图页面点击列表')">列表</a>
+      <router-link to="/search" class="search" @click="recordButton('地图页面点击搜索')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
       <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handleClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
@@ -37,6 +37,7 @@
   import store from '@/store'
   import  ComplexOverlay  from '@/utils/prototype.js'
   import {mapState,mapMutations} from 'vuex'
+  import {recordButton} from '@/utils/record'
   export default {
     name: 'Map',
     data () {
@@ -107,6 +108,7 @@
         console.log('地图条件搜索')
       },
       handleClearSearh(){
+        recordButton('地图页面清空搜索')
         this.roomListDestroy()
         this.assign({
           key:'keywordsSearch',
@@ -134,6 +136,7 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
+        recordButton('地图页面点击个性找房')
         let map = this.$store.state.map;
         let that = this;
         this.isFind = false;
@@ -283,6 +286,7 @@
         this.handleComponentView(msg)
       },
       handleComponentView(component){
+        if(component=='showScreen') recordButton('地图页面点击筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
         store.state.mapData.showRoomList = false;
