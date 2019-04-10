@@ -74,7 +74,6 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
-import record from '@/utils/record'
 export default {
   name: "Search",
   data() {
@@ -264,10 +263,6 @@ export default {
         keyWords: keywordsSearch.keyWords,
         typeId:keywordsSearch.typeId
       });
-      record(3,{
-        keyType:2,
-        keyWords:this.keywordsSearch.keyWords
-      })
       axios.post(API["hotWordsCount"], params)
       this.backMap()
     },

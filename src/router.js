@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
-import record from '@/utils/record'
 import store from '@/store'
 Vue.use(Router)
 
@@ -31,13 +30,7 @@ Vue.use(Router)
 })
 
 router.beforeEach((to,from,next)=>{
-  let currentCity = store.state.currentCity;
-  record(1,{
-    to:to.name,
-    from:from.name,
-    cityId:currentCity.cityId,
-    cityName:currentCity.cityName
-  })
+
   next()
 })
 
