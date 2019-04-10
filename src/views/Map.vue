@@ -218,7 +218,7 @@
             switch(_state.keywordsSearch.typeId){
               case 1:
                 json.levelType = 4;
-                json.villageId = _state.keywordsSearch.tableId;
+                // json.villageId = _state.keywordsSearch.tableId;
                 break;
               case 2:
                 json.levelType = 6;

@@ -89,6 +89,7 @@ export default{ //很关键
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     json.radius = store.state.mapScreen.radius;
+                    Object.assign(json,this.$store.state.screen)
                     that.showCoverHouse(json);
                 }
             }else{
@@ -109,7 +110,7 @@ export default{ //很关键
                         switch(store.state.keywordsSearch.typeId){
                             case 1:
                                 store.state.mapData.levelType = 4;
-                              json.villageId = store.state.keywordsSearch.tableId;
+                            //   json.villageId = store.state.keywordsSearch.tableId;
                               break;
                             case 2:
                             store.state.mapData.levelType = 6;
