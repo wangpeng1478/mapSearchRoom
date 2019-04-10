@@ -5,7 +5,7 @@
         <h4>入住区域</h4>
         <p @click="selectionArea">
           <i class="iconfont icon-dingwei"></i>
-          {{(keywordsSearch.keyWords&&Object.keys(regionTemp).length==0) ? '请选择入住区域' : regionName}}
+          {{(keywordsSearch.keyWords&&Object.keys(regionTemp).length==0) ? keywordsSearch.keyWords : regionName}}
           <i class="iconfont icon-you"></i>
         </p>
       </div>
@@ -132,10 +132,37 @@
         }
         return query;
       },
-      screenChange(msg) {
+      screenChange() {
         let query = this.screenCondition();
-        query.metroStationId = query.stationId;
-        delete query['stationId']
+        if(query.stationId){
+          query.metroStationId = query.stationId;
+          delete query['stationId']
+        }
+        if(Object.keys(this.keywordsSearch).length!=0){
+          console.log(this.keywordsSearch)
+            let tableId=this.keywordsSearch.tableId;
+            switch (this.keywordsSearch.typeId) {
+              case 1:
+                query.villageId=tableId
+                break;
+              case 2:
+                query.metroStationId=tableId
+                break;
+              case 3:
+                query.metroId=tableId
+                break;
+              case 4:
+                query.busStationId=tableId
+                break;
+              case 6:
+                query.ceaId=tableId
+                break;
+              case 7:
+                query.prcId=tableId
+                break;
+            }
+        }
+
         axios.post(API["queryMapRoomCount"], query).then(res => {
           if (res.data.code == 0) {
             let roomCount = res.data.data.roomCount;
@@ -151,7 +178,7 @@
       customPrice(e) {
         this.customPriceValue = e;
         this.priceRecomm = null;
-        this.screenChange('自定义价格筛选');
+        this.screenChange();
       },
       sliderChange(e) {
         this.customPriceValue = e;
@@ -172,7 +199,7 @@
           key: "regionTemp",
           value: {}
         });
-        this.screenChange('条件筛选重置按钮');
+        this.screenChange();
       },
       sliderReset() {
         this.customPriceValue = [0, 27];
@@ -184,7 +211,7 @@
         roomFeatureIdIndex == -1 ?
           roomFeatureIds.push(selectRoomFeatureId) :
           roomFeatureIds.splice(roomFeatureIdIndex, 1);
-        this.screenChange('房间特色按钮');
+        this.screenChange();
       },
       handleroomType(selectroomTypeStatus) {
         if (this.query.roomType == selectroomTypeStatus) {
@@ -192,13 +219,13 @@
         } else {
           this.query.roomType = selectroomTypeStatus;
         }
-        this.screenChange('房间类型按钮');
+        this.screenChange();
       },
       handleRoomRent(selectRoomRentDays) {
         let rentDays = this.query.rentDays;
         this.query.rentDays =
           selectRoomRentDays == rentDays ? null : selectRoomRentDays;
-        this.screenChange('可租日期按钮');
+        this.screenChange();
       },
       handlePriceRecomm(priceContent) {
 
@@ -228,7 +255,7 @@
           this.customPriceValue = [0, 27];
           this.$refs.slider.changeDefaultValue([0, 27]);
         }
-        this.screenChange('房间价格按钮');
+        this.screenChange();
       },
       handleQuery() {
         let query = this.screenCondition();
@@ -272,7 +299,7 @@
                 break;
               case 2:
                 query.levelType = 6
-                query.MetroStationId=tableId
+                query.metroStationId=tableId
                 break;
               case 3:
                 query.levelType = 5
@@ -291,11 +318,6 @@
                 query.prcId=tableId
                 break;
             }
-
-
-
-
-
           }
         }
         this.assign({
@@ -329,7 +351,7 @@
         } else {
           this.regionName = this.regionTemp.showRegion;
         }
-        this.screenChange('区域筛选按钮');
+        this.screenChange();
       }
     },
     computed: mapState([
