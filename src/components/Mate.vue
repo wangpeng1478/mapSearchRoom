@@ -34,6 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
+import {recordButton} from '@/utils/record'
 export default {
     name: 'iMate',
     data () {
@@ -231,6 +232,10 @@ export default {
             this.$emit("mateScreen","showScreen")
         },
         choose :function (res) {
+            if(res==1) recordButton('个性找房点击公交')
+            if(res==2) recordButton('个性找房点击汽车')
+            if(res==3) recordButton('个性找房点击自行车')
+            if(res==4) recordButton('个性找房点击步行')
             let _this = this;
             this.$store.state.mapData.isInvFind = true;
             this.$store.state.mapData.type = res;
