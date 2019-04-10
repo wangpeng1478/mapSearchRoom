@@ -10,13 +10,14 @@ const pageNames = {
 
 const getSystemInfo = () => {
     let u = navigator.userAgent;
+    alert(u.split(';')[2])
     let os = 4,
         osVersion = 1,
         model='';
     if (u.indexOf('Android') != -1) {
         os = 1;
         model='Android'
-        osVersion = u.split(';')[1]
+        osVersion = u.split(';')[2]
     }
     if (u.indexOf('iPhone') != -1) {
         os = 2;
