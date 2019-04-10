@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
 import store from '@/store'
-import {recordPage} from '@/utils/record'
+import {getPageInfo,recordPage} from '@/utils/record'
 Vue.use(Router)
 
  const router = new Router({
@@ -31,6 +31,10 @@ Vue.use(Router)
 })
 
 router.beforeEach((to,from,next)=>{
+  getPageInfo({
+    currentPage:to.name,
+    prevPage:from.name
+  })
   recordPage()
   next()
 })
