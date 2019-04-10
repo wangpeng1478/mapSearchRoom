@@ -343,7 +343,11 @@
                 break;
             }
           }else if(Object.keys(this.regionTemp).length == 0){
-            query.levelType = 2
+            query.levelType = 2;
+            this.mapDataChangelatitudeAndLongitude({
+                latitude: this.currentCity.latitude,
+                longitude: this.currentCity.longitude
+              })
           }
         }
         this.assign({
