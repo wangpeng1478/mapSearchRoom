@@ -58,7 +58,7 @@ export default {
             let _this = this;
             let distance = 0;
             // map.removeOverlay(store.state.circleObj);
-            this.$store.state.trafficSpeedList.map((val)=>{
+            _state.trafficSpeedList.map((val)=>{
                 if(val.type == _state.mapData.type){
                     _state.mapData.speed = val.speed
                 }
@@ -73,12 +73,11 @@ export default {
             _state.mapData.scale =11;
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
-
+            
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
-            // localStorage.setItem("circle",circle); 
             
             
             var geoc = new BMap.Geocoder();
@@ -113,6 +112,7 @@ export default {
             store.state.latitude = json.latitude;
             store.state.levelType = json.levelType;
             Object.assign(json,this.$store.state.screen)
+            
             this.$.showCoverHouse(json);
         })
     },
@@ -172,6 +172,7 @@ export default {
                 }
                 store.state.mapData.isOverLay = true;
                 store.state.mapData.scale = scale;
+                store.state.mapData.isClickZoom = true;
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{

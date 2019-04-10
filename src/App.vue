@@ -35,7 +35,7 @@
       
     },
     mounted() {
-      // console.log(this.$router)
+      console.log(this.$router)
       this.location();
 
       var lastTouchEnd = 0;

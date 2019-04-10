@@ -69,6 +69,7 @@ export default{ //很关键
             store.state.mapData.scale =  zoom;
             let map = store.state.map;
             let mapData = store.state.mapData;
+            console.log("zoomendEvent",store.state.mapData.isClickZoom)
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
                     var cp = obj.getCenter();
@@ -78,7 +79,7 @@ export default{ //很关键
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     json.radius = store.state.mapScreen.radius;
-                    Object.assign(json,this.$store.state.screen)
+                    Object.assign(json,store.state.screen)
                     that.showCoverHouse(json);
                 }
             }else{
@@ -92,6 +93,12 @@ export default{ //很关键
                     json.cityId = store.state.currentCity.cityId;
                     
                     Object.assign(json,store.state.screen);
+                    if(json.ceaId){
+                        delete json["ceaId"];
+                      }
+                      if(json.prcId){
+                        delete json["prcId"];
+                      }
                     if(store.state.keywordsSearch.tableId){
                         switch(store.state.keywordsSearch.typeId){
                             case 1:
@@ -103,12 +110,12 @@ export default{ //很关键
                               json.stationId = store.state.keywordsSearch.tableId;
                               break;
                             case 3:
-                              jstore.state.mapDatason.levelType = 5;
+                              store.state.mapData.levelType = 5;
                               json.metroId  = store.state.keywordsSearch.tableId;
                               break;
                             case 4:
                               //公交站点
-                              store.state.mapData.levelType = 4;
+                              store.state.mapData.levelType = 7;
                               break;
                             case 6:
                             store.state.mapData.levelType = 3;
@@ -121,6 +128,7 @@ export default{ //很关键
                               break;
                         }
                     }
+                    console.log("zoomendEvent",store.state.mapData.levelType)
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     that.showHouse(json);
@@ -134,7 +142,15 @@ export default{ //很关键
     showHouse:function(mpdata){
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
-        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+        
+        var mJson = {};
+        for (const key in mpdata) {
+            mJson[key] = mpdata[key];
+        }
+        if(mJson.levelType == 7){
+            mJson.levelType = 4;
+        }
+        axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
                 //去掉圆
@@ -147,7 +163,7 @@ export default{ //很关键
                     case 2:
                     case 3:
                     case 4:
-                    case 7:
+                    
                         store.state.coverDataList = res;
                         this.showAreaHouse(mpdata);
                         break;
@@ -156,14 +172,16 @@ export default{ //很关键
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
+                    case 7:
                         store.state.coverDataList = res;
                         let metroPoint;
                         //重新画圆
+                        console.log("showHouse circle",store.state.keywordsSearch)
                         if(isClickZoom){
                             
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
                                 metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
-                            }else if(store.state.screen.levelType == 6){
+                            }else if(store.state.screen && store.state.screen.levelType == 6){
                                 metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
                             }else{
                                 metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
@@ -172,19 +190,18 @@ export default{ //很关键
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
                         }else{
-                            if(store.state.screen && store.state.screen.levelType == 6){
-                                if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+                            if( store.state.keywordsSearch.tableId && (store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4)){
 
-                                    metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
-                                }else if(store.state.screen.levelType == 6){
-                                    metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
-                                }else{
-                                    metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-                                }
-                                let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
-                                store.state.circleObj = metroCircle;
-                                map.addOverlay(metroCircle); //增加圆
+                                metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                            }else if(store.state.screen &&(store.state.screen.levelType == 6 || store.state.screen.levelType == 7)){
+                                metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
+                            }else{
+                                metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
                             }
+                            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                            
                         }
                         
                         this.showAreaHouse(mpdata);
@@ -196,8 +213,15 @@ export default{ //很关键
     //搜索后显示房源
     showSearchHouse:function(mpdata){
         let map = store.state.map;
-        
-        axios.post(API["queryMapCoverData"], mpdata).then(res => {
+        store.state.mapData.levelType = mpdata.levelType;
+        var mJson = {};
+        for (const key in mpdata) {
+            mJson[key] = mpdata[key];
+        }
+        if(mJson.levelType == 7){
+            mJson.levelType = 4;
+        }
+        axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
                 store.state.mapData.scale=this.toScale(mpdata.levelType);
@@ -220,15 +244,13 @@ export default{ //很关键
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
+                    case 7:
+                    console.log("paintCircle+++++++")
                         store.state.coverDataList = res;
                         let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
                         let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
-                        this.showAreaHouse(mpdata);
-                        break;
-                    case 7:
-                        store.state.coverDataList = res;
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -286,6 +308,7 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
+                    console.log("showCoverHouse",store.state.mapData)
                     this.showCoverByCoordinate(json);
                 }
             });
@@ -312,6 +335,7 @@ export default{ //很关键
         }
         
         let bounds = map.getBounds();
+        console.log("showAreaHouse",data)
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
                 if(
@@ -363,6 +387,7 @@ export default{ //很关键
                             ,false);
                             break;
                         case 4:
+                        
                             myCompOverlay._div.addEventListener("click", 
                             function (e) {
                                 fuzhi(e,4,true);
@@ -401,6 +426,20 @@ export default{ //很关键
                             }
                             ,false);
                             break;
+                        case 7:
+                            myCompOverlay._div.addEventListener("click", 
+                            function (e) {
+                                fuzhi(e,7,true);
+                                var target = e.target;
+                                if(!target.getAttribute("key")){
+                                    target = target.parentNode;
+                                }
+                                store.state.mapData.scale = 16;
+                                store.state.mapData.villageId = target.getAttribute("key");
+                                store.state.mapData.showRoomList = true;
+                            }
+                            ,false);
+                            break;
                         default:
                             break;
                     }
@@ -422,9 +461,9 @@ export default{ //很关键
             }
             json.latitude = target.getAttribute("lat");
             json.longitude = target.getAttribute("lng");
-            store.state.mapScreen.levelType = levelType;
-            store.state.mapScreen.latitude = target.getAttribute("lat");
-            store.state.mapScreen.longitude = target.getAttribute("lng");
+            store.state.mapData.levelType = levelType;
+            // store.state.mapScreen.latitude = target.getAttribute("lat");
+            // store.state.mapScreen.longitude = target.getAttribute("lng");
             store.state.mapData.latitude = target.getAttribute("lat");
             store.state.mapData.longitude = target.getAttribute("lng");
             Object.assign(json,store.state.screen);
@@ -465,6 +504,7 @@ export default{ //很关键
     toLevelType:function(scale){
         var levelType;
         let _state = store.state;
+        console.log("toLevelType",store.state.mapData.levelType)
         if(_state.mapData.levelType==5||_state.mapData.levelType==6){
             switch (scale) {
                 case 1:
@@ -510,7 +550,12 @@ export default{ //很关键
                 levelType = 3;
                     break;
                 default:
+                if(store.state.mapData.levelType==7){
+                    levelType = 7;
+                }else{
                     levelType = 4;
+                }
+                    
                     break;
             }
         }
@@ -538,7 +583,7 @@ export default{ //很关键
             case 6:
             scale = 14;
             case 7:
-            scale = 14;
+            scale = 16;
                 break;
             default:break;
         }
@@ -669,10 +714,7 @@ export default{ //很关键
         })
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
-        let mapData = store.state.mapData;
-        if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
-        }
         
         let bounds = map.getBounds();
         
