@@ -342,6 +342,8 @@
                 query.prcId=tableId
                 break;
             }
+          }else if(Object.keys(this.regionTemp).length == 0){
+            query.levelType = 2
           }
         }
         this.assign({
