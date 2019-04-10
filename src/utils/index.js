@@ -625,19 +625,19 @@ export default{ //很关键
         let bounds = map.getBounds();
 
 
-        
-        var transit = new BMap.TransitRoute(map, { 
-            renderOptions: { 
-                map: map, 
-                autoViewport: true
+        //标出 地铁线路
+        // var transit = new BMap.TransitRoute(map, { 
+        //     renderOptions: { 
+        //         map: map, 
+        //         autoViewport: false
                 
-            },
-            // 配置跨城公交的交通方式策略为地铁优先
-            transitTypePolicy: BMAP_TRANSIT_POLICY_FIRST_SUBWAYS
-        });
-        var start = new BMap.Point(121.30768, 31.19531);
-        var end = new BMap.Point(121.81360, 31.15518);
-        transit.search(start, end);
+        //     },
+        //     // 配置跨城公交的交通方式策略为地铁优先
+        //     transitTypePolicy: BMAP_TRANSIT_POLICY_FIRST_SUBWAYS
+        // });
+        // var start = new BMap.Point(121.30768, 31.19531);
+        // var end = new BMap.Point(121.81360, 31.15518);
+        // transit.search(start, end);
         _state.coverDataList.map((val,index)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");

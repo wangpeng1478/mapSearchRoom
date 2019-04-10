@@ -301,8 +301,8 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
     div.id = 
     div.className = "location_metro_label";
     div.style.zIndex = BMap.Overlay.getZIndex(this._point.lat);
-    div.style.width = "14vw";
-    div.style.height = "4vw";
+    div.style.width = "10vw";
+    div.style.height = "3vw";
     div.setAttribute("lat",this._point.lat);
     div.setAttribute("lng",this._point.lng);
     div.setAttribute("key",this._key);
@@ -318,8 +318,13 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
     var arrow = this._arrow = document.createElement("div");
     arrow.className = "label_metro_arrow";
     arrow.style.border = "3vw solid transparent";
+    arrow.style.borderBottom = "0";
     arrow.style.borderTop = "2vw solid #0fb896";
     div.appendChild(arrow);
+
+    var p3 = this._p = document.createElement("p");
+    p3.className = "label_metro_circle";
+    div.appendChild(p3);
     map.getPanes().labelPane.appendChild(div);
     return div;
 }
