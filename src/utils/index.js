@@ -302,6 +302,7 @@ export default{ //很关键
     //个性找房
     showCoverHouse:function(data){
         let _state = store.state;
+        console.log("showCoverHouse",_state.mapData.isOverLay)
         if(_state.mapData.isOverLay){
             var json = data;
             axios.post(API["queryMapCoverByCoordinate"], json).then(res => {

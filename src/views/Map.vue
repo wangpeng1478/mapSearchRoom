@@ -84,30 +84,42 @@
       },
       mapScreen(){
         //地图条件搜索
-        // localStorage.removeItem("circle");
+        console.log("地图条件搜索")
         let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        //去除圆形阴影
-        if(store.state.circleObj){
-            map.removeOverlay(store.state.circleObj);
-            store.state.circleObj = null;
-        }
-        Object.assign(json,this.$store.state.screen);
-        delete json["latitude"];
-        delete json["longitude"];
-        store.state.mapData.scale = this.$.toScale(json.levelType);
-        store.state.mapData.levelType = json.levelType;
+        if(store.state.mapData.isOverLay){
+          console.log(store.state.mapData.levelType)
+          Object.assign(json,this.$store.state.screen);
+          json.longitude = store.state.mapData.longitude;
+          json.latitude = store.state.mapData.latitude;
+          json.levelType = store.state.mapData.levelType;
+          json.radius = store.state.mapData.speed*store.state.mapData.time;;
+          this.$.showCoverHouse(json);
+        }else{
+          
+          //去除圆形阴影
+          if(store.state.circleObj){
+              map.removeOverlay(store.state.circleObj);
+              store.state.circleObj = null;
+          }
+          Object.assign(json,this.$store.state.screen);
+          delete json["latitude"];
+          delete json["longitude"];
+          store.state.mapData.scale = this.$.toScale(json.levelType);
+          store.state.mapData.levelType = json.levelType;
 
-        store.state.mapData.isClickZoom =true;
-        if(json.ceaId){
-          delete json["ceaId"];
+          store.state.mapData.isClickZoom =true;
+          if(json.ceaId){
+            delete json["ceaId"];
+          }
+          if(json.prcId){
+            delete json["prcId"];
+          }
+          this.$.showHouse(json);
         }
-        if(json.prcId){
-          delete json["prcId"];
-        }
-        this.$.showHouse(json);
+        
       },
       handleClearSearh(){
         recordButton('地图页面清空搜索')
