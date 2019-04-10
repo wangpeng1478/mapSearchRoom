@@ -34,6 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
+import {recordButton} from '@/utils/record'
 export default {
     name: 'iMate',
     data () {
@@ -74,13 +75,10 @@ export default {
             let scale = _state.mapData.scale;
 
             map.centerAndZoom(point, scale);
-            console.log("circleObj",store.state.circleObj)
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
-            console.log("circleObj",store.state.circleObj)
             map.addOverlay(circle); //增加圆
             // localStorage.setItem("circle",circle); 
-            console.log(map.getOverlays())
             
             
             var geoc = new BMap.Geocoder();
@@ -154,7 +152,6 @@ export default {
            
             if(this.speed!=0){
                 var mp = store.state.map;
-                console.log(localStorage.getItem("circle"))
                 if(store.state.circleObj){
                     mp.removeOverlay(store.state.circleObj);
                 }
@@ -173,7 +170,6 @@ export default {
                 if(this.$store.state.mapData.isInvFind){
                     scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
                 }
-                console.log("scale+++++++++++++++",scale)
                 store.state.mapData.isOverLay = true;
                 store.state.mapData.scale = scale;
                 mp.centerAndZoom(point, scale);
@@ -236,6 +232,10 @@ export default {
             this.$emit("mateScreen","showScreen")
         },
         choose :function (res) {
+            if(res==1) recordButton('个性找房点击公交')
+            if(res==2) recordButton('个性找房点击汽车')
+            if(res==3) recordButton('个性找房点击自行车')
+            if(res==4) recordButton('个性找房点击步行')
             let _this = this;
             this.$store.state.mapData.isInvFind = true;
             this.$store.state.mapData.type = res;
