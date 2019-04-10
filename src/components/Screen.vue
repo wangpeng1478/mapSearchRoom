@@ -139,7 +139,7 @@
           query.metroStationId = query.stationId;
           delete query['stationId']
         }
-        if(Object.keys(this.keywordsSearch).length!=0){
+        if(Object.keys(this.keywordsSearch).length!=0&&Object.keys(this.regionTemp).length == 0){
             let tableId=this.keywordsSearch.tableId;
             switch (this.keywordsSearch.typeId) {
               case 1:
@@ -287,7 +287,6 @@
         recordButton('地图页面点击筛选中的确定');
         let query = this.screenCondition();
         if (!this.isOverLay) {
-
           if (Object.keys(this.regionTemp).length != 0 && Object.keys(this.keywordsSearch).length != 0) {
             this.assign({
               key: 'keywordsSearch',
