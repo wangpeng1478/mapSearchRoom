@@ -138,6 +138,7 @@
         store.state.mapData.isOverLay = true;
       },
       showMateFun:function(){
+        //个性找房
         recordButton('地图页面点击个性找房')
         let map = this.$store.state.map;
         let that = this;
@@ -155,6 +156,8 @@
         });
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl);
+
+        store.state.mapData.isClickZoom = true;
       },
       hiddenMateFun: function(msg){
         let map = this.$store.state.map;

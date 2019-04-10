@@ -71,10 +71,7 @@ export default{ //很关键
             store.state.mapData.scale =  zoom;
             let map = store.state.map;
             let mapData = store.state.mapData;
-<<<<<<< HEAD
-            console.log("zoomendEvent",store.state.mapData.levelType)
-=======
->>>>>>> 11ec2c9c542492f3b29caddc122ab5b2398d7dca
+            console.log("zoomendEvent",store.state.mapData.isClickZoom)
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
                     var cp = obj.getCenter();
@@ -84,7 +81,7 @@ export default{ //很关键
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     json.radius = store.state.mapScreen.radius;
-                    Object.assign(json,this.$store.state.screen)
+                    Object.assign(json,store.state.screen)
                     that.showCoverHouse(json);
                 }
             }else{
@@ -147,7 +144,6 @@ export default{ //很关键
     showHouse:function(mpdata){
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
-<<<<<<< HEAD
         
         var mJson = {};
         for (const key in mpdata) {
@@ -157,9 +153,6 @@ export default{ //很关键
             mJson.levelType = 4;
         }
         axios.post(API["queryMapCoverData"], mJson).then(res => {
-=======
-        axios.post(API["queryMapCoverData"], mpdata).then(res => {
->>>>>>> 11ec2c9c542492f3b29caddc122ab5b2398d7dca
             if (res.data.code == 0) {
                 res = res.data.data;
                 //去掉圆
@@ -317,6 +310,7 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
+                    console.log("showCoverHouse",store.state.mapData)
                     this.showCoverByCoordinate(json);
                 }
             });
@@ -343,10 +337,7 @@ export default{ //很关键
         }
         
         let bounds = map.getBounds();
-<<<<<<< HEAD
         console.log("showAreaHouse",data)
-=======
->>>>>>> 11ec2c9c542492f3b29caddc122ab5b2398d7dca
         if(_state.coverDataList){
             _state.coverDataList.map((val,index)=>{
                 if(
@@ -725,10 +716,7 @@ export default{ //很关键
         })
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
-        let mapData = store.state.mapData;
-        if(!mapData.isOverLay){
             map.centerAndZoom(point,store.state.mapData.scale);
-        }
         
         let bounds = map.getBounds();
         

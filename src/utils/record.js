@@ -10,7 +10,7 @@ const pageNames = {
 
 const getSystemInfo = () => {
     let u = navigator.userAgent;
-    alert(u.split(';')[2])
+    // alert(u.split(';')[2])
     let os = 4,
         osVersion = 1,
         model='';
