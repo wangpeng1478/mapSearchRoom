@@ -58,18 +58,21 @@ export default {
             let _this = this;
             let distance = 0;
             // map.removeOverlay(store.state.circleObj);
-            _state.trafficSpeedList.map((val)=>{
-                if(val.type == _state.mapData.type){
-                    _state.mapData.speed = val.speed
-                }
-            })
-            
-            if(_state.mapScreen.radius){
-                distance = _state.mapScreen.radius;
-            }else{
-                distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
-            }
-            _state.mapData.isOverLay = true;
+            // _state.trafficSpeedList.map((val)=>{
+            //     if(val.type == _state.mapData.type){
+            //         _state.mapData.speed = val.speed
+            //     }
+            // })
+            store.state.mapData.type = 2;
+            store.state.mapData.speed = 800;
+            store.state.mapData.time = 30;
+            distance = 800 *30 ; //默认出行方式
+            // if(_state.mapScreen.radius){
+            //     distance = _state.mapScreen.radius;
+            // }else{
+            //     distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
+            // }
+            store.state.mapData.isOverLay = true;
             _state.mapData.scale =11;
             let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
             let scale = _state.mapData.scale;
@@ -87,6 +90,9 @@ export default {
                     address = rs.addressComponents.street
                 }else{
                     address = rs.addressComponents.district
+                }
+                if(_this.$store.state.pointSearch){
+                    address = _this.$store.state.pointSearch.name;
                 }
                 var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
@@ -112,7 +118,7 @@ export default {
             store.state.latitude = json.latitude;
             store.state.levelType = json.levelType;
             Object.assign(json,this.$store.state.screen)
-            
+            store.state.mapData.levelType = json.levelType;
             this.$.showCoverHouse(json);
         })
     },
@@ -152,6 +158,7 @@ export default {
            
             if(this.speed!=0){
                 var mp = store.state.map;
+                var _this = this;
                 if(store.state.circleObj){
                     mp.removeOverlay(store.state.circleObj);
                 }
@@ -187,7 +194,11 @@ export default {
 
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
-                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point, rs.addressComponents.street,"ComplexCoverOverlay",
+                    var address =  rs.addressComponents.street;
+                    if(_this.$store.state.pointSearch){
+                        address = _this.$store.state.pointSearch.name;
+                    }
+                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
                         _this.$router.push("search");
                     });
@@ -201,7 +212,7 @@ export default {
                 json.levelType = this.toLevelType(scale);
                 json.radius = distance;
                 Object.assign(json,this.$store.state.screen)
-                
+                store.state.mapData.levelType = json.levelType;
                 this.$.showCoverHouse(json);
             }
         },
@@ -224,9 +235,13 @@ export default {
             store.state.mapData.isOverLay = false;
             //筛选条件置空
             this.$store.state.screen=null;
-            this.$store.state.screen.screenTemp=null;
-            this.$store.state.screen.region={};
-            this.$store.state.screen.regionTemp={};
+            this.$store.state.screenTemp=null;
+            this.$store.state.region={};
+            this.$store.state.regionTemp={};
+            this.$store.state.mapData.levelType = 2;
+            this.$store.state.mapData.scale = 11;
+            this.$store.state.mapData.isOverLay = false;
+            this.$store.state.pointSearch = null;
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
