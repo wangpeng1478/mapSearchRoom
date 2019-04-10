@@ -57,9 +57,7 @@ export default {
             let _state = store.state;
             let _this = this;
             let distance = 0;
-            map.removeOverlay(localStorage.getItem("circle"));
-            // map.enableMassClear()
-            // map.clearOverlays();
+            // map.removeOverlay(store.state.circleObj);
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == _state.mapData.type){
                     _state.mapData.speed = val.speed
@@ -77,9 +75,14 @@ export default {
             let scale = _state.mapData.scale;
 
             map.centerAndZoom(point, scale);
+            console.log("circleObj",store.state.circleObj)
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+            this.$store.state.circleObj = circle;
+            console.log("circleObj",store.state.circleObj)
             map.addOverlay(circle); //增加圆
-            localStorage.setItem("circle",circle); 
+            // localStorage.setItem("circle",circle); 
+            console.log(map.getOverlays())
+            
             
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
@@ -97,20 +100,64 @@ export default {
             }); 
             _state.mapScreen.radius = distance;
             
-            // var json = {};
-            // json.longitude = _state.mapData.longitude;
-            // json.latitude = _state.mapData.latitude;
-            // Object.assign(json,_state.mapScreen,_state.screen)
-            // this.$.showCoverHouse(json);
+            
+            //筛选条件置空
+            this.$store.state.screen=null;
+            this.$store.state.screenTemp=null;
+            this.$store.state.region={};
+            this.$store.state.regionTemp={};
+            var json = {};
+            json.longitude = _state.mapData.longitude;
+            json.latitude = _state.mapData.latitude;
+            json.levelType = this.toLevelType(scale);
+            json.radius = distance;
+
+            store.state.longitude = json.longitude;
+            store.state.latitude = json.latitude;
+            store.state.levelType = json.levelType;
+            Object.assign(json,this.$store.state.screen)
+            this.$.showCoverHouse(json);
         })
     },
     methods:{
+        toLevelType:function(scale){
+            var levelType;
+            switch (scale) {
+                case 1:
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                case 9: 
+                levelType = 1;
+                    break;
+                case 10:
+                
+                case 11:
+                case 12:
+                levelType = 2;
+                    break;
+                case 13:
+                case 14:
+                    levelType = 3;
+                    break;
+                default:
+                    levelType = 4;
+                    break;
+            }
+            
+            return levelType;
+        },
         filter:function(){
            
             if(this.speed!=0){
                 var mp = store.state.map;
-                if(localStorage.getItem("circle")){
-                    map.removeOverlay(localStorage.getItem("circle"));
+                console.log(localStorage.getItem("circle"))
+                if(store.state.circleObj){
+                    mp.removeOverlay(store.state.circleObj);
                 }
                 
                  mp.getOverlays().map((val)=>{
@@ -127,6 +174,7 @@ export default {
                 if(this.$store.state.mapData.isInvFind){
                     scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
                 }
+                console.log("scale+++++++++++++++",scale)
                 store.state.mapData.isOverLay = true;
                 store.state.mapData.scale = scale;
                 mp.centerAndZoom(point, scale);
@@ -154,9 +202,11 @@ export default {
                 var json = {};
                 json.longitude = _state.mapData.longitude;
                 json.latitude = _state.mapData.latitude;
-                Object.assign(json,_state.mapScreen,_state.screen)
+                json.levelType = this.toLevelType(scale);
+                json.radius = distance;
+                Object.assign(json,this.$store.state.screen)
                 
-                // this.$.showCoverHouse(json);
+                this.$.showCoverHouse(json);
             }
         },
         checkTime : function (params) {
@@ -176,6 +226,11 @@ export default {
                 return;
             })
             store.state.mapData.isOverLay = false;
+            //筛选条件置空
+            this.$store.state.screen=null;
+            this.$store.state.screen.screenTemp=null;
+            this.$store.state.screen.region={};
+            this.$store.state.screen.regionTemp={};
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
