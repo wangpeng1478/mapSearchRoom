@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
-import store from '@/store'
 import {getPageInfo,recordPage} from '@/utils/record'
 Vue.use(Router)
 
@@ -9,7 +8,6 @@ Vue.use(Router)
   mode:'hash',
   base:"/sh/map",
   routes: [
-    
     {
       path: '/',
       name: 'Map',

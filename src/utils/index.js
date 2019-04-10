@@ -1,9 +1,7 @@
 import axios from 'axios'
 import API from '@/utils/api'
 import store from '@/store'
-import  http  from "@/utils/data.js"
 import  ComplexOverlay  from '@/utils/prototype.js'
-import  Map  from '@/views/Map.vue'
 export default{ //很关键
 
     locationSuccess:function(obj){

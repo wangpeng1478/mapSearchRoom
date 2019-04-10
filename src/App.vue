@@ -32,8 +32,10 @@
     created: function () {
       this.httpQueryCityList();
       this.httpQueryMapBaseData();
+      
     },
     mounted() {
+      // console.log(this.$router)
       this.location();
 
       var lastTouchEnd = 0;
