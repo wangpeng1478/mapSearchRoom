@@ -155,7 +155,6 @@
     watch: {
       $route(to, from) {
         let cityPY = this.$route.params.cityPY;
-        console.log(cityPY)
         if (this.cityList) {
           let localCity = this.cityList.findIndex(city => {
             return city.cityPinyin == cityPY;
