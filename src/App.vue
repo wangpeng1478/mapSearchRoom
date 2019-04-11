@@ -70,7 +70,6 @@
       location() {
         if (navigator.geolocation) { //判断是否支持Geolocation API
           navigator.geolocation.getCurrentPosition(res => {}, err => {
-            console.log(err)
           }, {
             enableHighAccuracy: true, //设置提升定位的精准度
             maximumAge: 0, //禁用缓存

@@ -47,7 +47,7 @@ export default {
     props: ['showMate'],
     mounted:function(){
         this.$nextTick(function(){
-            let map = store.state.map;
+            let map = this.map;
             let _state = store.state;
             let _this = this;
             let distance = 0;
@@ -99,7 +99,7 @@ export default {
                 });
                 map.addOverlay(myCompOverlay);
             }); 
-            _state.mapScreen.radius = distance;
+            this.mapScreen.radius = distance;
             //筛选条件置空
             this.clearScreen()
             var json = {};
@@ -111,8 +111,12 @@ export default {
             store.state.mapData.mateSite.longitude = json.longitude;
             store.state.mapData.mateSite.latitude = json.latitude;
             Object.assign(json,this.$store.state.screen)
-            store.state.mapData.levelType = json.levelType;
             console.log(json)
+            this.assignMapData({
+                longitude:json.longitude,
+                latitude:json.latitude,
+                levelType:json.levelType
+            })
             this.$.showCoverHouse(json);
         })
     },
@@ -152,7 +156,7 @@ export default {
         filter:function(){
            
             if(this.speed!=0){
-                var mp = store.state.map;
+                var mp = this.map;
                 var _this = this;
                 if(store.state.circleObj){
                     mp.removeOverlay(store.state.circleObj);
@@ -164,19 +168,22 @@ export default {
                     }
                     return;
                 })
-                let _state = store.state;
-                let _mapData = store.state.mapData;
-                this.$store.state.mapData.longitude = _mapData.mateSite.longitude;
-                this.$store.state.mapData.latitude = _mapData.mateSite.latitude;
-                let point = new BMap.Point(_mapData.mateSite.longitude,_mapData.mateSite.latitude);
-                let distance = this.$store.state.mapScreen.radius;
-                let scale = store.state.mapData.scale;
-                if(this.$store.state.mapData.isInvFind){
+
+                let mapData = this.mapData;
+                this.$store.state.mapData.longitude = mapData.mateSite.longitude;
+                this.$store.state.mapData.latitude = mapData.mateSite.latitude;
+                let point = new BMap.Point(mapData.longitude,mapData.latitude);
+                let distance = this.mapScreen.radius;
+                let scale = mapData.scale;
+                if(mapData.isInvFind){
                     scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
                 }
-                store.state.mapData.isOverLay = true;
-                store.state.mapData.scale = scale;
-                store.state.mapData.isClickZoom = true;
+                this.assignMapData({
+                    isOverLay:true,
+                    scale:scale,
+                    isClickZoom:true
+                })
+                
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{
@@ -204,8 +211,8 @@ export default {
                 
                 this.$store.state.mapData.isInvFind = false;
                 var json = {};
-                json.longitude = _state.mapData.longitude;
-                json.latitude = _state.mapData.latitude;
+                json.longitude = this.mapData.longitude;
+                json.latitude = this.mapData.latitude;
                 json.levelType = this.toLevelType(scale);
                 json.radius = distance;
                 Object.assign(json,this.$store.state.screen)
@@ -216,12 +223,12 @@ export default {
         checkTime : function (params) {
             if(this.time !== (20+10*params)){
                 this.$store.state.mapData.time = (20+10*params);
-                this.$store.state.mapScreen.radius = (20+10*params)*this.$store.state.mapData.speed;
+                this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
                 this.filter();
             }
         },
         backFun : function (){
-            var mp = store.state.map;
+            var mp = this.map;
             var hiddenMate = false;
             var elements = document.querySelectorAll(".BMap_noprint.anchorBL")[0];
                 elements.className = "BMap_noprint anchorBL "; 
@@ -229,7 +236,7 @@ export default {
                  mp.removeOverlay(val)
                 return;
             })
-            store.state.mapData.isOverLay = false;
+            this.assignMapData({isOverLay:false})
             //筛选条件置空
             this.clearScreen()
             this.assignMapData({
@@ -254,16 +261,17 @@ export default {
                 isInvFind:true,
                 type:res
             })
-            this.$store.state.trafficSpeedList.map((val)=>{
+            this.trafficSpeedList.map((val)=>{
                 if(val.type == res){
                     store.state.mapData.speed = val.speed;
                 }
             })
-            this.$store.state.mapScreen.radius =this.$store.state.mapData.speed*this.$store.state.mapData.time;
+            this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
+            // this.assignMapData({radius:this.mapData.speed*this.mapData.time})
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData','pointSearch'])
+    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen','trafficSpeedList'])
 }
 </script>
 
