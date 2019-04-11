@@ -10,7 +10,7 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <p href="javacript:;" @click="handleCancle">取消</p>
+      <p @click="handleCancle">取消</p>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion && searchTagHistory.length!=0">
@@ -134,7 +134,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen"]),
+    ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen","showToast"]),
     handleCancle(){
       recordButton('搜索页面点击取消');
       this.$router.go(-1);
@@ -211,7 +211,9 @@ export default {
           .then(res => {
             if (res.data.code == 0) {
               let searchResult = res.data.data;
-
+              if(searchResult.length==0){
+                this.showToast('对不起，暂未匹配到相关数据')
+              }
               searchResult.map(result => {
                 result.showKeyWords = result.keyWords.replace(
                   this.searchValue,
