@@ -135,6 +135,7 @@ export default new Vuex.Store({
       state.pointSearch = null;
       state.screen = null;
       state.screenTemp = null;
+      state.mapData.isOverLay=false;
     }
   },
   actions: {

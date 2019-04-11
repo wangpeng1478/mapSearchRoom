@@ -99,12 +99,8 @@ export default {
                 map.addOverlay(myCompOverlay);
             }); 
             _state.mapScreen.radius = distance;
-            
             //筛选条件置空
-            this.$store.state.screen=null;
-            this.$store.state.screenTemp=null;
-            this.$store.state.region={};
-            this.$store.state.regionTemp={};
+            this.clearScreen()
             var json = {};
             json.longitude = _state.mapData.longitude;
             json.latitude = _state.mapData.latitude;
@@ -120,7 +116,7 @@ export default {
         })
     },
     methods:{
-        ...mapMutations(['assignMapData']),
+        ...mapMutations(['assignMapData','clearScreen']),
         toLevelType:function(scale){
             var levelType;
             switch (scale) {
@@ -232,10 +228,7 @@ export default {
             })
             store.state.mapData.isOverLay = false;
             //筛选条件置空
-            this.$store.state.screen=null;
-            this.$store.state.screenTemp=null;
-            this.$store.state.region={};
-            this.$store.state.regionTemp={};
+            this.clearScreen()
             this.$store.state.mapData.levelType = 2;
             this.$store.state.mapData.scale = 11;
             this.$store.state.mapData.isOverLay = false;
