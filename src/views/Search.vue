@@ -275,7 +275,8 @@ export default {
         cityId: this.currentCity.cityId,
         id: keywordsSearch.id,
         keyWords: keywordsSearch.keyWords,
-        typeId:keywordsSearch.typeId
+        typeId:keywordsSearch.typeId,
+        tableId:keywordsSearch.tableId
       });
       recordSearch({
           keyType:2,

@@ -34,6 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
+import {mapState} from 'vuex'
 import {recordButton} from '@/utils/record'
 export default {
     name: 'iMate',
@@ -96,7 +97,7 @@ export default {
                 }
                 var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
-                    _this.$router.push('search');
+                    _this.$router.push('/'+_this.currentCity.cityPinyin+'/map/search');
                 });
                 map.addOverlay(myCompOverlay);
             }); 
@@ -200,7 +201,7 @@ export default {
                     }
                     var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
-                        _this.$router.push("search");
+                        _this.$router.push('/'+this.currentCity.cityPinyin+"/map/search");
                     });
                     mp.addOverlay(myCompOverlay);
                 }); 
@@ -263,7 +264,8 @@ export default {
             this.$store.state.mapScreen.radius =this.$store.state.mapData.speed*this.$store.state.mapData.time;
             this.filter();
         }
-    }
+    },
+    computed:mapState(['currentCity'])
 }
 </script>
 

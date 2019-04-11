@@ -80,7 +80,8 @@
     methods : {
       ...mapMutations(['assign']),
       handleAddress(){
-        this.$router.push('address')
+        recordButton('地图页面清空搜索')
+        this.$router.push('/'+this.currentCity.cityPinyin+'/map/address')
       },
       mapScreen(){
         //地图条件搜索

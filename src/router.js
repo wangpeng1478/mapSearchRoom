@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Map from './views/Map.vue'
 import {getPageInfo,recordPage} from '@/utils/record'
-import store from '@/store'
 Vue.use(Router)
 
  const router = new Router({

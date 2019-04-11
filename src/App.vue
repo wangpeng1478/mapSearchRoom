@@ -31,7 +31,6 @@
     },
     mounted() {
       this.httpQueryCityList();
-      this.httpQueryMapBaseData();
       this.location();
 
       var lastTouchEnd = 0;
@@ -73,10 +72,27 @@
         let _this = this;
         axios.post(API["queryCityList"]).then(res => {
           if (res.data.code == 0) {
+            let cityList = res.data.data
             _this.assign({
               key: "cityList",
-              value: res.data.data
+              value: cityList
             });
+            let cityPY = this.$route.params.cityPY
+            let localCity = cityList.findIndex(city => {
+              return city.cityPinyin == cityPY;
+            });
+            if (localCity != -1) {
+              _this.assign({
+                key: "currentCity",
+                value: cityList[localCity]
+              });
+            } else {
+              _this.assign({
+                key: "currentCity",
+                value: cityList[0]
+              });
+              this.$router.push('/' + cityList[0].cityPinyin + '/map')
+            }
             _this.loadCity()
           }
         });
@@ -106,12 +122,6 @@
       },
       loadCity() {
         if (this.currentCity.confirm == undefined) {
-          if (localStorage.currentCity != undefined) {
-            this.assign({
-              key: 'currentCity',
-              value: JSON.parse(localStorage.currentCity)
-            })
-          }
           this.mapDataChangelatitudeAndLongitude({
             latitude: this.currentCity.latitude,
             longitude: this.currentCity.longitude
@@ -134,8 +144,27 @@
     },
     computed: mapState(['currentCity', 'toast', 'cityList']),
     watch: {
+      $route(to, from) {
+        let cityPY = this.$route.params.cityPY;
+        console.log(cityPY)
+        if(this.cityList){
+          let localCity = this.cityList.findIndex(city => {
+              return city.cityPinyin == cityPY;
+            });
+            if(localCity==-1){
+              this.$router.go(-1)
+            }else{
+              this.assign({
+                key: "currentCity",
+                value: this.cityList[localCity]
+              });
+            }
+        }
+        
+      },
       currentCity() {
         this.httpQueryMapBaseData();
+        this.$router.push('/' + this.currentCity.cityPinyin + '/map')
         this.resetAllState();
       },
       toast(val) {
