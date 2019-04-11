@@ -2,14 +2,14 @@
   <div class="slider-wrap">
     <div class="mate_line_active" :style="activeLine"></div>
     <span
-      class="slider"
+      class="slider slider1"
       @touchstart="touchSlider('a',$event)"
       @touchmove="moveSlider('a',$event)"
       @touchend='endSlider'
       :style="{left:sliderLeft.a+'px'}"
     ></span>
     <span
-      class="slider"
+      class="slider slider2"
       @touchstart="touchSlider('b',$event)"
       @touchmove="moveSlider('b',$event)"
       @touchend='endSlider'
@@ -136,7 +136,12 @@ export default {
   background-size: 100% 100%;
   z-index: 1;
 }
-
+.slider-wrap .slider1{
+  transform: translateX(-2vw)
+}
+.slider-wrap .slider2{
+  transform: translateX(2vw)
+}
 .mate_line_active {
   position: absolute;
   top: 2.6vw;
