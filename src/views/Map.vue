@@ -158,14 +158,7 @@
           key:'keywordsSearch',
           value:{}
         })
-        map.removeControl(that.geolocationControl);
-        
-        let geolocationControl = new BMap.GeolocationControl({
-          anchor:BMAP_ANCHOR_BOTTOM_RIGHT,
-          offset:new BMap.Size(10,190)
-        });
-        this.geolocationControl = geolocationControl;
-        map.addControl(geolocationControl);
+        this.geolocationControl.setOffset(new BMap.Size(10,190))
 
         store.state.mapData.isClickZoom = true;
       },
@@ -173,12 +166,7 @@
         let map = this.$store.state.map;
         this.showView.showMate = msg;
         this.isFind = true;
-        map.removeControl(this.geolocationControl)
-        let geolocationControl = new BMap.GeolocationControl({
-          anchor:BMAP_ANCHOR_BOTTOM_RIGHT,
-        });
-        this.geolocationControl = geolocationControl;
-        map.addControl(geolocationControl);
+        this.geolocationControl.setOffset(new BMap.Size(10,30));
 
         var json = {};
         json.cityId = this.$store.state.currentCity.cityId;
@@ -204,7 +192,7 @@
         map.addEventListener("touchmove", function () {
           map.enableDragging();
         });
-        let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT});
+        let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,offset:new BMap.Size(10,30)});
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl); 
         //监听定位控件
