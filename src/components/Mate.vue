@@ -229,9 +229,11 @@ export default {
             store.state.mapData.isOverLay = false;
             //筛选条件置空
             this.clearScreen()
-            this.$store.state.mapData.levelType = 2;
-            this.$store.state.mapData.scale = 11;
-            this.$store.state.mapData.isOverLay = false;
+            this.assignMapData({
+                levelType:2,
+                scale:11,
+                isOverLay:false,
+            })
             this.$store.state.pointSearch = null;
             this.$emit("hiddenMate",hiddenMate)
         },
@@ -244,8 +246,10 @@ export default {
             if(res==3) recordButton('个性找房点击自行车')
             if(res==4) recordButton('个性找房点击步行')
             let _this = this;
-            this.$store.state.mapData.isInvFind = true;
-            this.$store.state.mapData.type = res;
+            this.assignMapData({
+                isInvFind:true,
+                type:res
+            })
             this.$store.state.trafficSpeedList.map((val)=>{
                 if(val.type == res){
                     store.state.mapData.speed = val.speed;
