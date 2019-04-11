@@ -55,6 +55,19 @@ export default{ //很关键
                 }
                 
                 
+            }else{
+                var cp = obj.getCenter();
+                store.state.mapData.latitude = cp.lat;
+                store.state.mapData.longitude = cp.lng;
+                store.state.mapData.scale = store.state.map.getZoom();
+                var json = {};
+                json.latitude = store.state.mapData.latitude;
+                json.longitude = store.state.mapData.longitude;
+                json.levelType = that.toLevelType(store.state.mapData.scale);
+                store.state.mapData.levelType = json.levelType;
+                json.radius = store.state.mapScreen.radius;
+                Object.assign(json,store.state.screen)
+                that.showCoverByCoordinate(json);
             }
             
         });
@@ -69,9 +82,11 @@ export default{ //很关键
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
                     var cp = obj.getCenter();
+                    store.state.mapData.latitude = cp.lat;
+                    store.state.mapData.longitude = cp.lng;
                     var json = {};
-                    json.latitude = store.state.mapData.latitude;
-                    json.longitude = store.state.mapData.longitude;
+                    json.latitude = store.state.mapData.mateSite.latitude;
+                    json.longitude = store.state.mapData.mateSite.longitude;
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     json.radius = store.state.mapScreen.radius;
@@ -182,9 +197,9 @@ export default{ //很关键
                         let metroPoint;
                         var distance ;
                         if(mpdata.levelType==6){
-                            distance = 3000;
+                            distance = 2000;
                         }else{
-                            distance = 1500;
+                            distance = 1000;
                         }
                         //重新画圆
                         if(isClickZoom){
@@ -257,9 +272,9 @@ export default{ //很关键
                     case 7:
                         var distance ;
                         if(mpdata.levelType==6){
-                            distance = 3000;
+                            distance = 2000;
                         }else{
-                            distance = 1500;
+                            distance = 1000;
                         }
                         store.state.coverDataList = res;
                         let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
@@ -335,21 +350,26 @@ export default{ //很关键
         let _state = store.state;
         let that = this;
 
-        
+        console.log("showAreaHouse")
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
             }
             return;
         })
+        
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
         let mapData = store.state.mapData;
+        console.log("showAreaHouse",store.state.mapData)
         if(!mapData.isOverLay){
+            console.log("coverDataList",point)
             map.centerAndZoom(point,store.state.mapData.scale);
+            console.log("coverDataList")
         }
         
         let bounds = map.getBounds();
+        console.log("coverDataList")
         if(_state.coverDataList){
             _state.coverDataList.map((val)=>{
                 if(
@@ -736,7 +756,7 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         
         let bounds = map.getBounds();
-        
+        console.log("coverDataList",_state.coverDataList)
         if(_state.coverDataList.length > 0){
 
 

@@ -74,8 +74,9 @@ export default {
 
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
-            
-            map.centerAndZoom(point, scale);
+            console.log(store.state.mapData)
+            // map.centerAndZoom(point, scale);
+            map.centerAndZoom(new BMap.Point(121.48789949,31.24916171), 11);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
@@ -107,11 +108,11 @@ export default {
             json.levelType = this.toLevelType(scale);
             json.radius = distance;
 
-            
+            store.state.mapData.mateSite.longitude = json.longitude;
+            store.state.mapData.mateSite.latitude = json.latitude;
             Object.assign(json,this.$store.state.screen)
-            store.state.mapData.longitude = json.longitude;
-            store.state.mapData.latitude = json.latitude;
             store.state.mapData.levelType = json.levelType;
+            console.log(json)
             this.$.showCoverHouse(json);
         })
     },
@@ -165,7 +166,9 @@ export default {
                 })
                 let _state = store.state;
                 let _mapData = store.state.mapData;
-                let point = new BMap.Point(_mapData.longitude,_mapData.latitude);
+                this.$store.state.mapData.longitude = _mapData.mateSite.longitude;
+                this.$store.state.mapData.latitude = _mapData.mateSite.latitude;
+                let point = new BMap.Point(_mapData.mateSite.longitude,_mapData.mateSite.latitude);
                 let distance = this.$store.state.mapScreen.radius;
                 let scale = store.state.mapData.scale;
                 if(this.$store.state.mapData.isInvFind){
@@ -235,6 +238,7 @@ export default {
                 isOverLay:false,
             })
             this.$store.state.pointSearch = null;
+            store.state.mapData.isOverLay = false;
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
