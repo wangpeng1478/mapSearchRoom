@@ -9,7 +9,6 @@
 
 
 <script>
-import store from '@/store'
 export default {
     name: 'slider',
     data () {
@@ -21,7 +20,6 @@ export default {
             num:0
         }
     },
-    store,
     props: ["sliderMin","sliderMax","step","value"],
     mounted: function (){
         this.lineLength = document.getElementsByClassName("mate_line")[0].offsetWidth;
@@ -42,7 +40,7 @@ export default {
         moveSlider:function (e) {
             
             let sl = this.sl;
-            this.$store.state.mapData.isInvFind = true;
+            this.$store.commit('assignMapData',{isInvFind:true})
             let moveX = e.changedTouches[0].clientX;
             let _x = Math.abs(moveX - this.startX);       //滑动距离
             let s = document.getElementsByClassName("slider")[0],
@@ -68,7 +66,7 @@ export default {
         },
         endSlider : function () {
             this.$emit("moveStep",this.num)
-            this.$store.state.mapData.isInvFind = false;
+            this.$store.commit('assignMapData',{isInvFind:false})
         }
     }
 }

@@ -66,7 +66,8 @@ export default new Vuex.Store({
       state.regionTemp = {};
     },
     assignMapData(state,data){
-      state.mapData[data.key] = data.value
+      let key = Object.keys(data)[0];
+      state.mapData[key] = data[key]
     },
     showToast(state,msg){
       state.toast = msg

@@ -236,7 +236,7 @@ export default {
       
     },
     saveHistory(tag){
-      this.assignMapData({key:"isClickZoom",value:true})
+      this.assignMapData({isClickZoom:true})
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;

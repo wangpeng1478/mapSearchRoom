@@ -55,7 +55,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       },
@@ -226,9 +226,9 @@
         json.cityId = _state.currentCity.cityId;
         json.levelType = 2;
         Object.assign(json,_state.screen)
-        if(_state.mapData.isOverLay){
-          this.mapData.latitude = this.$store.state.pointSearch.lat;
-          this.mapData.longitude = this.$store.state.pointSearch.lng;
+        if(_state.mapData.isOverLay && this.pointSearch){
+          this.mapData.latitude = this.pointSearch.lat;
+          this.mapData.longitude = this.pointSearch.lng;
           this.showMateFun();
         }else{
           if(_state.keywordsSearch.tableId){
