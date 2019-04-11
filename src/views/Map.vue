@@ -409,7 +409,7 @@
     height: 12vw;
     right: 17vw;
     top: 0;
-    font-size: 3vw;
+    font-size: 4vw;
     line-height: 12vw;
     font-weight: bold;
     text-align: center;
