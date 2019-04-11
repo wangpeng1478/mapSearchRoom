@@ -95,10 +95,10 @@ export default{ //很关键
                     Object.assign(json,store.state.screen);
                     if(json.ceaId){
                         delete json["ceaId"];
-                      }
-                      if(json.prcId){
+                    }
+                    if(json.prcId){
                         delete json["prcId"];
-                      }
+                    }
                     if(store.state.keywordsSearch.tableId){
                         switch(store.state.keywordsSearch.typeId){
                             case 1:
@@ -157,6 +157,15 @@ export default{ //很关键
                     map.removeOverlay(store.state.circleObj);
                     store.state.circleObj = null;
                 }
+
+                //公交站 缩放 显示圈
+                if(mpdata.levelType!=7&&store.state.keywordsSearch.levelType==7){
+                    let busPoint;
+                    busPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                    let busCircle = new BMap.Circle(busPoint,1500,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                    store.state.circleObj = busCircle;
+                    map.addOverlay(busCircle); //增加圆
+                }
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -174,6 +183,12 @@ export default{ //很关键
                     case 7:
                         store.state.coverDataList = res;
                         let metroPoint;
+                        var distance ;
+                        if(mpdata.levelType==6){
+                            distance = 3000;
+                        }else{
+                            distance = 1500;
+                        }
                         //重新画圆
                         if(isClickZoom){
                             
@@ -184,7 +199,7 @@ export default{ //很关键
                             }else{
                                 metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
                             }
-                            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                            let metroCircle = new BMap.Circle(metroPoint,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
                         }else{
@@ -196,12 +211,12 @@ export default{ //很关键
                             }else{
                                 metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
                             }
-                            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                            let metroCircle = new BMap.Circle(metroPoint,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
-                            
+                            console.log("Circle++++++++")
                         }
-                        
+                        console.log("showAreaHouse++++++++")
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -243,9 +258,15 @@ export default{ //很关键
                         break;
                     case 6:
                     case 7:
+                        var distance ;
+                        if(mpdata.levelType==6){
+                            distance = 3000;
+                        }else{
+                            distance = 1500;
+                        }
                         store.state.coverDataList = res;
                         let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-                        let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+                        let metroCircle = new BMap.Circle(metroPoint,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
                         this.showAreaHouse(mpdata);

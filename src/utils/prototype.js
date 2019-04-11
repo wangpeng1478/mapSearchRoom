@@ -73,6 +73,7 @@ ComplexAreaOverlay.prototype.draw = function(){
 
 //定位覆盖物
 function ComplexSiteOverlay(point, text,type,callback){
+    
     this._point = point;
     this._text = text;
     this._type = type;
@@ -123,10 +124,15 @@ ComplexSiteOverlay.prototype.initialize = function(map){
     return div;
 }
 ComplexSiteOverlay.prototype.draw = function(){
-    var map = this._map;
-    var pixel = map.pointToOverlayPixel(this._point);
-    this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
-    this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
+    console.log("ComplexSiteOverlay++++++++++++++++")
+    var that = this;
+    setTimeout(function () {
+        var map = this._map;
+        var pixel = map.pointToOverlayPixel(this._point);
+        this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
+        this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
+    }.call(this), 100);//延时接口请求，加了这个就可以正常显示了
+   
 }
 
 
@@ -340,7 +346,5 @@ ComplexMetroStationOverlay.prototype.draw = function(){
 export default  {
     ComplexSiteOverlay,
     ComplexAreaOverlay,
-    
-    // ComplexVillageOverlay,
     ComplexMetroStationOverlay
 }
