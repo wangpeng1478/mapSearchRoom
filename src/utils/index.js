@@ -28,13 +28,10 @@ export default{ //很关键
     },
     movingEvent:function(obj){
         var that = this;
-        obj.addEventListener("moving", function(e){
+        obj.addEventListener("moving", function(){
             let map = store.state.map;
-            let _state = store.state;
             let mapData = store.state.mapData;
-            if(mapData.isOverLay){
-
-            }else{
+            if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
@@ -68,7 +65,6 @@ export default{ //很关键
         obj.addEventListener("zoomend", function(e){
             let zoom = e.currentTarget.getZoom();
             store.state.mapData.scale =  zoom;
-            let map = store.state.map;
             let mapData = store.state.mapData;
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
@@ -354,7 +350,7 @@ export default{ //很关键
         
         let bounds = map.getBounds();
         if(_state.coverDataList){
-            _state.coverDataList.map((val,index)=>{
+            _state.coverDataList.map((val)=>{
                 if(
                     (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
                     (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
@@ -375,7 +371,7 @@ export default{ //很关键
                     
                     //覆盖物添加点击事件+
                     myCompOverlay._div.addEventListener('touchstart',function(){
-                        map.disableDragging();  //禁用地图拖拽功能
+                        map.disableDragging()//禁用地图拖拽功能
                     });
     
                     switch (data.levelType) {
@@ -645,7 +641,7 @@ export default{ //很关键
     //     })
     // },
     // 地铁线路房源
-    showMetroHouse:function(data){
+    showMetroHouse:function(){
         //地铁房源
         let map = store.state.map;
         let _state = store.state;
@@ -675,7 +671,7 @@ export default{ //很关键
         // var start = new BMap.Point(121.30768, 31.19531);
         // var end = new BMap.Point(121.81360, 31.15518);
         // transit.search(start, end);
-        _state.coverDataList.map((val,index)=>{
+        _state.coverDataList.map((val)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
         //   myCompOverlay.disableMassClear();
@@ -683,7 +679,7 @@ export default{ //很关键
           //覆盖物添加点击事件+
           
           myCompOverlay._div.addEventListener('touchstart',function(){
-           map.disableDragging();  //禁用地图拖拽功能
+           map.disableDragging() //禁用地图拖拽功能
           });
           myCompOverlay._div.addEventListener("click", function (e) {
               var json = {};
@@ -740,7 +736,7 @@ export default{ //很关键
         if(_state.coverDataList.length > 0){
 
 
-            _state.coverDataList.map((val,index)=>{
+            _state.coverDataList.map((val)=>{
                 if(
                     (bounds.He < parseFloat(val.lng)||bounds.He < parseFloat(val.villageLongitude)||bounds.He < parseFloat(val.longitude))&&
                     (parseFloat(val.lng) < bounds.Ce||parseFloat(val.villageLongitude) < bounds.Ce||parseFloat(val.longitude) < bounds.Ce) &&
@@ -760,7 +756,7 @@ export default{ //很关键
                     
                     //覆盖物添加点击事件+
                     myCompOverlay._div.addEventListener('touchstart',function(){
-                        map.disableDragging();  //禁用地图拖拽功能
+                        map.disableDragging(); //禁用地图拖拽功能
                     });
     
                     switch (data.levelType) {
@@ -866,7 +862,7 @@ export default{ //很关键
                 
     //             //覆盖物添加点击事件+
     //             myCompOverlay._div.addEventListener('touchstart',function(){
-    //                 map.disableDragging();  //禁用地图拖拽功能
+    //                 map.disableDragging();//禁用地图拖拽功能
     //             });
 
     //             myCompOverlay._div.addEventListener("click", 

@@ -311,7 +311,7 @@
       selectionArea(){
         this.showView.showRegionAndMetro=true;
       },
-      hiddenRegion(msg){
+      hiddenRegion(){
         this.showView.showRegionAndMetro=false;
         // screenChange()
         // this.$refs.screen.screenChange();
