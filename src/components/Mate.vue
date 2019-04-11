@@ -107,10 +107,10 @@ export default {
             json.levelType = this.toLevelType(scale);
             json.radius = distance;
 
-            store.state.longitude = json.longitude;
-            store.state.latitude = json.latitude;
-            store.state.levelType = json.levelType;
+            
             Object.assign(json,this.$store.state.screen)
+            store.state.mapData.longitude = json.longitude;
+            store.state.mapData.latitude = json.latitude;
             store.state.mapData.levelType = json.levelType;
             this.$.showCoverHouse(json);
         })

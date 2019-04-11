@@ -136,6 +136,7 @@ export default{ //很关键
     //显示房源
     showHouse:function(mpdata){
         let map = store.state.map;
+        console.log("store.state.mapData.scale++++",store.state.mapData.scale)
         let isClickZoom = store.state.mapData.isClickZoom;
         
         var mJson = {};
@@ -580,26 +581,29 @@ export default{ //很关键
         var scale = 12;
         switch (levelType) {
             case 1:
-            scale = 9;
+                scale = 9;
+                break;
             case 2:
-            scale = 11;
+                scale = 11;
                 break;
             case 3:
-            scale = 14;
+                scale = 14;
                 break;
             case 4:
-            scale = 16;
+                scale = 16;
                 break;
             case 5:
-            scale = 12;
+                scale = 12;
                 break;
             case 6:
-            scale = 14;
+                scale = 14;
+                break;
             case 7:
             scale = 16;
                 break;
             default:break;
         }
+        
         return scale;
     },
     
