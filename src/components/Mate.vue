@@ -34,7 +34,7 @@
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import store from '@/store'
-import {mapState} from 'vuex'
+import {mapState,mapMutations} from 'vuex'
 import {recordButton} from '@/utils/record'
 export default {
     name: 'iMate',
@@ -57,19 +57,23 @@ export default {
             //         _state.mapData.speed = val.speed
             //     }
             // })
-            store.state.mapData.type = 2;
-            store.state.mapData.speed = 800;
-            store.state.mapData.time = 30;
             distance = 800 *30 ; //默认出行方式
             // if(_state.mapScreen.radius){
             //     distance = _state.mapScreen.radius;
             // }else{
             //     distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
             // }
-            store.state.mapData.isOverLay = true;
-            _state.mapData.scale =11;
-            let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
-            let scale = _state.mapData.scale;
+            this.assignMapData({
+                type:2,
+                speed:800,
+                time:30,
+                isOverLay:true,
+                scale:11
+            })
+
+
+            let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
+            let scale = _this.mapData.scale;
             
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
@@ -85,8 +89,8 @@ export default {
                 }else{
                     address = rs.addressComponents.district
                 }
-                if(_this.$store.state.pointSearch){
-                    address = _this.$store.state.pointSearch.name;
+                if(_this.pointSearch){
+                    address = _this.pointSearch.name;
                 }
                 var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                 function(){
@@ -95,7 +99,6 @@ export default {
                 map.addOverlay(myCompOverlay);
             }); 
             _state.mapScreen.radius = distance;
-            
             
             //筛选条件置空
             this.$store.state.screen=null;
@@ -117,6 +120,7 @@ export default {
         })
     },
     methods:{
+        ...mapMutations(['assignMapData']),
         toLevelType:function(scale){
             var levelType;
             switch (scale) {
@@ -189,8 +193,8 @@ export default {
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
                     var address =  rs.addressComponents.street;
-                    if(_this.$store.state.pointSearch){
-                        address = _this.$store.state.pointSearch.name;
+                    if(_this.pointSearch){
+                        address = _this.pointSearch.name;
                     }
                     var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
@@ -258,7 +262,7 @@ export default {
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData'])
+    computed:mapState(['currentCity','mapData','pointSearch'])
 }
 </script>
 
