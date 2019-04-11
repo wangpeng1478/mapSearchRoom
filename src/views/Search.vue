@@ -10,7 +10,7 @@
         @input="handleInput"
       >
       <i class="clearinput iconfont icon-guanbi" v-show="searchValue!=''" @click="handleClearinput"></i>
-      <a href="javacript:;" @click="handleCancle">取消</a>
+      <p href="javacript:;" @click="handleCancle">取消</p>
     </div>
     <div class="search-tag" v-show="searchValue==''">
       <div class="search-tag-list" v-if="isRegion && searchTagHistory.length!=0">
@@ -319,7 +319,7 @@ export default {
   line-height: 10.6vw;
 }
 
-.input-row a {
+.input-row p {
   display: block;
   width: 15.5vw;
   height: 10.6vw;
