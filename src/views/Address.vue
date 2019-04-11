@@ -9,7 +9,7 @@
       <p v-if="positionState==0 && localCity!=-1" @click="chooseCity(localCity)">{{cityList[localCity].cityName}}</p>
     </div>
     <p class="tit">选择城市</p>
-    <ul class="city-list" v-if="cityList.length!=0">
+    <ul class="city-list" v-if="cityList">
       <li v-for="(city,index) in cityList" :key="city.cityId">
         <p @click="chooseCity(index)">{{ city.cityName }}</p>
       </li>
