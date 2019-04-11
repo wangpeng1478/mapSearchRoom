@@ -45,13 +45,6 @@ export default {
     store,
     components:{sliderComponent},
     props: ['showMate'],
-    computed:{
-       mapData(){
-        return this.$store.state.mapData;
-      }
-    },
-    watch:{
-    },
     mounted:function(){
         this.$nextTick(function(){
             let map = store.state.map;
@@ -265,7 +258,7 @@ export default {
             this.filter();
         }
     },
-    computed:mapState(['currentCity'])
+    computed:mapState(['currentCity','mapData'])
 }
 </script>
 
