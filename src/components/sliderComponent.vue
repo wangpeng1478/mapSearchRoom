@@ -9,6 +9,7 @@
 
 
 <script>
+import {mapMutations} from 'vuex'
 export default {
     name: 'slider',
     data () {
@@ -32,6 +33,7 @@ export default {
         lineA.style.width = this.sliderLeft + "px";
     },
     methods:{
+        ...mapMutations(['assignMapData']),
         touchSlider : function (e) {
             var s = document.getElementsByClassName("slider")[0];
             this.sliderLeft = parseFloat(s.style.left);
@@ -40,7 +42,7 @@ export default {
         moveSlider:function (e) {
             
             let sl = this.sl;
-            this.$store.commit('assignMapData',{isInvFind:true})
+            this.assignMapData({isInvFind:true})
             let moveX = e.changedTouches[0].clientX;
             let _x = Math.abs(moveX - this.startX);       //滑动距离
             let s = document.getElementsByClassName("slider")[0],
@@ -66,7 +68,7 @@ export default {
         },
         endSlider : function () {
             this.$emit("moveStep",this.num)
-            this.$store.commit('assignMapData',{isInvFind:false})
+            this.assignMapData({isInvFind:false})
         }
     }
 }

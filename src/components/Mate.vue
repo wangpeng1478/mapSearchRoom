@@ -194,7 +194,7 @@ export default {
                     }
                     var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
-                        _this.$router.push('/'+this.currentCity.cityPinyin+"/map/search");
+                        _this.$router.push('/'+_this.currentCity.cityPinyin+"/map/search");
                     });
                     mp.addOverlay(myCompOverlay);
                 }); 
