@@ -625,6 +625,8 @@ html,body,#app{
     -moz-user-select : none;
     font-size : 12px;
     z-index: 100;
+    text-align:center;
+    box-shadow: 5px 5px 5px #888888;
   }
 
   .label_metro_arrow{
@@ -632,18 +634,19 @@ html,body,#app{
     width : 0px;
     height : 0px;
     top : 4vw;
-    left : 3vw;
+    left : 50%;
+    margin-left: -3vw;
     overflow : hidden;
 }
 
   .label_metro_circle{
     position: relative;
+    display: inline-block;
     width: 3vw;
     height: 3vw;
     border-radius: 50%;
     background: #fff;
     border: 2px solid #39AC6A;
-    margin-left: 3vw;
     margin-top: 2vw;
   }
 </style>
