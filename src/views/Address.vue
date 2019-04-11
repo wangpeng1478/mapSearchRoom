@@ -38,7 +38,11 @@ export default {
     },
     chooseCity(idx){
       recordButton('城市切换页面点击城市')
-      this.currentCityChange(idx);
+      if(this.cityList[idx].cityId!=this.currentCity.cityId){
+        this.currentCityChange(idx);
+      }else{
+        this.$router.go(-1);
+      }
     },
     //获取当前城市
     getLocation() {
