@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
+    <div class="roomlist" @touchmove="event.preventDefault();" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
       <a :href="currentCity.url+'/room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if="room.roomSpecialOffer>0">特价</em>
@@ -86,10 +86,12 @@
         })
       },
       handleRoomlistStart(e) {
+        event.preventDefault();
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
         this.roomListTransition=false
       },
       handleRoomlistScroll(e) {
+        event.preventDefault();
         let translateY = e.changedTouches[0].clientY - this.touchStartY;
         if (translateY > -this.vh * 40) {
           this.translateY = translateY;
@@ -98,6 +100,7 @@
         }
       },
       handleRoomlistEnd() {
+        event.preventDefault();
         this.roomListTransition=true
         let _top = 40 * this.vh - this.translateY;
         if (_top <= 20 * this.vh) {
