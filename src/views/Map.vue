@@ -108,8 +108,9 @@
           Object.assign(json,this.$store.state.screen);
           delete json["latitude"];
           delete json["longitude"];
-          store.state.mapData.scale = this.$.toScale(json.levelType);
           store.state.mapData.levelType = json.levelType;
+          
+          store.state.mapData.scale = this.$.toScale(json.levelType);
 
           store.state.mapData.isClickZoom =true;
           if(json.ceaId){
@@ -118,6 +119,7 @@
           if(json.prcId){
             delete json["prcId"];
           }
+          
           this.$.showHouse(json);
         }
         
@@ -581,38 +583,37 @@ html,body,#app{
   position : absolute;
   white-space : nowrap;
   -moz-user-select : none;
-  font-size : 4vw;
+  font-size : 16px;
   z-index: 10000;
 }
 .label_site_img{
   position : absolute;
-  top:11vw;
-  left: 50%;
-  width: 5vw;
-  height : 6vw;
-  border-radius : 1vw;
+  top: 43px;
+  left: 0;
+  width: 22px;
+  height: 27px;
   background:url("../assets/images/icon/site2.png") no-repeat;
   background-size:100% 100%;
-  margin-left:-2.5vw;
+  margin-left:-11px;
 }
 .location_site_write{
-  width : 3vw;
-  height : 4vw;
+  width : 14px;
+  height : 16px;
   display : inline-block;
   margin : 0px;
   background : url('../assets/images/icon/write.png') no-repeat;
   background-size : 100% 100%;
-  margin-left: 3vw;
+  margin-left: 8px;
   vertical-align: middle;
 }
 .label_site_arrow{
   position : absolute;
   width : 0px;
   height : 0px;
-  top : 9vw;
-  left : 50%;
+  top: 32px;
+  left : 0;
   overflow : hidden;
-  margin-left:-2vw;
+  margin-left: -9px;
 }
 
 .location_metro_label{

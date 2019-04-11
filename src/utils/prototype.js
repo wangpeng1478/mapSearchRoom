@@ -85,17 +85,18 @@ ComplexSiteOverlay.prototype.initialize = function(map){
     this._map = map;
     var div = this._div = document.createElement("div");
     div.className = "location_site_label";
-    div.style.height = "8vw";
     div.style.zIndex = "1000";
-    div.style.backgroundColor = "#fff";
     div.style.cursor = "pointer";
+    div.style.height = "33px";
     var p = this._p = document.createElement("p");
+    p.style.position = "relative";
+    p.style.left = "-50%";
     p.style.margin = "0px";
     p.style.color = "#000";
     p.style.background="#fff";
-    p.style.padding="2vw 3vw";
-    p.style.fontSize= "4vw";
-    p.style.borderRadius = "1vw";
+    p.style.padding="6px";
+    p.style.fontSize= "16px";
+    p.style.borderRadius = "3px";
 
     div.appendChild(p);
     p.appendChild(document.createTextNode(this._text));
@@ -108,13 +109,14 @@ ComplexSiteOverlay.prototype.initialize = function(map){
 
     var arrow = this._arrow = document.createElement("div");
     arrow.className = "label_site_arrow";
-    arrow.style.border = "2vw solid transparent";
-    arrow.style.borderTop = "2vw solid #fff";
+    arrow.style.border = "9px solid transparent";
+    arrow.style.borderTop = "9px solid #fff";
     div.appendChild(arrow);
 
     var p3 = this.p3 = document.createElement("p");
     p3.className = "label_site_img";
     div.appendChild(p3);
+
 
     div.addEventListener('touchend',function(){
         _this._callback();
@@ -126,12 +128,15 @@ ComplexSiteOverlay.prototype.initialize = function(map){
 ComplexSiteOverlay.prototype.draw = function(){
     console.log("ComplexSiteOverlay++++++++++++++++")
     var that = this;
-    setTimeout(function () {
-        var map = this._map;
-        var pixel = map.pointToOverlayPixel(this._point);
-        this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
-        this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
-    }.call(this), 100);//延时接口请求，加了这个就可以正常显示了
+    console.log("div.offsetWidth",this._div.style.height)
+    var map = this._map;
+    var pixel = map.pointToOverlayPixel(this._point);
+    console.log(pixel)
+    this._div.style.left =pixel.x+ "px";
+    this._div.style.top = (pixel.y-parseInt(this._div.style.height)-parseInt(this._arrow.style.borderWidth) - 27)+ "px";
+    // this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";
+    // this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 6) + "vw";
+
    
 }
 
