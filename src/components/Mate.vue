@@ -253,16 +253,16 @@ export default {
                 isInvFind:true,
                 type:res
             })
-            this.$store.state.trafficSpeedList.map((val)=>{
+            this.trafficSpeedList.map((val)=>{
                 if(val.type == res){
                     store.state.mapData.speed = val.speed;
                 }
             })
-            this.assignMapData({radius:this.$store.state.mapData.speed*this.$store.state.mapData.time})
+            this.assignMapData({radius:this.mapData.speed*this.mapData.time})
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen'])
+    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen','trafficSpeedList'])
 }
 </script>
 
