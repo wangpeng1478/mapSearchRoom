@@ -74,8 +74,9 @@ export default {
 
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
-            
-            map.centerAndZoom(point, scale);
+            console.log(store.state.mapData)
+            // map.centerAndZoom(point, scale);
+            map.centerAndZoom(new BMap.Point(121.48789949,31.24916171), 11);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
@@ -107,8 +108,10 @@ export default {
             json.levelType = this.toLevelType(scale);
             json.radius = distance;
 
-            
+            store.state.mapData.mateSite.longitude = json.longitude;
+            store.state.mapData.mateSite.latitude = json.latitude;
             Object.assign(json,this.$store.state.screen)
+            console.log(json)
             this.assignMapData({
                 longitude:json.longitude,
                 latitude:json.latitude,
@@ -165,7 +168,10 @@ export default {
                     }
                     return;
                 })
+
                 let mapData = this.mapData;
+                this.$store.state.mapData.longitude = mapData.mateSite.longitude;
+                this.$store.state.mapData.latitude = mapData.mateSite.latitude;
                 let point = new BMap.Point(mapData.longitude,mapData.latitude);
                 let distance = this.mapScreen.radius;
                 let scale = mapData.scale;
@@ -177,6 +183,7 @@ export default {
                     scale:scale,
                     isClickZoom:true
                 })
+                
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{
@@ -238,6 +245,7 @@ export default {
                 isOverLay:false,
             })
             this.$store.state.pointSearch = null;
+            store.state.mapData.isOverLay = false;
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
@@ -258,7 +266,8 @@ export default {
                     store.state.mapData.speed = val.speed;
                 }
             })
-            this.assignMapData({radius:this.mapData.speed*this.mapData.time})
+            this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
+            // this.assignMapData({radius:this.mapData.speed*this.mapData.time})
             this.filter();
         }
     },
