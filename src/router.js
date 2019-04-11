@@ -5,7 +5,7 @@ import {getPageInfo,recordPage} from '@/utils/record'
 Vue.use(Router)
 
  const router = new Router({
-  mode:'hash',
+  mode:'history',
   routes: [
     {
       path: '/:cityPY/map',
