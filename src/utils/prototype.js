@@ -127,7 +127,6 @@ ComplexSiteOverlay.prototype.initialize = function(map){
 }
 ComplexSiteOverlay.prototype.draw = function(){
     console.log("ComplexSiteOverlay++++++++++++++++")
-    var that = this;
     console.log("div.offsetWidth",this._div.style.height)
     var map = this._map;
     var pixel = map.pointToOverlayPixel(this._point);
@@ -342,7 +341,6 @@ ComplexMetroStationOverlay.prototype.initialize = function(map){
 ComplexMetroStationOverlay.prototype.draw = function(){
     var map = this._map;
     var pixel = map.pointToOverlayPixel(this._point);
-    console.log(this._div.offsetWidth);
     this._div.style.left = (pixel.x- parseFloat(this._div.offsetWidth/2))/window.innerWidth*100 + "vw";
     // this._div.style.left = (pixel.x/window.innerWidth*100 - parseInt(this._div.style.width)/2 - 1) + "vw";
     this._div.style.top  = (pixel.y/window.innerWidth*100 - parseInt(this._div.style.height) - parseInt(this._arrow.style.borderWidth) - 3) + "vw";
