@@ -10,8 +10,9 @@ export default{ //很关键
         obj.addEventListener("locationSuccess", function(e){
             let map = store.state.map;
             // 定位成功事件
-            store.state.mapData.latitude = e.point.lat;
-            store.state.mapData.longitude = e.point.lng;
+            // console.log(e.point)
+            store.state.mapData.latitude = parseFloat(e.point.lat);
+            store.state.mapData.longitude = parseFloat(e.point.lng);
             
             store.state.mapData.scale = store.state.map.getZoom();
             var json = {};
@@ -21,7 +22,7 @@ export default{ //很关键
             that.showHouse(json)
 
             let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-            let metroCircle = new BMap.Circle(metroPoint,3000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+            let metroCircle = new BMap.Circle(metroPoint,2000,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             localStorage.setItem("circle",metroCircle); 
             map.addOverlay(metroCircle); //增加圆
         });
@@ -75,78 +76,78 @@ export default{ //很关键
     //层级改变
     zoomendEvent:function(obj){
         var that = this;
-        obj.addEventListener("zoomend", function(e){
-            let zoom = e.currentTarget.getZoom();
-            store.state.mapData.scale =  zoom;
-            let mapData = store.state.mapData;
-            if(store.state.mapData.isOverLay){
-                if( !store.state.mapData.isClickZoom){
-                    var cp = obj.getCenter();
-                    store.state.mapData.latitude = cp.lat;
-                    store.state.mapData.longitude = cp.lng;
-                    var json = {};
-                    json.latitude = store.state.mapData.mateSite.latitude;
-                    json.longitude = store.state.mapData.mateSite.longitude;
-                    json.levelType = that.toLevelType(zoom);
-                    mapData.levelType = json.levelType;
-                    json.radius = store.state.mapScreen.radius;
-                    Object.assign(json,store.state.screen)
-                    that.showCoverHouse(json);
-                }
-            }else{
-                if(!store.state.mapData.isClickZoom){
+        // obj.addEventListener("zoomend", function(e){
+        //     let zoom = e.currentTarget.getZoom();
+        //     store.state.mapData.scale =  zoom;
+        //     let mapData = store.state.mapData;
+        //     if(store.state.mapData.isOverLay){
+        //         if( !store.state.mapData.isClickZoom){
+        //             var cp = obj.getCenter();
+        //             store.state.mapData.latitude = cp.lat;
+        //             store.state.mapData.longitude = cp.lng;
+        //             var json = {};
+        //             json.latitude = store.state.mapData.mateSite.latitude;
+        //             json.longitude = store.state.mapData.mateSite.longitude;
+        //             json.levelType = that.toLevelType(zoom);
+        //             mapData.levelType = json.levelType;
+        //             json.radius = store.state.mapScreen.radius;
+        //             Object.assign(json,store.state.screen)
+        //             that.showCoverHouse(json);
+        //         }
+        //     }else{
+        //         if(!store.state.mapData.isClickZoom){
                     
-                    var cp = obj.getCenter();
-                    store.state.mapData.latitude = cp.lat;
-                    store.state.mapData.longitude = cp.lng;
+        //             var cp = obj.getCenter();
+        //             store.state.mapData.latitude = cp.lat;
+        //             store.state.mapData.longitude = cp.lng;
                     
-                    var json = {};
-                    json.cityId = store.state.currentCity.cityId;
+        //             var json = {};
+        //             json.cityId = store.state.currentCity.cityId;
                     
-                    Object.assign(json,store.state.screen);
-                    if(json.ceaId){
-                        delete json["ceaId"];
-                    }
-                    if(json.prcId){
-                        delete json["prcId"];
-                    }
-                    if(store.state.keywordsSearch.tableId){
-                        switch(store.state.keywordsSearch.typeId){
-                            case 1:
-                                store.state.mapData.levelType = 4;
-                              break;
-                            case 2:
-                            store.state.mapData.levelType = 6;
-                              json.metroId  = store.state.keywordsSearch.parentId;
-                              json.stationId = store.state.keywordsSearch.tableId;
-                              break;
-                            case 3:
-                              store.state.mapData.levelType = 5;
-                              json.metroId  = store.state.keywordsSearch.tableId;
-                              break;
-                            case 4:
-                              //公交站点
-                              store.state.mapData.levelType = 7;
-                              break;
-                            case 6:
-                            store.state.mapData.levelType = 3;
-                              json.ceaId  = store.state.keywordsSearch.tableId;
-                              json.prcId  = store.state.keywordsSearch.parentId;
-                              break;
-                            case 7:
-                            store.state.mapData.levelType = 2;
-                              json.prcId  = store.state.keywordsSearch.tableId;
-                              break;
-                        }
-                    }
-                    json.levelType = that.toLevelType(zoom);
-                    mapData.levelType = json.levelType;
-                    that.showHouse(json);
-                }
-            }
+        //             Object.assign(json,store.state.screen);
+        //             if(json.ceaId){
+        //                 delete json["ceaId"];
+        //             }
+        //             if(json.prcId){
+        //                 delete json["prcId"];
+        //             }
+        //             if(store.state.keywordsSearch.tableId){
+        //                 switch(store.state.keywordsSearch.typeId){
+        //                     case 1:
+        //                         store.state.mapData.levelType = 4;
+        //                       break;
+        //                     case 2:
+        //                     store.state.mapData.levelType = 6;
+        //                       json.metroId  = store.state.keywordsSearch.parentId;
+        //                       json.stationId = store.state.keywordsSearch.tableId;
+        //                       break;
+        //                     case 3:
+        //                       store.state.mapData.levelType = 5;
+        //                       json.metroId  = store.state.keywordsSearch.tableId;
+        //                       break;
+        //                     case 4:
+        //                       //公交站点
+        //                       store.state.mapData.levelType = 7;
+        //                       break;
+        //                     case 6:
+        //                     store.state.mapData.levelType = 3;
+        //                       json.ceaId  = store.state.keywordsSearch.tableId;
+        //                       json.prcId  = store.state.keywordsSearch.parentId;
+        //                       break;
+        //                     case 7:
+        //                     store.state.mapData.levelType = 2;
+        //                       json.prcId  = store.state.keywordsSearch.tableId;
+        //                       break;
+        //                 }
+        //             }
+        //             json.levelType = that.toLevelType(zoom);
+        //             mapData.levelType = json.levelType;
+        //             that.showHouse(json);
+        //         }
+        //     }
             
-            store.state.mapData.isClickZoom = false;
-        });
+        //     store.state.mapData.isClickZoom = false;
+        // });
     },
     //显示房源
     showHouse:function(mpdata){
