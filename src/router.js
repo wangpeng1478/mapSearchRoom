@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Meta from 'vue-meta'
 import Map from './views/Map.vue'
 import {getPageInfo,recordPage} from '@/utils/record'
 Vue.use(Router)
-
+Vue.use(Meta)
  const router = new Router({
   mode:'hash',
   routes: [

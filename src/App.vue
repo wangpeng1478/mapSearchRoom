@@ -20,9 +20,19 @@
   } from 'timers';
   export default {
     name: "app",
+    metaInfo() {
+      return {
+        title: `${this.cityName}租房网_${this.cityName}合租|房屋出租信息网_青客移动站`,
+        meta: [{
+          name: 'keywords',
+          content: `${this.cityName}租房网、${this.cityName}合租、${this.cityName}房屋出租、${this.cityName}租房信息网`
+        }, {name:'description',content:`手机青客租房网提供${this.cityName}同城最新、最全的房屋出租信息,${this.cityName}租房、找合租、个人房屋出租,就上手机青客租房网。`}]
+      }
+    },
     data() {
       return {
-        showModel: false
+        showModel: false,
+        cityName: '上海'
       }
     },
     components: {
@@ -147,22 +157,23 @@
       $route(to, from) {
         let cityPY = this.$route.params.cityPY;
         console.log(cityPY)
-        if(this.cityList){
+        if (this.cityList) {
           let localCity = this.cityList.findIndex(city => {
-              return city.cityPinyin == cityPY;
+            return city.cityPinyin == cityPY;
+          });
+          if (localCity == -1) {
+            this.$router.go(-1)
+          } else {
+            this.assign({
+              key: "currentCity",
+              value: this.cityList[localCity]
             });
-            if(localCity==-1){
-              this.$router.go(-1)
-            }else{
-              this.assign({
-                key: "currentCity",
-                value: this.cityList[localCity]
-              });
-            }
+          }
         }
-        
+
       },
       currentCity() {
+        this.cityName = this.currentCity.cityName;
         this.httpQueryMapBaseData();
         this.$router.push('/' + this.currentCity.cityPinyin + '/map')
         this.resetAllState();
