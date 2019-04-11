@@ -226,6 +226,9 @@ export default {
           });
       } else {
         this.acResult = this.ac.getResults().Lq;
+        if(this.acResult.length==0){
+          this.showToast('对不起，暂未匹配到相关数据')
+        }
       }
     },
     handleSearchTag(idx, name) {
