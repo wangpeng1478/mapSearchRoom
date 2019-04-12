@@ -49,11 +49,7 @@ export default {
   },
   methods: {
     reset() {
-      let valueArr = this.defaultValue;
-      this.value = {
-        a: valueArr[0],
-        b: valueArr[1]
-      };
+      this.changeDefaultValue(this.defaultValue)
       this.stepLength =
         document.getElementsByClassName("slider-wrap")[0].offsetWidth /
         this.step;

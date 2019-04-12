@@ -229,7 +229,7 @@
       },
       sliderReset() {
         this.customPriceValue = [0, 27];
-        this.$refs.slider.reset();
+        this.$refs.slider.changeDefaultValue(this.customPriceValue);
       },
       handleRoomFeature(selectRoomFeatureId) {
         let roomFeatureIds = this.query.roomFeatureIds;
