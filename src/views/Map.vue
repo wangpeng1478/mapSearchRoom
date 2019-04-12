@@ -85,7 +85,6 @@
       },
       mapScreen(){
         //地图条件搜索
-        console.log("地图条件搜索")
         let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
@@ -149,9 +148,7 @@
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
-        console.log("params",this.$route)
         let map = this.$store.state.map;
-        let that = this;
         this.isFind = false;
         this.showView.showMate = true;
         this.assign({
@@ -175,12 +172,10 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
-        console.log("store.state.pointSearch",this.$store.state)
         store.state.mapData.showRoomList = false;
         this.$store.state.mapData.isClickZoom = true;
         this.showView.showMate = false;
         //模拟数据
-        let that = this;
         let map = new BMap.Map("allmap");
         let _state = this.$store.state;
         // 创建地图实例 
@@ -450,7 +445,7 @@
     height: 95vw;
     border-radius: 100%;
     background-color: #78e9fe;
-	  opacity: 0.35;
+    opacity: 0.35;
     z-index: 10;
     margin: auto;
   }

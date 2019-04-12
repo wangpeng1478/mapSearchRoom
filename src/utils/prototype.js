@@ -126,11 +126,8 @@ ComplexSiteOverlay.prototype.initialize = function(map){
     return div;
 }
 ComplexSiteOverlay.prototype.draw = function(){
-    console.log("ComplexSiteOverlay++++++++++++++++")
-    console.log("div.offsetWidth",this._div.style.height)
     var map = this._map;
     var pixel = map.pointToOverlayPixel(this._point);
-    console.log(pixel)
     this._div.style.left =pixel.x+ "px";
     this._div.style.top = (pixel.y-parseInt(this._div.style.height)-parseInt(this._arrow.style.borderWidth) - 27)+ "px";
     // this._div.style.left = (pixel.x/window.innerWidth*100 - this._div.offsetWidth/window.innerWidth*100/2 - 1) + "vw";

@@ -62,7 +62,6 @@ export default {
 
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
-            console.log(store.state.mapData)
             map.centerAndZoom(point, scale);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
@@ -98,7 +97,6 @@ export default {
             store.state.mapData.mateSite.longitude = json.longitude;
             store.state.mapData.mateSite.latitude = json.latitude;
             Object.assign(json,this.$store.state.screen)
-            console.log(json)
             this.assignMapData({
                 longitude:json.longitude,
                 latitude:json.latitude,
