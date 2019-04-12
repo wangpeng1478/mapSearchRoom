@@ -138,7 +138,7 @@
         // let distance = _state.speed * _state.time;
         let distance = _state.radius;
         map.centerAndZoom(point, _state.scale);
-        let circle = $.paintCircle(point,distance);
+        let circle = this.$.paintCircle(point,distance);
         
         map.addOverlay(circle); //增加圆
         store.state.mapData.isOverLay = true;

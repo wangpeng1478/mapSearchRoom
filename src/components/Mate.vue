@@ -67,7 +67,7 @@ export default {
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
-            let circle = $.paintCircle(point,distance);
+            let circle = this.$.paintCircle(point,distance);
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
             
@@ -176,7 +176,7 @@ export default {
                 })
                 
                 mp.centerAndZoom(point, scale);
-                var circle = $.paintCircle(point,distance);
+                var circle = this.$.paintCircle(point,distance);
                 mp.getOverlays().map((val)=>{
                     if(val._type!="ComplexOverlay"){
                         mp.removeOverlay(val)
