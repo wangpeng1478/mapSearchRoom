@@ -30,6 +30,8 @@ Vue.use(Meta)
 })
 
 router.beforeEach((to,from,next)=>{
+
+  
   getPageInfo({
     currentPage:to.name,
     prevPage:from.name

@@ -21,6 +21,7 @@
   export default {
     name: "app",
     metaInfo() {
+      console.log("params",this.$route)
       return {
         title: `${this.cityName}租房网_${this.cityName}合租|房屋出租信息网_青客移动站`,
         meta: [{

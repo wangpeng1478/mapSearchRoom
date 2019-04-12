@@ -91,7 +91,6 @@
         this.showView.showMask=false;
         this.showView.showScreen=false;
         if(store.state.mapData.isOverLay){
-          console.log(store.state.mapData.levelType)
           Object.assign(json,this.$store.state.screen);
           json.longitude = store.state.mapData.longitude;
           json.latitude = store.state.mapData.latitude;
@@ -126,7 +125,6 @@
       },
       handleClearSearh(){
         recordButton('地图页面清空搜索')
-        console.log('地图页面清空搜索')
         this.roomListDestroy()
         this.assign({
           key:'keywordsSearch',
@@ -156,6 +154,7 @@
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
+        console.log("params",this.$route)
         let map = this.$store.state.map;
         let that = this;
         this.isFind = false;
