@@ -4,7 +4,7 @@ import router from './router'
 import store from './store'
 import  $  from "./utils/index.js"
 import 'url-search-params-polyfill'
-// import './utils/console'
+import './assets/images/iconfont/iconfont.css'
 Vue.prototype.$ = $
 Vue.config.productionTip = false
 
