@@ -26,6 +26,7 @@ export default{ //很关键
             map.addOverlay(metroCircle); //增加圆
         });
     },
+    //拖动事件
     movingEvent:function(obj){
         var that = this;
         obj.addEventListener("moving", function(){
@@ -72,7 +73,7 @@ export default{ //很关键
             
         });
     },
-    //层级改变
+    //层级改变 缩放事件
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
@@ -283,48 +284,6 @@ export default{ //很关键
             }
         });
     },
-    // showScreenHouse:function(mpdata){
-    //     axios.post(API["queryMapCoverData"], mpdata).then(res => {
-            
-    //         if (res.data.code == 0) {
-    //             res = res.data.data;
-                
-    //             switch (mpdata.levelType) {
-    //                 case 1:
-    //                 case 2:
-    //                     store.state.mapData.scale = 14;
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 3:
-    //                     store.state.mapData.scale = 16;
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 4:
-    //                     store.state.mapData.scale = 17;
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 5:
-    //                     store.state.mapData.scale = 14;
-    //                     store.state.coverDataList = res.mapResultDtos;
-    //                     this.showMetroHouse(mpdata);
-    //                     break;
-    //                 case 6:
-    //                     store.state.mapData.scale = 17;
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //                 case 7:
-    //                     store.state.mapData.scale = 17;
-    //                     store.state.coverDataList = res;
-    //                     this.showAreaHouse(mpdata);
-    //                     break;
-    //             }
-    //         }
-    //     });
-    // },
     //个性找房 
     showCoverHouse:function(data){
         let _state = store.state;
@@ -614,44 +573,6 @@ export default{ //很关键
         
         return scale;
     },
-    
-    // showVillageHouse:function(data){
-    //     let map = store.state.map;
-    //     map.getOverlays().map((val)=>{
-    //         if(val._type=="ComplexOverlay"){
-    //            map.removeOverlay(val)
-    //         }
-    //         return;
-    //     })
-    //     let point = new BMap.Point(data.longitude,data.latitude);
-    //     store.state.mapData.latitude = data.latitude;
-    //     store.state.mapData.longitude = data.longitude;
-    //     store.state.mapData.scale = 17;
-    //     // 创建点坐标  
-    //     let mapData = store.state.mapData; 
-    //     if(!mapData.isOverLay){
-    //         map.centerAndZoom(point,store.state.mapData.scale);
-    //     }
-    //     let bounds = map.getBounds();
-
-    //     store.state.coverDataList.map((val,index)=>{
-    //         if(val.ceaId == store.state.mapData.ceaId){
-    //             if(bounds.He < val.lng&&val.lng < bounds.Ce && bounds.Rd < val.lat&&val.lat < bounds.Pd){
-    //                 var txt = val.value, mouseoverTxt = val.count + "间";
-    //                 var myCompOverlay = new ComplexOverlay.ComplexCeaOverlay(new BMap.Point(val.lng,val.lat), txt,mouseoverTxt,"ComplexOverlay");
-    //                 map.addOverlay(myCompOverlay);
-    //                 //覆盖物添加点击事件+
-    //                 myCompOverlay._div.addEventListener('touchstart',function(){
-    //                 map.disableDragging();  //禁用地图拖拽功能
-    //                 });
-    //                 myCompOverlay._div.addEventListener("click", function () {
-    //                     store.state.mapData.showRoomList = true;
-    //                 });
-    //             }
-    //         }
-    //         return;
-    //     })
-    // },
     // 地铁线路房源
     showMetroHouse:function(){
         //地铁房源

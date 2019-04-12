@@ -212,7 +212,6 @@
             switch(_state.keywordsSearch.typeId){
               case 1:
                 json.levelType = 4;
-                // json.villageId = _state.keywordsSearch.tableId;
                 break;
               case 2:
                 json.levelType = 6;
@@ -289,8 +288,6 @@
       },
       hiddenRegion(){
         this.showView.showRegionAndMetro=false;
-        // screenChange()
-        // this.$refs.screen.screenChange();
       },
       roomListDestroy(){
         store.state.mapData.showRoomList = false;
@@ -485,7 +482,6 @@
   .site-pin{
     width: 6vw;
     height: 12vw;
-    /* background: url(../assets/images/icon/sitepin.png) no-repeat; */
     background-size: 100%;
     margin-left: 9.5vw;
     margin-top: 2vw;
@@ -520,23 +516,17 @@ html,body,#app{
   height: 100%;
   width: 100%;
 }
-.location_label,.location_cea_label{
+.location_label{
     position : absolute;
-    /* background : #0fb896; */
     color : white;
-    /* padding : 1vw; */
     line-height : 4vw;
     white-space : nowrap;
     -moz-user-select : none;
     font-size : 3vw;
 }
 
-.label_arrow,.label_cea_arrow{
+.label_arrow{
     position : relative;
-    /* width : 0px;
-    height : 0px;
-    top : 10vw;
-    left : 0px; */
     overflow : hidden;
 }
 
