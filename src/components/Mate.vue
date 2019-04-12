@@ -51,7 +51,18 @@ export default {
             let _state = store.state;
             let _this = this;
             let distance = 0;
+            // map.removeOverlay(store.state.circleObj);
+            // _state.trafficSpeedList.map((val)=>{
+            //     if(val.type == _state.mapData.type){
+            //         _state.mapData.speed = val.speed
+            //     }
+            // })
             distance = 800 *30 ; //默认出行方式
+            // if(_state.mapScreen.radius){
+            //     distance = _state.mapScreen.radius;
+            // }else{
+            //     distance = _state.mapData.speed *_state.mapData.time ; //默认出行方式
+            // }
             this.assignMapData({
                 type:2,
                 speed:800,
@@ -59,10 +70,13 @@ export default {
                 isOverLay:true,
                 scale:11
             })
+
+
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
-            
-            map.centerAndZoom(point, scale);
+            console.log(store.state.mapData)
+            // map.centerAndZoom(point, scale);
+            map.centerAndZoom(new BMap.Point(121.48789949,31.24916171), 11);
             let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
@@ -97,6 +111,7 @@ export default {
             store.state.mapData.mateSite.longitude = json.longitude;
             store.state.mapData.mateSite.latitude = json.latitude;
             Object.assign(json,this.$store.state.screen)
+            console.log(json)
             this.assignMapData({
                 longitude:json.longitude,
                 latitude:json.latitude,
@@ -189,7 +204,6 @@ export default {
                     }
                     var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
                     function(){
-                        console.log("_this.currentCity.cityPinyin",_this.currentCity.cityPinyin)
                         _this.$router.push('/'+_this.currentCity.cityPinyin+"/map/search");
                     });
                     mp.addOverlay(myCompOverlay);

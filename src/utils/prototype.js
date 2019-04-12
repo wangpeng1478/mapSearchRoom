@@ -119,7 +119,6 @@ ComplexSiteOverlay.prototype.initialize = function(map){
 
 
     div.addEventListener('touchend',function(){
-        console.log("touchend")
         _this._callback();
     });
     map.getPanes().labelPane.appendChild(div);

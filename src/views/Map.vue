@@ -78,7 +78,7 @@
       })
     },
     methods : {
-      ...mapMutations(['assign']),
+      ...mapMutations(['assign','clearSearh']),
       handleAddress(){
         recordButton('地图页面清空搜索')
         this.$router.push('/'+this.currentCity.cityPinyin+'/map/address')
@@ -125,16 +125,11 @@
       },
       handleClearSearh(){
         recordButton('地图页面清空搜索')
-        this.roomListDestroy()
-        this.assign({
-          key:'keywordsSearch',
-          value:{}
-        })
+        this.clearSearh()
         let _state = this.$store.state;
         var json = {};
-        json.cityId = _state.currentCity.cityId;
+        json.cityId = this.currentCity.cityId;
         json.levelType = 2;
-        store.state.mapData.scale = 12;
         Object.assign(json,_state.screen)
         this.$.showHouse(json);
       },
@@ -397,7 +392,7 @@
     height: 12vw;
     right: 17vw;
     top: 0;
-    font-size: 3vw;
+    font-size: 4vw;
     line-height: 12vw;
     font-weight: bold;
     text-align: center;

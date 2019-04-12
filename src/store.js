@@ -62,6 +62,17 @@ export default new Vuex.Store({
     assign(state,data){
       state[data.key] = data.value
     },
+    clearSearh(state){
+      state.keywordsSearch={};
+      let mapDataAss = {
+        latitude:state.currentCity.latitude,
+        longitude:state.currentCity.longitude,
+        levelType:2,
+        scale:11,
+        showRoomList:false
+      }
+      Object.assign(state.mapData,mapDataAss)
+    },
     clearScreen(state){ //搜索后青客筛选条件
       state.screen = null;
       state.screenTemp = null;
