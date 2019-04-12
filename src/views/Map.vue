@@ -40,7 +40,6 @@
     data () {
       return{
         showView:{},
-        isFind:true,
         geolocationControl:null
       }
     },
@@ -145,7 +144,6 @@
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
-        this.isFind = false;
         this.assignMapData({
           isOverLay:true
         })
@@ -161,7 +159,6 @@
         this.assignMapData({
           isOverLay:msg
         })
-        this.isFind = true;
         this.geolocationControl.setOffset(new BMap.Size(10,30));
 
         var json = {};
@@ -171,14 +168,15 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
+        console.log("mapData",store.state.mapData)
         store.state.mapData.showRoomList = false;
         this.$store.state.mapData.isClickZoom = true;
         this.assignMapData({
           isClickZoom:true
         })
-        this.assignMapData({
-          isOverLay:false
-        })
+        // this.assignMapData({
+        //   isOverLay:false
+        // })
         //模拟数据
         let map = new BMap.Map("allmap");
         let _this = this;
@@ -210,9 +208,16 @@
         json.cityId = this.currentCity.cityId;
         json.levelType = 2;
         Object.assign(json,_this.screen)
-        if(this.mapData.isOverLay && this.pointSearch){
-          this.mapData.latitude = this.pointSearch.lat;
-          this.mapData.longitude = this.pointSearch.lng;
+        if(this.mapData.isOverLay){
+          if(this.pointSearch){
+            this.mapData.latitude = this.pointSearch.lat;
+            this.mapData.longitude = this.pointSearch.lng;
+          }else{
+            this.mapData.latitude = this.mapData.mateSite.latitude;
+            this.mapData.longitude = this.mapData.mateSite.longitude;
+            
+          }
+          console.log(this.mapData)
           this.showMateFun();
         }else{
           if(this.keywordsSearch.tableId){

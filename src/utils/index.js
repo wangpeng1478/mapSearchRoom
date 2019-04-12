@@ -25,8 +25,8 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             that.showHouse(json)
 
-            let metroPoint = this.getMapPoint('mapData')
-            let metroCircle = this.paintCircle(metroPoint,3000)
+            let metroPoint = that.getMapPoint('mapData')
+            let metroCircle = that.paintCircle(metroPoint,2000)
             map.addOverlay(metroCircle); //增加圆
         });
     },

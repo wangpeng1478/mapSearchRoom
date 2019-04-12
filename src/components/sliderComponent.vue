@@ -18,15 +18,16 @@ export default {
             startX:0,
             sliderLeft:0,
             sl:0,    //步长
-            num:0
+            num:0,      //移动 长度（格）
+            sdvalue:0
         }
     },
     props: ["sliderMin","sliderMax","step","value"],
     mounted: function (){
         this.lineLength = document.getElementsByClassName("mate_line")[0].offsetWidth;
         this.sl = this.lineLength/this.step; 
-        this.num = this.value;
-        this.sliderLeft = this.num*this.sl;
+        this.sdvalue = parseInt(this.value);
+        this.sliderLeft = this.sdvalue*this.sl;
         let s = document.getElementsByClassName("slider")[0],
             lineA = document.getElementsByClassName("mate_line_active")[0];
         s.style.left = this.sliderLeft + "px";
@@ -47,19 +48,19 @@ export default {
             let _x = Math.abs(moveX - this.startX);       //滑动距离
             let s = document.getElementsByClassName("slider")[0],
                 lineA = document.getElementsByClassName("mate_line_active")[0];
-            let num = Math.round(_x / sl);
+            let num = (moveX - this.startX)/_x*Math.round(_x / sl);
             let lineLength = 0;
-            if(this.sliderLeft + (moveX - this.startX)/_x*num*sl >= this.lineLength){
-                num = this.step;
+            
+            if(this.sliderLeft + num*sl >= this.lineLength){
+                num = this.step - this.sdvalue;
                 lineLength = this.lineLength + "px";
-            }else if(this.sliderLeft + (moveX - this.startX)/_x*num*sl <= 0){
-                num = 0;
+            }else if(this.sliderLeft + num*sl <= 0){
+                num = -this.sdvalue;
                 lineLength = 0 + "px";
             }else{
-                lineLength = this.sliderLeft + (moveX - this.startX)/_x*num*sl + "px";
+                lineLength = this.sliderLeft + num*sl + "px";
             }
             s.style.left = lineLength;
-            
             lineA.style.width = lineLength;
             if(this.num!=num){
                 this.num = num;
@@ -67,7 +68,8 @@ export default {
             }
         },
         endSlider : function () {
-            this.$emit("moveStep",this.num)
+            this.sdvalue =parseInt(this.sdvalue) + parseInt(this.num);
+            this.$emit("moveStep",this.sdvalue)
             this.assignMapData({isInvFind:false})
         }
     }

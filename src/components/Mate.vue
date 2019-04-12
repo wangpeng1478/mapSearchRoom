@@ -57,14 +57,11 @@ export default {
             distance = this.speed * this.time; //默认出行方式
             this.assignMapData({
                 type:2,
-                // speed:800,
-                // time:30,
-                isOverLay:true,
                 scale:11
             })
 
-
-            let point = this.$.getMapPoint('mapData')
+            console.log("mate mapData++++",_this.mapData)
+            let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
             let circle = this.$.paintCircle(point,distance);
@@ -99,8 +96,12 @@ export default {
             json.levelType = this.toLevelType(scale);
             json.radius = distance;
 
-            store.state.mapData.mateSite.longitude = json.longitude;
-            store.state.mapData.mateSite.latitude = json.latitude;
+            this.assignMapData({
+                mateSite:{
+                    latitude:json.longitude,
+                    longitude:json.latitude,
+                }
+            })
             Object.assign(json,this.$store.state.screen)
             this.assignMapData({
                 longitude:json.longitude,
@@ -162,7 +163,7 @@ export default {
                 let mapData = this.mapData;
                 this.$store.state.mapData.longitude = mapData.mateSite.longitude;
                 this.$store.state.mapData.latitude = mapData.mateSite.latitude;
-                let point = this.$.getMapPoint('mapData')
+                let point = new BMap.Point(mapData.longitude,mapData.latitude);
                 // let distance = this.mapScreen.radius;
                 let distance = this.mapData.radius;
                 let scale = mapData.scale;
@@ -186,7 +187,6 @@ export default {
                 mp.addOverlay(circle); //增加圆
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
-                    console.log("getLocation",rs)
                     var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
                     if(_this.pointSearch){
                         address = _this.pointSearch.name;
@@ -216,6 +216,7 @@ export default {
                 // this.$store.state.mapData.radius = (20+10*params)*this.mapData.speed;
                 this.time = (20+10*params);
                 this.$store.state.mapData.radius = (20+10*params)*this.speed;
+                console.log("radius",this.$store.state.mapData.radius)
                 this.filter();
             }
         },
@@ -237,7 +238,9 @@ export default {
                 isOverLay:false,
             })
             this.$store.state.pointSearch = null;
-            store.state.mapData.isOverLay = false;
+            this.assignMapData({
+                isOverLay:false,
+            })
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){

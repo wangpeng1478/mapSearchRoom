@@ -15,9 +15,8 @@
     mapMutations,
     mapActions
   } from "vuex";
-  import {
-    setTimeout
-  } from 'timers';
+import { setTimeout } from 'timers';
+  
   export default {
     name: "app",
     metaInfo() {
