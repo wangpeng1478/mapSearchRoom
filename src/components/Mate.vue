@@ -172,8 +172,7 @@ export default {
                 mp.centerAndZoom(point, scale);
                 var circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                 mp.getOverlays().map((val)=>{
-                    if(val._type=="ComplexOverlay"){
-                    }else{
+                    if(val._type!="ComplexOverlay"){
                         mp.removeOverlay(val)
                     }
                     return;

@@ -29,13 +29,11 @@
 
 <script>
   import axios from 'axios'
-  import API from '@/utils/api'
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
   import store from '@/store'
-  import  ComplexOverlay  from '@/utils/prototype.js'
   import {mapState,mapMutations} from 'vuex'
   import {recordButton} from '@/utils/record'
   export default {
@@ -94,7 +92,7 @@
           json.longitude = store.state.mapData.longitude;
           json.latitude = store.state.mapData.latitude;
           json.levelType = store.state.mapData.levelType;
-          json.radius = store.state.mapData.speed*store.state.mapData.time;;
+          json.radius = store.state.mapData.speed*store.state.mapData.time;
           this.$.showCoverHouse(json);
         }else{
           
@@ -135,7 +133,6 @@
       findHouse:function(){
         let map = store.state.map;
         let _state = store.state.mapData;
-        let center = map.getCenter();
         map.clearOverlays();
         let point = new BMap.Point(_state.longitude,_state.latitude);
         let distance = _state.speed * _state.time;
@@ -148,7 +145,6 @@
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
-        let map = this.$store.state.map;
         this.isFind = false;
         this.showView.showMate = true;
         this.assign({
@@ -160,7 +156,6 @@
         store.state.mapData.isClickZoom = true;
       },
       hiddenMateFun: function(msg){
-        let map = this.$store.state.map;
         this.showView.showMate = msg;
         this.isFind = true;
         this.geolocationControl.setOffset(new BMap.Size(10,30));
@@ -187,7 +182,7 @@
         map.addEventListener("touchmove", function () {
           map.enableDragging();
         });
-        let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,offset:new BMap.Size(10,30)});
+        let geolocationControl= new BMap.GeolocationControl({anchor:'BMAP_ANCHOR_BOTTOM_RIGHT',offset:new BMap.Size(10,30)});
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl); 
         //监听定位控件

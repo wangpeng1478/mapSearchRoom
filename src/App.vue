@@ -32,12 +32,12 @@
     data() {
       return {
         showModel: false,
-        cityName: '上海'
+        cityName: '上海',
+        localCity: -1 //定位的城市索引
       }
     },
     components: {
-      Model,
-      localCity: -1 //定位的城市索引
+      Model
     },
     mounted() {
       this.httpQueryCityList();
@@ -153,7 +153,7 @@
     },
     computed: mapState(['currentCity', 'toast', 'cityList']),
     watch: {
-      $route(to, from) {
+      $route() {
         let cityPY = this.$route.params.cityPY;
         if (this.cityList) {
           let localCity = this.cityList.findIndex(city => {
