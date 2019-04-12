@@ -151,7 +151,6 @@ export default{ //很关键
     //显示房源
     showHouse:function(mpdata){
         let map = store.state.map;
-        console.log("store.state.mapData.scale++++",store.state.mapData.scale)
         let isClickZoom = store.state.mapData.isClickZoom;
         
         var mJson = {};
@@ -226,9 +225,7 @@ export default{ //很关键
                             let metroCircle = new BMap.Circle(metroPoint,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
-                            console.log("Circle++++++++")
                         }
-                        console.log("showAreaHouse++++++++")
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -349,8 +346,6 @@ export default{ //很关键
         let map = store.state.map;
         let _state = store.state;
         let that = this;
-
-        console.log("showAreaHouse")
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
@@ -361,15 +356,11 @@ export default{ //很关键
         let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
         // 创建点坐标 
         let mapData = store.state.mapData;
-        console.log("showAreaHouse",store.state.mapData)
         if(!mapData.isOverLay){
-            console.log("coverDataList",point)
             map.centerAndZoom(point,store.state.mapData.scale);
-            console.log("coverDataList")
         }
         
         let bounds = map.getBounds();
-        console.log("coverDataList")
         if(_state.coverDataList){
             _state.coverDataList.map((val)=>{
                 if(
@@ -496,8 +487,6 @@ export default{ //很关键
             json.latitude = target.getAttribute("lat");
             json.longitude = target.getAttribute("lng");
             store.state.mapData.levelType = levelType;
-            // store.state.mapScreen.latitude = target.getAttribute("lat");
-            // store.state.mapScreen.longitude = target.getAttribute("lng");
             store.state.mapData.latitude = target.getAttribute("lat");
             store.state.mapData.longitude = target.getAttribute("lng");
             Object.assign(json,store.state.screen);
@@ -698,7 +687,6 @@ export default{ //很关键
         _state.coverDataList.map((val)=>{
           var txt = val.value, mouseoverTxt = val.count + "间";
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
-        //   myCompOverlay.disableMassClear();
           map.addOverlay(myCompOverlay);
           //覆盖物添加点击事件+
           
@@ -756,7 +744,6 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         
         let bounds = map.getBounds();
-        console.log("coverDataList",_state.coverDataList)
         if(_state.coverDataList.length > 0){
 
 
@@ -855,54 +842,4 @@ export default{ //很关键
             return json;
         }
     },
-    // showCoverByCoordinate:function(data){
-    //     let map = store.state.map;
-    //     let _state = store.state;
-    //     let that = this;
-    //     map.getOverlays().map((val)=>{
-    //         if(val._type=="ComplexOverlay"){
-    //            map.removeOverlay(val)
-    //         }
-    //         return;
-    //     })
-    //     let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
-    //     // 创建点坐标 
-    //     let mapData = store.state.mapData;
-    //     if(!mapData.isOverLay){
-    //         map.centerAndZoom(point,store.state.mapData.scale);
-    //     }
-    //     let bounds = map.getBounds();
-    //     _state.coverDataList.map((val,index)=>{
-    //         if(
-    //             (bounds.He < val.lng)&&
-    //             (val.lng < bounds.Ce) &&
-    //             (bounds.Rd < val.lat)&&
-    //             (val.lat < bounds.Pd)
-    //         ){
-    //             var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
-    //             var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
-    //             map.addOverlay(myCompOverlay);
-                
-                
-    //             //覆盖物添加点击事件+
-    //             myCompOverlay._div.addEventListener('touchstart',function(){
-    //                 map.disableDragging();//禁用地图拖拽功能
-    //             });
-
-    //             myCompOverlay._div.addEventListener("click", 
-    //             function (e) {
-    //                 store.state.mapData.showRoomList = true;
-    //                 var target = e.target;
-    //                 if(!target.getAttribute("key")){
-    //                     target = target.parentNode;
-    //                 }
-                   
-    //                 store.state.mapData.villageId = target.getAttribute("key");
-    //             }
-    //             ,false);
-    //         }
-            
-    //         return;
-    //     })
-    // }
 }
