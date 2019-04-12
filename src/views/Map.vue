@@ -28,7 +28,6 @@
 
 
 <script>
-  import axios from 'axios'
   import Mate from '@/components/Mate.vue'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
