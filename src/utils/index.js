@@ -2,7 +2,6 @@ import axios from 'axios'
 import API from '@/utils/api'
 import store from '@/store'
 import  ComplexOverlay  from '@/utils/prototype.js'
-
 export default{ //很关键
     paintCircle(point,distance){
         return new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});

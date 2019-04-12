@@ -57,7 +57,7 @@
         return this.$store.state.mapBaseDataReady;
       },
       showRoomList(){
-        return this.$store.state.mapData.showRoomList;
+        return this.mapData.showRoomList;
       },
       cityId(){
         return this.$store.state.currentCity.cityId;
@@ -75,24 +75,24 @@
       })
     },
     methods : {
-      ...mapMutations(['assign','clearSearh']),
+      ...mapMutations(['assign','clearSearh','assignMapData']),
       handleAddress(){
         recordButton('地图页面清空搜索')
         this.$router.push('/'+this.currentCity.cityPinyin+'/map/address')
       },
       mapScreen(){
         //地图条件搜索
+        let _this = this;
         let map = store.state.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        if(store.state.mapData.isOverLay){
+        if(this.mapData.isOverLay){
           Object.assign(json,this.$store.state.screen);
-          json.longitude = store.state.mapData.longitude;
-          json.latitude = store.state.mapData.latitude;
-          json.levelType = store.state.mapData.levelType;
-          // json.radius = store.state.mapData.speed*store.state.mapData.time;
-          json.radius = store.state.mapData.radius;
+          json.longitude = this.mapData.longitude;
+          json.latitude = this.mapData.latitude;
+          json.levelType = this.mapData.levelType;
+          json.radius = this.mapData.radius;
           this.$.showCoverHouse(json);
         }else{
           
@@ -104,11 +104,11 @@
           Object.assign(json,this.$store.state.screen);
           delete json["latitude"];
           delete json["longitude"];
-          store.state.mapData.levelType = json.levelType;
-          
-          store.state.mapData.scale = this.$.toScale(json.levelType);
-
-          store.state.mapData.isClickZoom =true;
+          this.assignMapData({
+            levelType:json.levelType,
+            scale:_this.$.toScale(json.levelType),
+            isClickZoom:true
+          })
           if(json.ceaId){
             delete json["ceaId"];
           }
@@ -132,7 +132,7 @@
       },
       findHouse:function(){
         let map = store.state.map;
-        let _state = store.state.mapData;
+        let _state = this.mapData;
         map.clearOverlays();
         let point = new BMap.Point(_state.longitude,_state.latitude);
         // let distance = _state.speed * _state.time;
@@ -173,11 +173,12 @@
         this.showView.showMate = false;
         //模拟数据
         let map = new BMap.Map("allmap");
-        let _state = this.$store.state;
+        let _this = this;
+        let _state = store.state;
         // 创建地图实例 
-        let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
+        let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
         // 创建点坐标  
-        map.centerAndZoom(point,_state.mapData.scale);
+        map.centerAndZoom(point,_this.mapData.scale);
         // 初始化地图，设置中心点坐标和地图级别 
         map.enableScrollWheelZoom(true);
         map.addEventListener("touchmove", function () {
@@ -197,11 +198,11 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-        _state.map = map;
+        store.state.map = map;
         var json = {};
-        json.cityId = _state.currentCity.cityId;
+        json.cityId = this.currentCity.cityId;
         json.levelType = 2;
-        Object.assign(json,_state.screen)
+        Object.assign(json,_this.screen)
         if(_state.mapData.isOverLay && this.pointSearch){
           this.mapData.latitude = this.pointSearch.lat;
           this.mapData.longitude = this.pointSearch.lng;
