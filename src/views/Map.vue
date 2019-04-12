@@ -115,19 +115,17 @@
           if(json.prcId){
             delete json["prcId"];
           }
-          
           this.$.showHouse(json);
         }
-        
       },
       handleClearSearh(){
         recordButton('地图页面清空搜索')
         this.clearSearh()
-        let _state = this.$store.state;
-        var json = {};
-        json.cityId = this.currentCity.cityId;
-        json.levelType = 2;
-        Object.assign(json,_state.screen)
+        var json = {
+          cityId:this.currentCity.cityId,
+          levelType:2
+        };
+        Object.assign(json,this.screen)
         this.$.showHouse(json);
       },
       findHouse:function(){
@@ -178,7 +176,6 @@
         //模拟数据
         let map = new BMap.Map("allmap");
         let _this = this;
-        let _state = store.state;
         // 创建地图实例 
         let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
         // 创建点坐标  
