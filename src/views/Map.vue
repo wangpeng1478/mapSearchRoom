@@ -181,7 +181,7 @@
         map.addEventListener("touchmove", function () {
           map.enableDragging();
         });
-        let geolocationControl= new BMap.GeolocationControl({anchor:'BMAP_ANCHOR_BOTTOM_RIGHT',offset:new BMap.Size(10,30)});
+        let geolocationControl= new BMap.GeolocationControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,offset:new BMap.Size(10,30)});
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl); 
         //监听定位控件
