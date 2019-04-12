@@ -138,7 +138,7 @@
         // let distance = _state.speed * _state.time;
         let distance = _state.radius;
         map.centerAndZoom(point, _state.scale);
-        let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
+        let circle = $.paintCircle(point,distance);
         
         map.addOverlay(circle); //增加圆
         store.state.mapData.isOverLay = true;
