@@ -183,9 +183,7 @@ export default {
                     }
                     return;
                 })
-                localStorage.setItem("circle",circle); 
                 mp.addOverlay(circle); //增加圆
-
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
                     console.log("getLocation",rs)
