@@ -91,7 +91,8 @@
           json.longitude = store.state.mapData.longitude;
           json.latitude = store.state.mapData.latitude;
           json.levelType = store.state.mapData.levelType;
-          json.radius = store.state.mapData.speed*store.state.mapData.time;
+          // json.radius = store.state.mapData.speed*store.state.mapData.time;
+          json.radius = store.state.mapData.radius;
           this.$.showCoverHouse(json);
         }else{
           
@@ -134,7 +135,8 @@
         let _state = store.state.mapData;
         map.clearOverlays();
         let point = new BMap.Point(_state.longitude,_state.latitude);
-        let distance = _state.speed * _state.time;
+        // let distance = _state.speed * _state.time;
+        let distance = _state.radius;
         map.centerAndZoom(point, _state.scale);
         let circle = new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
         

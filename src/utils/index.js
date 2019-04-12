@@ -65,7 +65,8 @@ export default{ //很关键
                 json.longitude = store.state.mapData.longitude;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
                 store.state.mapData.levelType = json.levelType;
-                json.radius = store.state.mapScreen.radius;
+                // json.radius = store.state.mapScreen.radius;
+                json.radius = store.state.mapData.radius;
                 Object.assign(json,store.state.screen)
                 that.showCoverByCoordinate(json);
             }
@@ -89,7 +90,8 @@ export default{ //很关键
                     json.longitude = store.state.mapData.mateSite.longitude;
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
-                    json.radius = store.state.mapScreen.radius;
+                    // json.radius = store.state.mapScreen.radius;
+                    json.radius = store.state.mapData.radius;
                     Object.assign(json,store.state.screen)
                     that.showCoverHouse(json);
                 }
@@ -717,7 +719,7 @@ export default{ //很关键
                   }
               }
               
-              store.state.mapScreen = json;
+            //   store.state.mapScreen = json;
               store.state.mapData.isClickZoom = true;
               that.showHouse(json);
               
@@ -832,7 +834,8 @@ export default{ //很关键
             json.longitude = target.getAttribute("lng");
             store.state.mapData.latitude = target.getAttribute("lat");
             store.state.mapData.longitude = target.getAttribute("lng");
-            json.radius = store.state.mapData.speed * store.state.mapData.time;
+            // json.radius = store.state.mapData.speed * store.state.mapData.time;
+            json.radius = store.state.mapData.radius;
             Object.assign(json,store.state.screen);
             json.levelType = levelType;
             if(!flag){
