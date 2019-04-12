@@ -16,7 +16,7 @@
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>
           <em class="img-tag img-tag3" v-else-if="room.roomState == 9">配置中</em>
           <img
-            :src="room.roomCoverPhotoSmall!='' && room.roomCoverPhotoSmall!=null ? room.roomCoverPhotoSmall : 'https://mp.qk365.com'+room.randomRoomCoverPhoto">
+            :src="room.roomCoverPhotoSmall!='' && room.roomCoverPhotoSmall!=null ? room.roomCoverPhotoSmall : 'https://www.qk365.com/images/noPic_Big0.jpg'">
           <i></i>
         </div>
         <div class="room-list-info">
