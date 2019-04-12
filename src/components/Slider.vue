@@ -111,7 +111,7 @@ export default {
   height: 6vw;
   position: relative;
   width: 65vw;
-  margin: 0 auto;
+  margin: 0 auto 2vw;
   height: 6vw;
 }
 .slider-wrap::before {

@@ -61,6 +61,9 @@ export default {
 };
 </script>
 <style scoped>
+#app{
+  overflow: hidden;
+}
 .close {
   display: block;
   width: 4vw;
