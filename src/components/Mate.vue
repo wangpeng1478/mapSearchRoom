@@ -44,7 +44,6 @@ export default {
     },
     store,
     components:{sliderComponent},
-    props: ['showMate'],
     mounted:function(){
         this.$nextTick(function(){
             let map = this.map;

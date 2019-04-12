@@ -12,7 +12,7 @@
     </div>
     </transition>
     <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
-    <Mate v-if="showView.showMate" :showMate="showView.showMate" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
+    <Mate v-if="showView.showMate" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
