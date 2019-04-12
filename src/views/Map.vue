@@ -203,25 +203,25 @@
         json.cityId = this.currentCity.cityId;
         json.levelType = 2;
         Object.assign(json,_this.screen)
-        if(_state.mapData.isOverLay && this.pointSearch){
+        if(this.mapData.isOverLay && this.pointSearch){
           this.mapData.latitude = this.pointSearch.lat;
           this.mapData.longitude = this.pointSearch.lng;
           this.showMateFun();
         }else{
-          if(_state.keywordsSearch.tableId){
+          if(this.keywordsSearch.tableId){
             
-            switch(_state.keywordsSearch.typeId){
+            switch(this.keywordsSearch.typeId){
               case 1:
                 json.levelType = 4;
                 break;
               case 2:
                 json.levelType = 6;
-                json.metroId  = _state.keywordsSearch.parentId;
-                json.stationId = _state.keywordsSearch.tableId;
+                json.metroId  = this.keywordsSearch.parentId;
+                json.stationId = this.keywordsSearch.tableId;
                 break;
               case 3:
                 json.levelType = 5;
-                json.metroId  = _state.keywordsSearch.tableId;
+                json.metroId  = this.keywordsSearch.tableId;
                 break;
               case 4:
                 //公交站点
@@ -263,7 +263,7 @@
         if(component=='showScreen') recordButton('地图页面点击筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
-        store.state.mapData.showRoomList = false;
+        this.roomListDestroy()
       },
       viewSetDefault(){
           if(this.mapData.isOverLay){
@@ -291,17 +291,14 @@
         this.showView.showRegionAndMetro=false;
       },
       roomListDestroy(){
-        store.state.mapData.showRoomList = false;
+        this.assignMapData({
+          showRoomList:false
+        })
       }
     }
   }
 </script>
 
-
-
-
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 #map{
