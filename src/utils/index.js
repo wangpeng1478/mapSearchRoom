@@ -31,12 +31,12 @@ export default{ //很关键
         obj.addEventListener("moving", function(){
             let map = store.state.map;
             let mapData = store.state.mapData;
+            var json = {};
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
-                var json = {};
                 json.cityId = store.state.currentCity.cityId;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
                 switch (json.levelType) {
@@ -60,7 +60,6 @@ export default{ //很关键
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
-                var json = {};
                 json.latitude = store.state.mapData.latitude;
                 json.longitude = store.state.mapData.longitude;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
@@ -79,12 +78,13 @@ export default{ //很关键
             let zoom = e.currentTarget.getZoom();
             store.state.mapData.scale =  zoom;
             let mapData = store.state.mapData;
+            var json = {},cp;
             if(store.state.mapData.isOverLay){
                 if( !store.state.mapData.isClickZoom){
-                    var cp = obj.getCenter();
+                    cp = obj.getCenter();
                     store.state.mapData.latitude = cp.lat;
                     store.state.mapData.longitude = cp.lng;
-                    var json = {};
+                    
                     json.latitude = store.state.mapData.mateSite.latitude;
                     json.longitude = store.state.mapData.mateSite.longitude;
                     json.levelType = that.toLevelType(zoom);
@@ -96,13 +96,10 @@ export default{ //很关键
             }else{
                 if(!store.state.mapData.isClickZoom){
                     
-                    var cp = obj.getCenter();
+                    cp = obj.getCenter();
                     store.state.mapData.latitude = cp.lat;
                     store.state.mapData.longitude = cp.lng;
-                    
-                    var json = {};
                     json.cityId = store.state.currentCity.cityId;
-                    
                     Object.assign(json,store.state.screen);
                     if(json.ceaId){
                         delete json["ceaId"];
@@ -668,8 +665,6 @@ export default{ //很关键
         let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
         // store.state.mapData.scale = 12;
         map.centerAndZoom(point,store.state.mapData.scale);
-        let bounds = map.getBounds();
-
 
         //标出 地铁线路
         // var transit = new BMap.TransitRoute(map, { 
@@ -754,16 +749,15 @@ export default{ //很关键
                     (bounds.Rd < parseFloat(val.lat)||bounds.Rd < parseFloat(val.villageLatitude)||bounds.Rd < parseFloat(val.latitude))&&
                     (parseFloat(val.lat) < bounds.Pd||parseFloat(val.villageLatitude) < bounds.Pd||parseFloat(val.latitude) < bounds.Pd)
                 ){
+                    var price,myCompOverlay,txt,mouseoverTxt;
                     if(data.levelType==6){
-                        var price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
-                        map.addOverlay(myCompOverlay);
+                        price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
+                        myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
                     }else{
-                        var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
-                        map.addOverlay(myCompOverlay);
+                        price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
+                        myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                     }
-                    
+                    map.addOverlay(myCompOverlay);
                     
                     //覆盖物添加点击事件+
                     myCompOverlay._div.addEventListener('touchstart',function(){
