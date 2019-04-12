@@ -132,16 +132,17 @@
       },
       findHouse:function(){
         let map = store.state.map;
-        let _state = this.mapData;
+        let mapData = this.mapData;
         map.clearOverlays();
-        let point = new BMap.Point(_state.longitude,_state.latitude);
-        // let distance = _state.speed * _state.time;
-        let distance = _state.radius;
-        map.centerAndZoom(point, _state.scale);
-        let circle = this.$.paintCircle(point,distance);
+        let point = new BMap.Point(mapData.longitude,mapData.latitude);
+        // let distance = mapData.speed * mapData.time;
+        map.centerAndZoom(point, mapData.scale);
+        let circle = this.$.paintCircle(point,mapData.radius);
         
         map.addOverlay(circle); //增加圆
-        store.state.mapData.isOverLay = true;
+        this.assignMapData({
+          isOverLay:true
+        })
       },
       showMateFun:function(){
         //个性找房
