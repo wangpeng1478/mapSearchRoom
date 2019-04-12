@@ -64,7 +64,7 @@ export default {
             })
 
 
-            let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
+            let point = this.$.getMapPoint('mapData')
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
             let circle = this.$.paintCircle(point,distance);
@@ -162,7 +162,7 @@ export default {
                 let mapData = this.mapData;
                 this.$store.state.mapData.longitude = mapData.mateSite.longitude;
                 this.$store.state.mapData.latitude = mapData.mateSite.latitude;
-                let point = new BMap.Point(mapData.longitude,mapData.latitude);
+                let point = this.$.getMapPoint('mapData')
                 // let distance = this.mapScreen.radius;
                 let distance = this.mapData.radius;
                 let scale = mapData.scale;

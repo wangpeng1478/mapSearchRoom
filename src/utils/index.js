@@ -6,6 +6,9 @@ export default{ //很关键
     paintCircle(point,distance){
         return new BMap.Circle(point,distance,{fillColor:"#78e9fe", strokeWeight: 1 ,fillOpacity: 0.3, strokeOpacity: 0.3});
     },
+    getMapPoint(stateName){
+        return new BMap.Point(store.state[stateName].longitude,store.state[[stateName]].latitude);
+    },
     locationSuccess:function(obj){
         var that = this;
         
@@ -22,7 +25,7 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             that.showHouse(json)
 
-            let metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+            let metroPoint = this.getMapPoint('mapData')
             let metroCircle = this.paintCircle(metroPoint,3000)
             map.addOverlay(metroCircle); //增加圆
         });
@@ -173,7 +176,7 @@ export default{ //很关键
                 //公交站 缩放 显示圈
                 if(mpdata.levelType!=7&&store.state.keywordsSearch.levelType==7){
                     let busPoint;
-                    busPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                    busPoint = this.getMapPoint('keywordsSearch')
                     let busCircle = this.paintCircle(busPoint,1500)
                     store.state.circleObj = busCircle;
                     map.addOverlay(busCircle); //增加圆
@@ -205,23 +208,22 @@ export default{ //很关键
                         if(isClickZoom){
                             
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
-                                metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                                metroPoint = this.getMapPoint('keywordsSearch')
                             }else if(store.state.screen && store.state.screen.levelType == 6){
-                                metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
+                                metroPoint = this.getMapPoint('screen')
                             }else{
-                                metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                                metroPoint = this.getMapPoint('mapData')
                             }
                             let metroCircle = this.paintCircle(metroPoint,distance)
                             store.state.circleObj = metroCircle;
                             map.addOverlay(metroCircle); //增加圆
                         }else{
                             if( store.state.keywordsSearch.tableId && (store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4)){
-
-                                metroPoint = new BMap.Point(store.state.keywordsSearch.longitude,store.state.keywordsSearch.latitude);
+                                metroPoint = this.getMapPoint('keywordsSearch')
                             }else if(store.state.screen &&(store.state.screen.levelType == 6 || store.state.screen.levelType == 7)){
-                                metroPoint = new BMap.Point(store.state.screen.longitude,store.state.screen.latitude);
+                                metroPoint = this.getMapPoint('screen')
                             }else{
-                                metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                                metroPoint = this.getMapPoint('mapData')
                             }
                             let metroCircle = this.paintCircle(metroPoint,distance)
                             
@@ -276,7 +278,7 @@ export default{ //很关键
                             distance = 1000;
                         }
                         store.state.coverDataList = res;
-                        var metroPoint = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+                        var metroPoint = this.getMapPoint('mapData')
                         var metroCircle = this.paintCircle(metroPoint,distance)
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
@@ -313,7 +315,7 @@ export default{ //很关键
             return;
         })
         
-        let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+        let point = this.getMapPoint('mapData')
         // 创建点坐标 
         let mapData = store.state.mapData;
         if(!mapData.isOverLay){
@@ -585,7 +587,7 @@ export default{ //很关键
             }
             return;
         })
-        let point = new BMap.Point(_state.mapData.longitude,_state.mapData.latitude);
+        let point = this.getMapPoint('mapData')
         // store.state.mapData.scale = 12;
         map.centerAndZoom(point,store.state.mapData.scale);
 
@@ -657,7 +659,7 @@ export default{ //很关键
             }
             return;
         })
-        let point = new BMap.Point(store.state.mapData.longitude,store.state.mapData.latitude);
+        let point = this.getMapPoint('mapData')
         // 创建点坐标 
             map.centerAndZoom(point,store.state.mapData.scale);
         

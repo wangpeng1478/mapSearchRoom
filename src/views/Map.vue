@@ -11,8 +11,8 @@
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
     </div>
     </transition>
-    <div class="mate" v-if="!showView.showMate" @click="showMateFun">个性找房</div>
-    <Mate v-if="showView.showMate" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
+    <div class="mate" v-if="!mapData.isOverLay" @click="showMateFun">个性找房</div>
+    <Mate v-if="mapData.isOverLay" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
@@ -132,7 +132,7 @@
         let map = store.state.map;
         let mapData = this.mapData;
         map.clearOverlays();
-        let point = new BMap.Point(mapData.longitude,mapData.latitude);
+        let point = this.$.getMapPoint('mapData')
         // let distance = mapData.speed * mapData.time;
         map.centerAndZoom(point, mapData.scale);
         let circle = this.$.paintCircle(point,mapData.radius);
@@ -146,7 +146,9 @@
         //个性找房
         recordButton('地图页面点击个性找房')
         this.isFind = false;
-        this.showView.showMate = true;
+        this.assignMapData({
+          isOverLay:true
+        })
         this.assign({
           key:'keywordsSearch',
           value:{}
@@ -156,7 +158,9 @@
         store.state.mapData.isClickZoom = true;
       },
       hiddenMateFun: function(msg){
-        this.showView.showMate = msg;
+        this.assignMapData({
+          isOverLay:msg
+        })
         this.isFind = true;
         this.geolocationControl.setOffset(new BMap.Size(10,30));
 
@@ -172,12 +176,14 @@
         this.assignMapData({
           isClickZoom:true
         })
-        this.showView.showMate = false;
+        this.assignMapData({
+          isOverLay:false
+        })
         //模拟数据
         let map = new BMap.Map("allmap");
         let _this = this;
         // 创建地图实例 
-        let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
+        let point = this.$.getMapPoint('mapData')
         // 创建点坐标  
         map.centerAndZoom(point,_this.mapData.scale);
         // 初始化地图，设置中心点坐标和地图级别 
@@ -271,7 +277,6 @@
       viewSetDefault(){
           if(this.mapData.isOverLay){
             this.showView = {
-              showMate: true,
               showScreen:false,
               showRegionAndMetro:false,
               showMask:false,
@@ -279,7 +284,6 @@
             }
         }else{
           this.showView = {
-            showMate: false,
             showScreen:false,
             showRegionAndMetro:false,
             showMask:false,
