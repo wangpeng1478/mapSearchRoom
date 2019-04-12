@@ -40,6 +40,8 @@ export default {
     name: 'iMate',
     data () {
         return{
+            speed:0,
+            time:0
         }
     },
     store,
@@ -50,11 +52,13 @@ export default {
             let _state = store.state;
             let _this = this;
             let distance = 0;
-            distance = 800 *30 ; //默认出行方式
+            this.speed = 800;
+            this.time = 30;
+            distance = this.speed * this.time; //默认出行方式
             this.assignMapData({
                 type:2,
-                speed:800,
-                time:30,
+                // speed:800,
+                // time:30,
                 isOverLay:true,
                 scale:11
             })
@@ -85,7 +89,8 @@ export default {
                 });
                 map.addOverlay(myCompOverlay);
             }); 
-            this.mapScreen.radius = distance;
+            // this.mapScreen.radius = distance;
+            this.mapData.radius = distance;
             //筛选条件置空
             this.clearScreen()
             var json = {};
@@ -158,7 +163,8 @@ export default {
                 this.$store.state.mapData.longitude = mapData.mateSite.longitude;
                 this.$store.state.mapData.latitude = mapData.mateSite.latitude;
                 let point = new BMap.Point(mapData.longitude,mapData.latitude);
-                let distance = this.mapScreen.radius;
+                // let distance = this.mapScreen.radius;
+                let distance = this.mapData.radius;
                 let scale = mapData.scale;
                 if(mapData.isInvFind){
                     scale = Math.round(Math.log(80000000 / distance) / Math.log(2))-1;
@@ -182,7 +188,8 @@ export default {
 
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
-                    var address =  rs.addressComponents.street;
+                    console.log("getLocation",rs)
+                    var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
                     if(_this.pointSearch){
                         address = _this.pointSearch.name;
                     }
@@ -207,7 +214,10 @@ export default {
         checkTime : function (params) {
             if(this.time !== (20+10*params)){
                 this.$store.state.mapData.time = (20+10*params);
-                this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
+                // this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
+                // this.$store.state.mapData.radius = (20+10*params)*this.mapData.speed;
+                this.time = (20+10*params);
+                this.$store.state.mapData.radius = (20+10*params)*this.speed;
                 this.filter();
             }
         },
@@ -247,11 +257,15 @@ export default {
             })
             this.trafficSpeedList.map((val)=>{
                 if(val.type == res){
-                    store.state.mapData.speed = val.speed;
+                    // store.state.mapData.speed = val.speed;
+                    _this.speed = val.speed;
                 }
             })
-            this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
-            // this.assignMapData({radius:this.mapData.speed*this.mapData.time})
+            // this.speed =  _this.speed;
+            console.log("speed",this.speed)
+            // this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
+            // this.$store.state.mapData.radius = this.mapData.speed*this.mapData.time;
+            this.$store.state.mapData.radius = this.speed*this.time;
             this.filter();
         }
     },

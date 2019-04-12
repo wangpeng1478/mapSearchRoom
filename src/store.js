@@ -20,9 +20,9 @@ export default new Vuex.Store({
     mapData:{
       type:2,
       cityId:2,
-      speed:800,
-      time:30,
-      // radius:0,
+      // speed:800,
+      // time:30,
+      radius:0,
       villageId:null,
       showRoomList:false,
       latitude:31.2363429624,
