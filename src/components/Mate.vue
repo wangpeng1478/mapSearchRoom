@@ -260,7 +260,6 @@ export default {
                 }
             })
             // this.speed =  _this.speed;
-            console.log("speed",this.speed)
             // this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
             // this.$store.state.mapData.radius = this.mapData.speed*this.mapData.time;
             this.$store.state.mapData.radius = this.speed*this.time;
