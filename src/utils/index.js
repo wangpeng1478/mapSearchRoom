@@ -30,11 +30,9 @@ export default{ //很关键
     movingEvent:function(obj){
         var that = this;
         obj.addEventListener("moving", function(){
-            let map = store.state.map;
             let mapData = store.state.mapData;
-            var json = {};
+            var json = {},cp = obj.getCenter();
             if(!mapData.isOverLay){
-                var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
@@ -57,7 +55,7 @@ export default{ //很关键
                 
                 
             }else{
-                var cp = obj.getCenter();
+                
                 store.state.mapData.latitude = cp.lat;
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
@@ -327,18 +325,13 @@ export default{ //很关键
                     (bounds.Rd < val.lat)||(bounds.Rd < val.villageLatitude)&&
                     (val.lat < bounds.Pd)||(val.villageLatitude < bounds.Pd)
                 ){
+                    var myCompOverlay,price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
                     if(data.levelType==6){
-                        var price = val.minShowPrice, txt = val.villageName, mouseoverTxt = val.roomCount + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
-                        map.addOverlay(myCompOverlay);
+                        myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
                     }else{
-                        
-                        var price = val.minPrice, txt = val.value, mouseoverTxt = val.count + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
-                        map.addOverlay(myCompOverlay);
+                        myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                     }
-                    
-                    
+                    map.addOverlay(myCompOverlay);
                     //覆盖物添加点击事件+
                     myCompOverlay._div.addEventListener('touchstart',function(){
                         map.disableDragging()//禁用地图拖拽功能
