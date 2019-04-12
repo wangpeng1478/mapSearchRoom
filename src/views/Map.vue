@@ -52,7 +52,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen']),
       mapBaseDataReady(){
         return this.$store.state.mapBaseDataReady;
       },
@@ -88,7 +88,7 @@
         this.showView.showMask=false;
         this.showView.showScreen=false;
         if(this.mapData.isOverLay){
-          Object.assign(json,this.$store.state.screen);
+          Object.assign(json,this.screen);
           json.longitude = this.mapData.longitude;
           json.latitude = this.mapData.latitude;
           json.levelType = this.mapData.levelType;
@@ -101,7 +101,7 @@
               map.removeOverlay(store.state.circleObj);
               store.state.circleObj = null;
           }
-          Object.assign(json,this.$store.state.screen);
+          Object.assign(json,this.screen);
           delete json["latitude"];
           delete json["longitude"];
           this.assignMapData({
@@ -162,14 +162,17 @@
         this.geolocationControl.setOffset(new BMap.Size(10,30));
 
         var json = {};
-        json.cityId = this.$store.state.currentCity.cityId;
+        json.cityId = this.currentCity.cityId;
         json.levelType = 2;
-        Object.assign(json,this.$store.state.screen)
+        Object.assign(json,this.screen)
         this.$.showHouse(json);
       },
       baiduMap: function () {
         store.state.mapData.showRoomList = false;
         this.$store.state.mapData.isClickZoom = true;
+        this.assignMapData({
+          isClickZoom:true
+        })
         this.showView.showMate = false;
         //模拟数据
         let map = new BMap.Map("allmap");
@@ -237,7 +240,9 @@
             store.state.mapData.levelType = json.levelType;
             this.$.showSearchHouse(json)
           }else{
-            _state.mapData.scale = 11;
+            this.assignMapData({
+              scale:11
+            })
             this.$.showHouse(json);
           }
         }
