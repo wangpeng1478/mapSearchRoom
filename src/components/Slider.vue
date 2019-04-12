@@ -45,14 +45,14 @@ export default {
   },
   props: ["step", "defaultValue"],
   mounted() {
+    this.stepLength =
+        document.getElementsByClassName("slider-wrap")[0].offsetWidth /
+        this.step;
     this.reset()
   },
   methods: {
     reset() {
       this.changeDefaultValue(this.defaultValue)
-      this.stepLength =
-        document.getElementsByClassName("slider-wrap")[0].offsetWidth /
-        this.step;
       this.sliderChange();
     },
     changeDefaultValue(valueArr){
