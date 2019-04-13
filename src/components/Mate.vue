@@ -98,8 +98,8 @@ export default {
 
             this.assignMapData({
                 mateSite:{
-                    latitude:json.longitude,
-                    longitude:json.latitude,
+                    latitude:json.latitude,
+                    longitude:json.longitude,
                 }
             })
             Object.assign(json,this.$store.state.screen)
