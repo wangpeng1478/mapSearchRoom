@@ -74,7 +74,7 @@
       })
     },
     methods : {
-      ...mapMutations(['assign','clearSearh','assignMapData']),
+      ...mapMutations(['assign','clearSearh','assignMapData','clearScreen']),
       handelList(){
         recordButton('地图页面点击列表')
       },
@@ -146,6 +146,8 @@
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
+        //筛选条件置空
+        this.clearScreen()
         this.assignMapData({
           isOverLay:true
         })

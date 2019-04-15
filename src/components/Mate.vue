@@ -50,10 +50,9 @@ export default {
         this.$nextTick(function(){
             let map = this.map;
             let _this = this;
-            let distance = 0;
             this.speed = 800;
             this.time = 30;
-            distance = this.speed * this.time; //默认出行方式
+            let distance = this.speed * this.time; //默认出行方式
             this.assignMapData({
                 type:2,
                 scale:11
@@ -66,27 +65,22 @@ export default {
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
             this.getLocation(point)
-            // this.mapScreen.radius = distance;
-            this.mapData.radius = distance;
-            //筛选条件置空
-            this.clearScreen()
-            var json = {};
-            json.longitude = this.mapData.longitude;
-            json.latitude = this.mapData.latitude;
-            json.levelType = this.toLevelType(scale);
-            json.radius = distance;
-
-            this.assignMapData({
-                mateSite:{
-                    latitude:json.latitude,
-                    longitude:json.longitude,
-                }
-            })
+            var json = {
+                longitude:this.mapData.longitude,
+                latitude:this.mapData.latitude,
+                levelType:this.toLevelType(scale),
+                radius:distance
+            };
             Object.assign(json,this.screen)
             this.assignMapData({
                 longitude:json.longitude,
                 latitude:json.latitude,
-                levelType:json.levelType
+                levelType:json.levelType,
+                radius:distance,
+                mateSite:{
+                    latitude:json.latitude,
+                    longitude:json.longitude,
+                }
             })
             this.$.showCoverHouse(json);
         })
