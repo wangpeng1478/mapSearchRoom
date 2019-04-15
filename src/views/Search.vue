@@ -292,7 +292,7 @@ export default {
       this.$router.go(-1);
     }
   },
-  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map"])
+  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map","pointSearch"])
 };
 </script>
 <style scoped>
