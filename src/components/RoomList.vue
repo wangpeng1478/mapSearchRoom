@@ -6,7 +6,7 @@
         <button class="retract"></button>
         <p class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
-      <div class="banner swiper-containe">
+      <div class="banner swiper-container">
         <div class="swiper-wrapper">
           <div class="swiper-slide">Slide 1</div>
           <div class="swiper-slide">Slide 2</div>
@@ -74,14 +74,11 @@
     },
     props: ['villageId'],
     mounted() {
-      this.$nextTick(()=>{
-        var bannerSwiper = new Swiper('.banner', {
-          observer:true,    observeParents:true,
-        loop: true,
-        allowTouchMove: false, // 不允许鼠标拖动
-        preventClicks: false,//默认true
-        autoplayDisableOnInteraction: false, 
-      })
+      this.$nextTick(() => {
+        new Swiper('.swiper-container', {
+          observer: true,
+          observeParents: true
+        })
       })
       if (this.banners.length != 0) {
         console.log(this.banners.length)
