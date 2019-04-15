@@ -101,6 +101,7 @@ export default {
 }
 .location p {
   height: 12vw;
+  font-size: 4.8vw;
   line-height: 12vw;
   margin-left: 13.3vw;
 }
