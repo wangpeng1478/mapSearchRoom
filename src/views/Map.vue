@@ -68,7 +68,6 @@
       }
     },
     beforeMount : function () {
-      console.log("map mounted")
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
@@ -160,15 +159,11 @@
         this.$.showHouse(json);
       },
       baiduMap: function () {
-        console.log("mapData",store.state.mapData)
         store.state.mapData.showRoomList = false;
         this.$store.state.mapData.isClickZoom = true;
         this.assignMapData({
           isClickZoom:true
         })
-        // this.assignMapData({
-        //   isOverLay:false
-        // })
         //模拟数据
         let map = new BMap.Map("allmap");
         let _this = this;
@@ -209,6 +204,7 @@
             this.mapData.longitude = this.mapData.mateSite.longitude;
             
           }
+          console.log("pointSearch",this.pointSearch)
           console.log(this.mapData)
           this.showMateFun();
         }else{
