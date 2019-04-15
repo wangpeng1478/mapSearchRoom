@@ -1,10 +1,10 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive">
+    <!-- <keep-alive>
+      <router-view>
       </router-view>
-  </keep-alive>
-    <!-- <router-view /> -->
+  </keep-alive> -->
+    <router-view />
     <Model v-if="showModel" :content="cityList ? cityList[localCity].cityName : ''" @handelModel='handelModel' />
     <p class="toast" v-if="toast">{{toast}}</p>
   </div>
@@ -24,7 +24,7 @@ import { setTimeout } from 'timers';
   export default {
     name: "app",
     metaInfo() {
-      return {
+      return {         
         title: `${this.cityName}租房网_${this.cityName}合租|房屋出租信息网_青客移动站`,
         meta: [{
           name: 'keywords',

@@ -12,31 +12,19 @@ Vue.use(Meta)
       path: '/:cityPY/map',
       name: 'Map',
       component: Map ,
-      meta: {
-        keepAlive: true, //此组件需要被缓存
-      }
     },{
       path:'/:cityPY/map/address',
       name:'Address',
       component: () => import('./views/Address.vue'),
-      meta: {
-        keepAlive: true, //此组件需要被缓存
-      }
     },{
       path:'/:cityPY/map/search',
       name:'Search',
       component: () => import('./views/Search.vue'),
-      meta: {
-        keepAlive: true, //此组件需要被缓存
-      }
     },
     { 
       path: '*', 
       name: 'Map',
       redirect:'/sh/map',
-      meta: {
-        keepAlive: true, //此组件需要被缓存
-      }
     }
   ]
 })

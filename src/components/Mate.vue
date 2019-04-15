@@ -47,6 +47,7 @@ export default {
     store,
     components:{sliderComponent},
     mounted:function(){
+        console.log("mate mounted")
         this.$nextTick(function(){
             let map = this.map;
             let _this = this;
@@ -64,7 +65,9 @@ export default {
             map.centerAndZoom(point, scale);
             let circle = this.$.paintCircle(point,distance);
             this.$store.state.circleObj = circle;
+            
             map.addOverlay(circle); //增加圆
+            console.log(map.getOverlays())
             this.getLocation(point)
             // this.mapScreen.radius = distance;
             this.mapData.radius = distance;

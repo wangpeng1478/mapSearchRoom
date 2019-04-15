@@ -67,7 +67,8 @@
         this.baiduMap();
       }
     },
-    mounted : function () {
+    beforeMount : function () {
+      console.log("map mounted")
       this.viewSetDefault()
       this.$nextTick(function(){
         this.baiduMap();
@@ -130,19 +131,6 @@
         Object.assign(json,this.screen)
         this.$.showHouse(json);
       },
-      // findHouse:function(){
-      //   let map = store.state.map;
-      //   let mapData = this.mapData;
-      //   map.clearOverlays();
-      //   let point = this.$.getMapPoint('mapData')
-      //   // let distance = mapData.speed * mapData.time;
-      //   map.centerAndZoom(point, mapData.scale);
-      //   let circle = this.$.paintCircle(point,mapData.radius);
-      //   map.addOverlay(circle); //增加圆
-      //   this.assignMapData({
-      //     isOverLay:true
-      //   })
-      // },
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
@@ -534,25 +522,27 @@ html,body,#app{
     line-height : 4vw;
     white-space : nowrap;
     -moz-user-select : none;
-    font-size : 3vw;
+    font-size : 2.5vw;
 }
 
 .label_arrow{
     position : relative;
     overflow : hidden;
+    width: 0vw;
+    height: 0vw;
 }
 
 .label_area_name,.label_area_cea_name{
-  position : relative;
-  margin : 0px;
-  min-width:19vw;
+  position : absolute;
+  left: 50%;
+  min-width:7vw;
   height : 5vw;
   line-height : 5vw;
   padding : 0vw 2vw;
   background : #ff9900;
   border-radius : 1vw;
   text-align : center;
-  transform : translate(-22.5%)
+  transform : translate(-50%)
 }
 
 .location_site_label{
