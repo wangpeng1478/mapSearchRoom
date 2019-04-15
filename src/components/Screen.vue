@@ -135,11 +135,13 @@
       },
       screenChange() {
         let query = this.screenCondition();
+        console.log(query)
         if(query.stationId){
           query.metroStationId = query.stationId;
           delete query['stationId']
         }
-        if(Object.keys(this.keywordsSearch).length!=0&&Object.keys(this.regionTemp).length == 0){
+        if(!this.mapData.isOverLay){
+          if(Object.keys(this.keywordsSearch).length!=0&&Object.keys(this.regionTemp).length == 0){
             let tableId=this.keywordsSearch.tableId;
             switch (this.keywordsSearch.typeId) {
               case 1:
@@ -162,6 +164,12 @@
                 break;
             }
         }
+        }else{
+          query.longitude=this.pointSearch.lng,
+          query.latitude=this.pointSearch.lat,
+          query.radius=this.mapData.radius
+        }
+        
         this.recordSearchInfo(query)//埋点
 
         axios.post(API["queryMapRoomCount"], query).then(res => {
@@ -395,7 +403,8 @@
       "screenTemp",
       "screen",
       "mapData",
-      "keywordsSearch"
+      "keywordsSearch",
+      "pointSearch"
     ]),
     watch: {
       regionTemp() {

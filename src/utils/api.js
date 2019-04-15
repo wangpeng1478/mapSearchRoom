@@ -11,6 +11,7 @@ const API = {
     queryMapCoverData:'/mapsearch/queryMapCoverData',
     queryRoomByVillage:'/mapsearch/queryRoomByVillage',
     queryMapCoverByCoordinate:'/mapsearch/queryMapCoverByCoordinate',
+    getBanners:"/mapsearch/getBanners",
     //埋点
     record:'/behavioral/record'
 }

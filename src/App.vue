@@ -152,7 +152,14 @@ import { setTimeout } from 'timers';
             this.showModel = true;
           }
         });
-      }
+      },
+      getBanner(){
+        axios.post(API['getBanners'],{
+          cityId:this.currentCity.cityId
+        }).then(res=>{
+          console.log(res)
+        })
+      },
     },
     computed: mapState(['currentCity', 'toast', 'cityList']),
     watch: {
@@ -174,6 +181,7 @@ import { setTimeout } from 'timers';
 
       },
       currentCity() {
+        this.getBanner()
         this.cityName = this.currentCity.cityName;
         this.httpQueryMapBaseData();
         this.$router.push('/' + this.currentCity.cityPinyin + '/map')
