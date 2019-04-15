@@ -47,7 +47,6 @@ export default {
     store,
     components:{sliderComponent},
     mounted:function(){
-        console.log("mate mounted")
         this.$nextTick(function(){
             let map = this.map;
             let _this = this;
@@ -66,7 +65,6 @@ export default {
             this.$store.state.circleObj = circle;
             
             map.addOverlay(circle); //增加圆
-            console.log(map.getOverlays())
             this.getLocation(point)
             var json = {
                 longitude:this.mapData.longitude,
@@ -203,7 +201,6 @@ export default {
                 this.assignMapData({
                     radius:(20+10*params)*this.speed
                 })
-                console.log("radius",this.mapData.radius)
                 this.filter();
             }
         },

@@ -204,8 +204,6 @@
             this.mapData.longitude = this.mapData.mateSite.longitude;
             
           }
-          console.log("pointSearch",this.pointSearch)
-          console.log(this.mapData)
           this.showMateFun();
         }else{
           if(this.keywordsSearch.tableId){
