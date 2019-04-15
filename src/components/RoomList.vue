@@ -2,17 +2,16 @@
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}" v-if="roomList.length!=0">
     <div class="village" :class="banners.length!=0 ? 'village-b' : ''">
-      <div @touchstart="handleRoomlistStart"
-      @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
+      <div @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
         <button class="retract"></button>
         <p class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
       <div class="banner swiper-containe">
         <div class="swiper-wrapper">
-        <div class="swiper-slide">Slide 1</div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-    </div>
+          <div class="swiper-slide">Slide 1</div>
+          <div class="swiper-slide">Slide 2</div>
+          <div class="swiper-slide">Slide 3</div>
+        </div>
       </div>
     </div>
 
@@ -58,7 +57,9 @@
   import {
     mapState
   } from 'vuex'
-import { constants } from 'crypto';
+  import {
+    constants
+  } from 'crypto';
   export default {
     name: "RoomList",
     data() {
@@ -73,12 +74,18 @@ import { constants } from 'crypto';
     },
     props: ['villageId'],
     mounted() {
-      var bannerSwiper = new Swiper('.banner', {
-          loop: true,
-        })
+      this.$nextTick(()=>{
+        var bannerSwiper = new Swiper('.banner', {
+          observer:true,    observeParents:true,
+        loop: true,
+        allowTouchMove: false, // 不允许鼠标拖动
+        preventClicks: false,//默认true
+        autoplayDisableOnInteraction: false, 
+      })
+      })
       if (this.banners.length != 0) {
         console.log(this.banners.length)
-        
+
       }
       this.vh = document.body.clientHeight / 100;
       this.loadRoomList();
