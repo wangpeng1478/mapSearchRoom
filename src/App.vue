@@ -1,6 +1,10 @@
 <template>
   <div id="app">
-    <router-view />
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive">
+      </router-view>
+  </keep-alive>
+    <!-- <router-view /> -->
     <Model v-if="showModel" :content="cityList ? cityList[localCity].cityName : ''" @handelModel='handelModel' />
     <p class="toast" v-if="toast">{{toast}}</p>
   </div>

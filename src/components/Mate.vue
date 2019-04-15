@@ -60,7 +60,8 @@ export default {
                 scale:11
             })
 
-            console.log("mate mapData++++",_this.mapData)
+            console.log("mate")
+            
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
@@ -175,8 +176,12 @@ export default {
                     scale:scale,
                     isClickZoom:true
                 })
+                console.log("mate checkTime mapData++++",this)
+                console.log("mate point",point)
+                console.log("mate scale",scale)
+                // mp.centerAndZoom(point, scale);
+
                 
-                mp.centerAndZoom(point, scale);
                 var circle = this.$.paintCircle(point,distance);
                 mp.getOverlays().map((val)=>{
                     if(val._type!="ComplexOverlay"){
@@ -187,6 +192,7 @@ export default {
                 mp.addOverlay(circle); //增加圆
                 var geoc = new BMap.Geocoder();
                 geoc.getLocation(point, function(rs){
+                    console.log(rs)
                     var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
                     if(_this.pointSearch){
                         address = _this.pointSearch.name;
@@ -206,10 +212,12 @@ export default {
                 json.radius = distance;
                 Object.assign(json,this.$store.state.screen)
                 store.state.mapData.levelType = json.levelType;
+                
                 this.$.showCoverHouse(json);
             }
         },
         checkTime : function (params) {
+            
             if(this.time !== (20+10*params)){
                 this.$store.state.mapData.time = (20+10*params);
                 // this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
