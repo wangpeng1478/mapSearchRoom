@@ -3,7 +3,7 @@
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate" @click="mateScreen"></div>
-        <div class="individuality_mate">
+        <div class="individuality_mate" @touchstart="moveStop" @touchend="moveStop">
             <div class="mate_icon">
                 <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
                 <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
@@ -47,6 +47,12 @@ export default {
     store,
     components:{sliderComponent},
     mounted:function(){
+        
+document.body.addEventListener('touchmove', function (e) {
+    e.preventDefault(); 
+}, {passive: false}); 
+
+
         this.$nextTick(function(){
             let map = this.map;
             let _this = this;
@@ -114,6 +120,10 @@ export default {
             }
             
             return levelType;
+        },
+        moveStop:function(event) {
+            event.preventDefault();
+            // return false
         },
         filter:function(){
            
