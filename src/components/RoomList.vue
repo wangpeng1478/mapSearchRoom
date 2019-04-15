@@ -340,7 +340,7 @@
 
   .tips {
     color: #999;
-    font-size: 12px;
+    font-size: 4vw;
     text-align: center;
     margin: 2vw 0 10vw;
   }

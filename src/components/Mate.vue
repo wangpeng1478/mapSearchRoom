@@ -68,25 +68,7 @@ export default {
             let circle = this.$.paintCircle(point,distance);
             this.$store.state.circleObj = circle;
             map.addOverlay(circle); //增加圆
-            
-            
-            var geoc = new BMap.Geocoder();
-            geoc.getLocation(point, function(rs){
-                var address = '';
-                if(rs.addressComponents.street){
-                    address = rs.addressComponents.street
-                }else{
-                    address = rs.addressComponents.district
-                }
-                if(_this.pointSearch){
-                    address = _this.pointSearch.name;
-                }
-                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
-                function(){
-                    _this.$router.push('/'+_this.currentCity.cityPinyin+'/map/search');
-                });
-                map.addOverlay(myCompOverlay);
-            }); 
+            this.getLocation(point)
             // this.mapScreen.radius = distance;
             this.mapData.radius = distance;
             //筛选条件置空
@@ -190,9 +172,24 @@ export default {
                     return;
                 })
                 mp.addOverlay(circle); //增加圆
-                var geoc = new BMap.Geocoder();
-                geoc.getLocation(point, function(rs){
-                    console.log(rs)
+                this.getLocation(point);
+                this.$store.state.mapData.isInvFind = false;
+                let json = {
+                    longitude:this.mapData.longitude,
+                    latitude:this.mapData.latitude,
+                    levelType:this.toLevelType(scale),
+                    radius:distance
+                }
+                Object.assign(json,this.screen)
+                this.assignMapData({
+                    levelType:json.levelType
+                })
+                this.$.showCoverHouse(json);
+            }
+        },
+        getLocation(){
+            var geoc = new BMap.Geocoder();
+            geoc.getLocation(point, function(rs){
                     var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
                     if(_this.pointSearch){
                         address = _this.pointSearch.name;
@@ -203,18 +200,6 @@ export default {
                     });
                     mp.addOverlay(myCompOverlay);
                 }); 
-                
-                this.$store.state.mapData.isInvFind = false;
-                var json = {};
-                json.longitude = this.mapData.longitude;
-                json.latitude = this.mapData.latitude;
-                json.levelType = this.toLevelType(scale);
-                json.radius = distance;
-                Object.assign(json,this.$store.state.screen)
-                store.state.mapData.levelType = json.levelType;
-                
-                this.$.showCoverHouse(json);
-            }
         },
         checkTime : function (params) {
             
