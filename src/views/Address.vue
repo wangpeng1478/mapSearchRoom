@@ -14,19 +14,10 @@
         <p @click="chooseCity(index)">{{ city.cityName }}</p>
       </li>
     </ul>
-    <div class="banner swiper-container">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">Slide 1</div>
-          <div class="swiper-slide">Slide 2</div>
-          <div class="swiper-slide">Slide 3</div>
-        </div>
-      </div>
   </div>
 </template>
 <script>
 import {mapState,mapMutations} from 'vuex';
-  import Swiper from 'swiper'
-  import 'swiper/dist/css/swiper.css';
 import {recordButton} from '@/utils/record';
 export default {
   name: "Address",
@@ -37,12 +28,6 @@ export default {
     };
   },
   mounted(){
-    this.$nextTick(() => {
-        new Swiper('.swiper-container', {
-          observer: true,
-          observeParents: true
-        })
-      })
     this.getLocation()
   },
   methods: {
@@ -141,9 +126,4 @@ export default {
     transform: rotate(360deg);
   }
 }
-  .banner {
-    width: 94.67vw;
-    height: 22.67vw;
-    background: #00aa83;
-  }
 </style>
