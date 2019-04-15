@@ -7,12 +7,12 @@
         <button class="retract"></button>
         <p class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
-      <div class="banner swiper-containe">
+      <div class="banner swiper-container">
         <div class="swiper-wrapper">
-        <div class="swiper-slide">Slide 1</div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-    </div>
+          <div class="swiper-slide">Slide 1</div>
+          <div class="swiper-slide">Slide 2</div>
+          <div class="swiper-slide">Slide 3</div>
+        </div>
       </div>
     </div>
 
@@ -73,8 +73,10 @@ import { constants } from 'crypto';
     },
     props: ['villageId'],
     mounted() {
-      var bannerSwiper = new Swiper('.banner', {
-          loop: true,
+      new Swiper('.banner', {
+          direction: 'horizontal', // 垂直切换选项
+          loop: true, // 循环模式选项
+          autoplay: true,
         })
       if (this.banners.length != 0) {
         console.log(this.banners.length)

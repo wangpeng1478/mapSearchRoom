@@ -23,12 +23,20 @@
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
+    <!-- <div class="banner swiper-container">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">Slide 1</div>
+        <div class="swiper-slide">Slide 2</div>
+        <div class="swiper-slide">Slide 3</div>
+      </div>
+    </div> -->
   </div>
 </template>
 
 
 <script>
   import Mate from '@/components/Mate.vue'
+  import Swiper from 'swiper'
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
@@ -72,6 +80,13 @@
       this.$nextTick(function(){
         this.baiduMap();
       })
+    },
+    mounted:function() {
+      new Swiper ('.baner', {
+                  direction: 'horizontal', // 垂直切换选项
+                  loop: true, // 循环模式选项
+                  autoplay: true,
+                })
     },
     methods : {
       ...mapMutations(['assign','clearSearh','assignMapData','clearScreen']),
@@ -606,6 +621,25 @@ html,body,#app{
     background: #fff;
     border: 2px solid #39AC6A;
     margin-top: 2vw;
+  }
+
+
+
+  .banner{
+    position: absolute;
+    top:200px;
+    left: 100px;
+    width: 500px;
+    height: 300px;
+    margin: 20px auto;
+    background: #fff;
+  }
+
+  .swiper-slide{
+    width: 400px;
+    height: 290px;
+    background: red;
+    border: 1px solid #fff;
   }
 </style>
 

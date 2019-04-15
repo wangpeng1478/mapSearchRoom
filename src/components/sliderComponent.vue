@@ -1,6 +1,6 @@
 <template>
     <div id="slider">
-        <div class="mate_line" @touchmove='movePrevent($event)'>
+        <div class="mate_line">
             <div class="mate_line_active"></div>
             <span class="slider"  @touchstart="touchSlider($event)" @touchmove='moveSlider($event)' @touchend='endSlider($event)' ></span>
         </div>
@@ -35,10 +35,6 @@ export default {
     },
     methods:{
         ...mapMutations(['assignMapData']),
-        movePrevent:function(event) {
-            //防止iPhone 浏览器页面 左右滑动
-            event.preventDefault();
-        },
         touchSlider : function (e) {
             var s = document.getElementsByClassName("slider")[0];
             this.sliderLeft = parseFloat(s.style.left);
