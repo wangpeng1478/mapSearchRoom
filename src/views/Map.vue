@@ -5,7 +5,7 @@
     <p class="currentcity iconfont icon-dingwei" @click="handleAddress"><i/>{{currentCity.cityName}}</p>
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
-      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="recordButton('地图页面点击列表')">列表</a>
+      <a :href="currentCity.url + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="search" append class="search" @click="recordButton('地图页面点击搜索')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
       <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handleClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>
@@ -75,6 +75,9 @@
     },
     methods : {
       ...mapMutations(['assign','clearSearh','assignMapData']),
+      handelList(){
+        recordButton('地图页面点击列表')
+      },
       handleAddress(){
         recordButton('地图页面清空搜索')
         this.$router.push('/'+this.currentCity.cityPinyin+'/map/address')
@@ -127,20 +130,19 @@
         Object.assign(json,this.screen)
         this.$.showHouse(json);
       },
-      findHouse:function(){
-        let map = store.state.map;
-        let mapData = this.mapData;
-        map.clearOverlays();
-        let point = this.$.getMapPoint('mapData')
-        // let distance = mapData.speed * mapData.time;
-        map.centerAndZoom(point, mapData.scale);
-        let circle = this.$.paintCircle(point,mapData.radius);
-        
-        map.addOverlay(circle); //增加圆
-        this.assignMapData({
-          isOverLay:true
-        })
-      },
+      // findHouse:function(){
+      //   let map = store.state.map;
+      //   let mapData = this.mapData;
+      //   map.clearOverlays();
+      //   let point = this.$.getMapPoint('mapData')
+      //   // let distance = mapData.speed * mapData.time;
+      //   map.centerAndZoom(point, mapData.scale);
+      //   let circle = this.$.paintCircle(point,mapData.radius);
+      //   map.addOverlay(circle); //增加圆
+      //   this.assignMapData({
+      //     isOverLay:true
+      //   })
+      // },
       showMateFun:function(){
         //个性找房
         recordButton('地图页面点击个性找房')
