@@ -158,6 +158,12 @@ import { setTimeout } from 'timers';
           cityId:this.currentCity.cityId
         }).then(res=>{
           console.log(res)
+          if(res.data.code==0){
+            this.assign({
+              key:'banners',
+              value:res.data.data
+            })
+          }
         })
       },
     },

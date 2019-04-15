@@ -1,11 +1,18 @@
 <template>
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}" v-if="roomList.length!=0">
-    <div class="village" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd"
-      @touchmove="handleRoomlistScroll">
-      <button class="retract"></button>
-      <div class="village-info">
-        <p>{{roomList[0].villageName}}（{{roomList.length}}间）</p>
+    <div class="village" :class="banners.length!=0 ? 'village-b' : ''">
+      <div @touchstart="handleRoomlistStart"
+      @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
+        <button class="retract"></button>
+        <p class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
+      </div>
+      <div class="banner swiper-containe">
+        <div class="swiper-wrapper">
+        <div class="swiper-slide">Slide 1</div>
+        <div class="swiper-slide">Slide 2</div>
+        <div class="swiper-slide">Slide 3</div>
+    </div>
       </div>
     </div>
 
@@ -23,7 +30,8 @@
           <p class="room-list-tit">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i class="iconfont icon-dingwei"></i>
-            <p v-if="room.busStationName.length>0 && room.busDistance>0 && room.busDistance  < 1500">距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
+            <p v-if="room.busStationName.length>0 && room.busDistance>0 && room.busDistance  < 1500">
+              距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
             </p>
             <span v-if="room.activityName!=''">{{room.activityName}}</span>
           </div>
@@ -44,10 +52,13 @@
 </template>
 <script>
   import axios from 'axios'
+  import Swiper from 'swiper'
+  import 'swiper/dist/css/swiper.css';
   import API from '@/utils/api'
   import {
     mapState
   } from 'vuex'
+import { constants } from 'crypto';
   export default {
     name: "RoomList",
     data() {
@@ -60,48 +71,55 @@
         roomList: []
       };
     },
-    props:['villageId'],
+    props: ['villageId'],
     mounted() {
+      var bannerSwiper = new Swiper('.banner', {
+          loop: true,
+        })
+      if (this.banners.length != 0) {
+        console.log(this.banners.length)
+        
+      }
       this.vh = document.body.clientHeight / 100;
       this.loadRoomList();
     },
     methods: {
-      loadRoomList(){
+      loadRoomList() {
         let params = {};
-      if (this.screen) {
-        params = {
-          rentDays: this.screen.rentDays,
-          priceFrom: this.screen.priceFrom,
-          priceTo: this.screen.priceTo,
-          roomType: this.screen.roomType,
-          roomFeatureIds: this.screen.roomFeatureIds
-        }
-      }
-      params.villageId = this.villageId
-      axios.post(API['queryRoomByVillage'], params)
-        .then(res => {
-          if (res.data.code == 0) {
-            this.roomList = res.data.data;
+        if (this.screen) {
+          params = {
+            rentDays: this.screen.rentDays,
+            priceFrom: this.screen.priceFrom,
+            priceTo: this.screen.priceTo,
+            roomType: this.screen.roomType,
+            roomFeatureIds: this.screen.roomFeatureIds
           }
-        })
+        }
+        params.villageId = this.villageId
+        axios.post(API['queryRoomByVillage'], params)
+          .then(res => {
+            if (res.data.code == 0) {
+              this.roomList = res.data.data;
+            }
+          })
       },
       handleRoomlistStart(e) {
         e.preventDefault();
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
-        this.roomListTransition=false
+        this.roomListTransition = false
       },
       handleRoomlistScroll(e) {
         e.preventDefault();
         let translateY = e.changedTouches[0].clientY - this.touchStartY;
-        if (translateY > -this.vh * 40) {
+        if (translateY > -this.vh * 30) {
           this.translateY = translateY;
         } else {
-          this.translateY = -this.vh * 40;
+          this.translateY = -this.vh * 30;
         }
       },
       handleRoomlistEnd() {
-        this.roomListTransition=true
-        let _top = 40 * this.vh - this.translateY;
+        this.roomListTransition = true
+        let _top = 30 * this.vh - this.translateY;
         if (_top <= 20 * this.vh) {
           this.translateState = -1;
           this.$emit('roomListDestroy')
@@ -110,13 +128,13 @@
           this.translateState = 0;
         } else {
           this.translateState = 1;
-          this.translateY = -40 * this.vh;
+          this.translateY = -30 * this.vh;
         }
       }
     },
-    computed: mapState(['screen','currentCity']),
-    watch:{
-      villageId(){
+    computed: mapState(['screen', 'currentCity', 'banners']),
+    watch: {
+      villageId() {
         this.loadRoomList();
       }
     }
@@ -128,9 +146,9 @@
     background: #fff;
     position: absolute;
     z-index: 5;
-    bottom: -40vh;
+    bottom: -30vh;
     width: 100%;
-    height: 70vh;
+    height: 60vh;
   }
 
   .roomlist-transition {
@@ -148,6 +166,11 @@
     background: #fff;
   }
 
+  .village-b {
+    top: -44vw;
+    height: 44vw;
+  }
+
   .retract {
     width: 10vw;
     height: 2vw;
@@ -159,21 +182,17 @@
   }
 
   .village-info {
-    position: absolute;
     overflow: hidden;
     height: 6vw;
     padding: 4vw 4vw;
     top: 7vw;
     width: 92vw;
-  }
-
-  .village-info p {
     color: #101010;
     font-size: 4.5vw;
     font-weight: bold;
-    line-height: 1;
+    line-height: 6vw;
   }
-  
+
   .roomlist {
     width: 100%;
     height: 30vh;
@@ -181,7 +200,7 @@
   }
 
   .height80 {
-    height: 70vh;
+    height: 60vh;
   }
 
   .roomlist a {
@@ -343,5 +362,11 @@
     font-size: 4vw;
     text-align: center;
     margin: 2vw 0 10vw;
+  }
+
+  .banner {
+    width: 94.67vw;
+    height: 22.67vw;
+    background: #00aa83;
   }
 </style>
