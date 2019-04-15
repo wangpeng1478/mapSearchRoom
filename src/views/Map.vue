@@ -623,24 +623,6 @@ html,body,#app{
     margin-top: 2vw;
   }
 
-
-
-  .banner{
-    position: absolute;
-    top:200px;
-    left: 100px;
-    width: 500px;
-    height: 300px;
-    margin: 20px auto;
-    background: #fff;
-  }
-
-  .swiper-slide{
-    width: 400px;
-    height: 290px;
-    background: red;
-    border: 1px solid #fff;
-  }
 </style>
 
 

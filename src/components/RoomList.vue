@@ -1,16 +1,18 @@
 <template>
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
-    :style="{transform: 'translateY('+translateY+'px)'}" v-if="roomList.length!=0">
+    :style="{transform: 'translateY('+translateY+'px)'}">
     <div class="village" :class="banners.length!=0 ? 'village-b' : ''">
       <div @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
         <button class="retract"></button>
-        <p class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
+        <p class="village-info" v-if="roomList.length!=0">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
       <div class="banner swiper-container">
         <div class="swiper-wrapper">
-          <div class="swiper-slide">Slide 1</div>
-          <div class="swiper-slide">Slide 2</div>
-          <div class="swiper-slide">Slide 3</div>
+          <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
+            <a :href="banner.href" target="_blank">
+              <img :src="banner.imgUrl">
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -77,7 +79,8 @@
       this.$nextTick(() => {
         new Swiper('.swiper-container', {
           observer: true,
-          observeParents: true
+          observeParents: true,
+          autoplay:true
         })
       })
       if (this.banners.length != 0) {
@@ -371,6 +374,11 @@
   .banner {
     width: 94.67vw;
     height: 22.67vw;
-    background: #00aa83;
+    background: #eaeaea;
+  }
+  .banner img{
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 </style>
