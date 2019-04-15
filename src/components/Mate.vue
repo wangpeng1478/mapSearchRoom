@@ -187,7 +187,7 @@ export default {
                 this.$.showCoverHouse(json);
             }
         },
-        getLocation(){
+        getLocation(point){
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
                     var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
