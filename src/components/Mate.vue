@@ -59,9 +59,7 @@ export default {
                 type:2,
                 scale:11
             })
-
-            console.log("mate")
-            
+                        
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
@@ -144,8 +142,10 @@ export default {
                 })
 
                 let mapData = this.mapData;
-                this.$store.state.mapData.longitude = mapData.mateSite.longitude;
-                this.$store.state.mapData.latitude = mapData.mateSite.latitude;
+                this.assignMapData({
+                    longitude:mapData.mateSite.longitude,
+                    latitude:mapData.mateSite.latitude
+                })
                 let point = new BMap.Point(mapData.longitude,mapData.latitude);
                 // let distance = this.mapScreen.radius;
                 let distance = this.mapData.radius;
@@ -158,11 +158,6 @@ export default {
                     scale:scale,
                     isClickZoom:true
                 })
-                console.log("mate checkTime mapData++++",this)
-                console.log("mate point",point)
-                console.log("mate scale",scale)
-                // mp.centerAndZoom(point, scale);
-
                 
                 var circle = this.$.paintCircle(point,distance);
                 mp.getOverlays().map((val)=>{
@@ -173,7 +168,6 @@ export default {
                 })
                 mp.addOverlay(circle); //增加圆
                 this.getLocation(point);
-                this.$store.state.mapData.isInvFind = false;
                 let json = {
                     longitude:this.mapData.longitude,
                     latitude:this.mapData.latitude,
@@ -182,7 +176,8 @@ export default {
                 }
                 Object.assign(json,this.screen)
                 this.assignMapData({
-                    levelType:json.levelType
+                    levelType:json.levelType,
+                    isInvFind:false
                 })
                 this.$.showCoverHouse(json);
             }
