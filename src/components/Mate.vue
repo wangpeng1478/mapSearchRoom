@@ -219,7 +219,6 @@ export default {
                  mp.removeOverlay(val)
                 return;
             })
-            this.assignMapData({isOverLay:false})
             //筛选条件置空
             this.clearScreen()
             this.assignMapData({
@@ -228,9 +227,6 @@ export default {
                 isOverLay:false,
             })
             this.$store.state.pointSearch = null;
-            this.assignMapData({
-                isOverLay:false,
-            })
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
