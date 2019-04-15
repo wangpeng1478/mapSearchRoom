@@ -49,7 +49,6 @@ export default {
     mounted:function(){
         this.$nextTick(function(){
             let map = this.map;
-            let _state = store.state;
             let _this = this;
             let distance = 0;
             this.speed = 800;
@@ -59,7 +58,7 @@ export default {
                 type:2,
                 scale:11
             })
-                        
+
             let point = new BMap.Point(_this.mapData.longitude,_this.mapData.latitude);
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
@@ -72,8 +71,8 @@ export default {
             //筛选条件置空
             this.clearScreen()
             var json = {};
-            json.longitude = _state.mapData.longitude;
-            json.latitude = _state.mapData.latitude;
+            json.longitude = this.mapData.longitude;
+            json.latitude = this.mapData.latitude;
             json.levelType = this.toLevelType(scale);
             json.radius = distance;
 
@@ -83,7 +82,7 @@ export default {
                     longitude:json.longitude,
                 }
             })
-            Object.assign(json,this.$store.state.screen)
+            Object.assign(json,this.screen)
             this.assignMapData({
                 longitude:json.longitude,
                 latitude:json.latitude,
@@ -183,6 +182,7 @@ export default {
             }
         },
         getLocation(point){
+            let _this = this;
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
                     var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
@@ -193,7 +193,7 @@ export default {
                     function(){
                         _this.$router.push('/'+_this.currentCity.cityPinyin+"/map/search");
                     });
-                    mp.addOverlay(myCompOverlay);
+                    _this.map.addOverlay(myCompOverlay);
                 }); 
         },
         checkTime : function (params) {
@@ -203,8 +203,10 @@ export default {
                 // this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
                 // this.$store.state.mapData.radius = (20+10*params)*this.mapData.speed;
                 this.time = (20+10*params);
-                this.$store.state.mapData.radius = (20+10*params)*this.speed;
-                console.log("radius",this.$store.state.mapData.radius)
+                this.assignMapData({
+                    radius:(20+10*params)*this.speed
+                })
+                console.log("radius",this.mapData.radius)
                 this.filter();
             }
         },
