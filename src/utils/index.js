@@ -91,8 +91,8 @@ export default{ //很关键
                     store.state.mapData.latitude = cp.lat;
                     store.state.mapData.longitude = cp.lng;
                     
-                    json.latitude = store.state.mapData.mateSite.latitude;
-                    json.longitude = store.state.mapData.mateSite.longitude;
+                    json.latitude = store.state.pointSearch.lat;
+                    json.longitude = store.state.pointSearch.lng;
                     json.levelType = that.toLevelType(zoom);
                     mapData.levelType = json.levelType;
                     // json.radius = store.state.mapScreen.radius;
