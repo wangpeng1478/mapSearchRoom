@@ -78,16 +78,12 @@ export default {
                 latitude:json.latitude,
                 levelType:json.levelType,
                 radius:distance,
-                mateSite:{
-                    latitude:json.latitude,
-                    longitude:json.longitude,
-                }
             })
             this.$.showCoverHouse(json);
         })
     },
     methods:{
-        ...mapMutations(['assignMapData','clearScreen']),
+        ...mapMutations(['assign','assignMapData','clearScreen']),
         toLevelType:function(scale){
             var levelType;
             switch (scale) {
@@ -136,9 +132,10 @@ export default {
                 })
 
                 let mapData = this.mapData;
+                let pointSearch = this.pointSearch;
                 this.assignMapData({
-                    longitude:mapData.mateSite.longitude,
-                    latitude:mapData.mateSite.latitude
+                    longitude:pointSearch.lng,
+                    latitude:pointSearch.lat
                 })
                 let point = new BMap.Point(mapData.longitude,mapData.latitude);
                 // let distance = this.mapScreen.radius;
@@ -180,23 +177,30 @@ export default {
             let _this = this;
             var geoc = new BMap.Geocoder();
             geoc.getLocation(point, function(rs){
-                    var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
-                    if(_this.pointSearch){
-                        address = _this.pointSearch.name;
+                var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
+                if(_this.pointSearch){
+                    address = _this.pointSearch.name;
+                }
+                var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
+                function(){
+                    _this.$router.push('/'+_this.currentCity.cityPinyin+"/map/search");
+                });
+
+                _this.assign({
+                    key:"pointSearch",
+                    value:{
+                        lat:point.lat,
+                        lng:point.lng,
+                        name:address,
                     }
-                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(point,address,"ComplexCoverOverlay",
-                    function(){
-                        _this.$router.push('/'+_this.currentCity.cityPinyin+"/map/search");
-                    });
-                    _this.map.addOverlay(myCompOverlay);
-                }); 
+                })
+                _this.map.addOverlay(myCompOverlay);
+            }); 
         },
         checkTime : function (params) {
             
             if(this.time !== (20+10*params)){
                 this.$store.state.mapData.time = (20+10*params);
-                // this.$store.state.mapScreen.radius = (20+10*params)*this.mapData.speed;
-                // this.$store.state.mapData.radius = (20+10*params)*this.mapData.speed;
                 this.time = (20+10*params);
                 this.assignMapData({
                     radius:(20+10*params)*this.speed
@@ -265,7 +269,7 @@ export default {
 }
 
 .imate{
-    position: fixed;
+    position: absolute;
     bottom: 61vw;
     right: 10px;
     width: 32px;
@@ -278,7 +282,7 @@ export default {
 }
 
 .individuality_mate{
-    position: fixed;
+    position: absolute;
     left: 5vw;
     right: auto;
     bottom: 5vw;

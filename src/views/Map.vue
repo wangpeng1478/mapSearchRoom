@@ -142,7 +142,7 @@
           key:'keywordsSearch',
           value:{}
         })
-        this.geolocationControl.setOffset(new BMap.Size(10,190))
+        this.geolocationControl.setOffset(new BMap.Size(10,180))
 
         store.state.mapData.isClickZoom = true;
       },
@@ -196,14 +196,9 @@
         json.levelType = 2;
         Object.assign(json,_this.screen)
         if(this.mapData.isOverLay){
-          if(this.pointSearch){
+          console.log("pointSearch",this.pointSearch)
             this.mapData.latitude = this.pointSearch.lat;
             this.mapData.longitude = this.pointSearch.lng;
-          }else{
-            this.mapData.latitude = this.mapData.mateSite.latitude;
-            this.mapData.longitude = this.mapData.mateSite.longitude;
-            
-          }
           this.showMateFun();
         }else{
           if(this.keywordsSearch.tableId){

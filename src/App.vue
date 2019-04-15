@@ -1,9 +1,5 @@
 <template>
   <div id="app">
-    <!-- <keep-alive>
-      <router-view>
-      </router-view>
-  </keep-alive> -->
     <router-view />
     <Model v-if="showModel" :content="cityList ? cityList[localCity].cityName : ''" @handelModel='handelModel' />
     <p class="toast" v-if="toast">{{toast}}</p>
