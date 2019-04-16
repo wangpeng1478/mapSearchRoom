@@ -20,7 +20,7 @@
     <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
       <a :href="currentCity.url+'/room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
-          <em class="img-tag img-tag1" v-if="room.roomSpecialOffer>0">特价</em>
+          <em class="img-tag img-tag1" v-if=" !room.roomSpecialOffer || room.roomSpecialOffer>0">特价</em>
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>
           <em class="img-tag img-tag3" v-else-if="room.roomState == 9">配置中</em>
           <img
