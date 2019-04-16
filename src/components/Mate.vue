@@ -54,11 +54,11 @@ export default {
         this.$nextTick(function(){
             let map = this.map;
             let _this = this;
-            this.speed = 800;
+            this.speed = 600;   //默认出行方式 speed
             this.time = 30;
             let distance = this.speed * this.time; //默认出行方式
             this.assignMapData({
-                type:2,
+                type:1,
                 scale:11
             })
 

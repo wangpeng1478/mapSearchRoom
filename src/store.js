@@ -18,7 +18,7 @@ export default new Vuex.Store({
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
     mapData:{
-      type:2,
+      type:1,
       cityId:2,
       // speed:800,
       // time:30,
