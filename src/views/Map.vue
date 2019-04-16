@@ -194,7 +194,11 @@
         json.cityId = this.currentCity.cityId;
         json.levelType = 2;
         Object.assign(json,_this.screen)
+        console.log(this.mapData)
+        console.log(map.getOverlays())
         if(this.mapData.isOverLay){
+          map.clearOverlays();
+          console.log(map.getOverlays())
             this.mapData.latitude = this.pointSearch.lat;
             this.mapData.longitude = this.pointSearch.lng;
           this.showMateFun();
