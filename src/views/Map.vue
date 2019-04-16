@@ -12,7 +12,7 @@
     </div>
     </transition>
     <div class="mate" v-if="!mapData.isOverLay" @click="showMateFun">个性找房</div>
-    <Mate v-if="mapData.isOverLay" @hiddenMate="hiddenMateFun" @mateScreen="mateScreenFun" />
+    <Mate v-if="mapData.isOverLay" @mateScreen="mateScreenFun" />
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
@@ -40,7 +40,6 @@
   import RoomList from '@/components/RoomList'
   import Screen from '@/components/Screen'
   import RegionAndMetro from '@/components/RegionAndMetro'
-  import store from '@/store'
   import {mapState,mapMutations} from 'vuex'
   import {recordButton} from '@/utils/record'
   export default {
@@ -59,15 +58,12 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen']),
-      mapBaseDataReady(){
-        return this.$store.state.mapBaseDataReady;
-      },
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj']),
       showRoomList(){
         return this.mapData.showRoomList;
       },
       cityId(){
-        return this.$store.state.currentCity.cityId;
+        return this.currentCity.cityId;
       }
     },
     watch:{
@@ -100,7 +96,7 @@
       mapScreen(){
         //地图条件搜索
         let _this = this;
-        let map = store.state.map;
+        let map = this.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
@@ -114,9 +110,9 @@
         }else{
           
           //去除圆形阴影
-          if(store.state.circleObj){
-              map.removeOverlay(store.state.circleObj);
-              store.state.circleObj = null;
+          if(this.circleObj){
+              map.removeOverlay(_this.circleObj);
+              this.assign({circleObj:null})
           }
           Object.assign(json,this.screen);
           delete json["latitude"];
@@ -151,30 +147,28 @@
         //筛选条件置空
         this.clearScreen()
         this.assignMapData({
-          isOverLay:true
+          isOverLay:true,
+          isClickZoom:true
         })
         this.assign({keywordsSearch:{}})
         this.geolocationControl.setOffset(new BMap.Size(10,180))
-
-        store.state.mapData.isClickZoom = true;
       },
-      hiddenMateFun: function(msg){
-        this.assignMapData({
-          isOverLay:msg
-        })
-        this.geolocationControl.setOffset(new BMap.Size(10,30));
+      // hiddenMateFun: function(msg){
+      //   this.assignMapData({
+      //     isOverLay:msg
+      //   })
+      //   this.geolocationControl.setOffset(new BMap.Size(10,30));
 
-        var json = {};
-        json.cityId = this.currentCity.cityId;
-        json.levelType = 2;
-        Object.assign(json,this.screen)
-        this.$.showHouse(json);
-      },
+      //   var json = {};
+      //   json.cityId = this.currentCity.cityId;
+      //   json.levelType = 2;
+      //   Object.assign(json,this.screen)
+      //   this.$.showHouse(json);
+      // },
       baiduMap: function () {
-        store.state.mapData.showRoomList = false;
-        this.$store.state.mapData.isClickZoom = true;
         this.assignMapData({
-          isClickZoom:true
+          isClickZoom:true,
+          showRoomList:false
         })
         //模拟数据
         let map = new BMap.Map("allmap");
@@ -202,7 +196,7 @@
         let marker = new BMap.Marker(point);  // 创建标注
         marker.disableMassClear();
         map.addOverlay(marker);               // 将标注添加到地图中
-        store.state.map = map;
+        this.assign({map})
         var json = {};
         json.cityId = this.currentCity.cityId;
         json.levelType = 2;
@@ -238,7 +232,7 @@
                 json.levelType = 2;
                 break;
             }
-            store.state.mapData.levelType = json.levelType;
+            this.assignMapData({levelType:json.levelType})
             this.$.showSearchHouse(json)
           }else{
             this.assignMapData({
