@@ -139,7 +139,6 @@
     computed: mapState([
       "metroList",
       "provincialList",
-      "mapBaseDataReady",
       "currentCity",
       "regionTemp"
     ])
