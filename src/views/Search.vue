@@ -224,10 +224,21 @@ export default {
             }
           });
       } else {
-        this.acResult = this.ac.getResults().Lq;
-        if(this.acResult.length==0){
+        let acResult = this.ac.getResults().Lq;
+        acResult.forEach((item,index)=>{
+          
+        })
+        for(let i=0;i<acResult.length;i++){
+          if(acResult[i].city.indexOf(this.currentCity.cityName)==-1){
+            acResult.splice(i,1)
+            i--;
+          }
+        }
+        console.log(acResult)
+        if(acResult.length==0){
           this.showToast('对不起，暂未匹配到相关数据')
         }
+        this.acResult = acResult;
       }
     },
     handleSearchTag(idx, name) {
