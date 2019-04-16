@@ -2,7 +2,7 @@
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}">
     <div class="village" :class="banners.length!=0 ? 'village-b' : ''">
-      <div @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
+      <div class="village-tit" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
         <button class="retract"></button>
         <p class="village-info" v-if="roomList.length!=0">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
@@ -376,5 +376,9 @@
     display: block;
     width: 100%;
     height: 100%;
+  }
+  .village-tit{
+    height: 20vw;
+    overflow: hidden;
   }
 </style>
