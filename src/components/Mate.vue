@@ -3,7 +3,7 @@
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate" @click="mateScreen"></div>
-        <div class="individuality_mate" @touchmove="moveStop">
+        <div class="individuality_mate" @touchmove.stop="moveStop">
             <div class="mate_icon">
                 <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
                 <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
@@ -120,7 +120,7 @@ export default {
         },
         moveStop:function(event) {
             event.preventDefault();
-            // return false
+            // // return false
         },
         filter:function(){
            
