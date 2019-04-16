@@ -41,6 +41,7 @@ export default new Vuex.Store({
     // submitScreen:null,   //点击确定筛选条件
     screen:null, //筛选条件
     screenTemp:null,//筛选条件缓存
+    mapBaseDataReady:false,
     metroStationData:{},      // 上一次的地铁站点
     coverDataList:[],
     metroList:[],

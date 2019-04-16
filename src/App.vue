@@ -102,6 +102,10 @@ import { setTimeout } from 'timers';
         }).then(res => {
           if (res.data.code == 0) {
             this.mapBaseData(res.data.data)
+            this.assignAsync({
+              key: "mapBaseDataReady",
+              value: true
+            });
           }
         });
       },
@@ -140,7 +144,7 @@ import { setTimeout } from 'timers';
         axios.post(API['getBanners'],{
           cityId:this.currentCity.cityId
         }).then(res=>{
-          if(res.data.code==0 && res.data.data!=null){
+          if(res.data.code==0){
             this.assign({banners:res.data.data})
           }
         })
