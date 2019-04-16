@@ -12,7 +12,7 @@
     </div>
     </transition>
     <div class="mate" v-if="!mapData.isOverLay" @click="showMateFun">个性找房</div>
-    <Mate v-if="mapData.isOverLay" @mateScreen="mateScreenFun" />
+    <Mate v-if="mapData.isOverLay" @mateScreen="mateScreenFun" @hiddenMate="hiddenMateFun"/>
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
@@ -23,13 +23,6 @@
     <RegionAndMetro v-if="showView.showRegionAndMetro" @hiddenRegion="hiddenRegion"/>
     </transition>
     <div class="mask" v-if="showView.showMask" @click="viewSetDefault"></div>
-    <!-- <div class="banner swiper-container">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">Slide 1</div>
-        <div class="swiper-slide">Slide 2</div>
-        <div class="swiper-slide">Slide 3</div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -153,18 +146,18 @@
         this.assign({keywordsSearch:{}})
         this.geolocationControl.setOffset(new BMap.Size(10,180))
       },
-      // hiddenMateFun: function(msg){
-      //   this.assignMapData({
-      //     isOverLay:msg
-      //   })
-      //   this.geolocationControl.setOffset(new BMap.Size(10,30));
+      hiddenMateFun: function(msg){
+        this.assignMapData({
+          isOverLay:msg
+        })
+        this.geolocationControl.setOffset(new BMap.Size(10,30));
 
-      //   var json = {};
-      //   json.cityId = this.currentCity.cityId;
-      //   json.levelType = 2;
-      //   Object.assign(json,this.screen)
-      //   this.$.showHouse(json);
-      // },
+        var json = {};
+        json.cityId = this.currentCity.cityId;
+        json.levelType = 2;
+        Object.assign(json,this.screen)
+        this.$.showHouse(json);
+      },
       baiduMap: function () {
         this.assignMapData({
           isClickZoom:true,
