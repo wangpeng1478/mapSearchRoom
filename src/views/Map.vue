@@ -208,7 +208,6 @@
         json.levelType = 2;
         Object.assign(json,_this.screen)
         if(this.mapData.isOverLay){
-          console.log("pointSearch",this.pointSearch)
             this.mapData.latitude = this.pointSearch.lat;
             this.mapData.longitude = this.pointSearch.lng;
           this.showMateFun();

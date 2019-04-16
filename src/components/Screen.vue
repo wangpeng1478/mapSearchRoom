@@ -135,7 +135,6 @@
       },
       screenChange() {
         let query = this.screenCondition();
-        console.log(query)
         if(query.stationId){
           query.metroStationId = query.stationId;
           delete query['stationId']

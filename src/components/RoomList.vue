@@ -76,16 +76,12 @@
     },
     props: ['villageId'],
     mounted() {
-      this.$nextTick(() => {
+      if (this.banners.length != 0) {
         new Swiper('.swiper-container', {
           observer: true,
           observeParents: true,
           autoplay:true
         })
-      })
-      if (this.banners.length != 0) {
-        console.log(this.banners.length)
-
       }
       this.vh = document.body.clientHeight / 100;
       this.loadRoomList();
