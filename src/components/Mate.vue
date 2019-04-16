@@ -48,9 +48,9 @@ export default {
     components:{sliderComponent},
     mounted:function(){
         
-document.body.addEventListener('touchmove', function (e) {
-    e.preventDefault(); 
-}, {passive: false}); 
+// document.body.addEventListener('touchmove', function (e) {
+//     e.preventDefault(); 
+// }, {passive: false}); 
 
 
         this.$nextTick(function(){
