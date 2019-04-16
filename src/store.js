@@ -57,7 +57,10 @@ export default new Vuex.Store({
   mutations: {
     //state赋值公共方法
     assign(state,data){
-      state[data.key] = data.value
+      let keys = Object.keys(data)
+      for(let i=0;i<keys.length;i++){
+        state[keys[i]] = data[keys[i]]
+      }
     },
     clearSearh(state){
       state.keywordsSearch={};

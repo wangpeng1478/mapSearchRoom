@@ -81,24 +81,15 @@ import { setTimeout } from 'timers';
         axios.post(API["queryCityList"]).then(res => {
           if (res.data.code == 0) {
             let cityList = res.data.data
-            _this.assign({
-              key: "cityList",
-              value: cityList
-            });
+            _this.assign({cityList});
             let cityPY = this.$route.params.cityPY
             let localCity = cityList.findIndex(city => {
               return city.cityPinyin == cityPY;
             });
             if (localCity != -1) {
-              _this.assign({
-                key: "currentCity",
-                value: cityList[localCity]
-              });
+              _this.assign({currentCity:cityList[localCity]});
             } else {
-              _this.assign({
-                key: "currentCity",
-                value: cityList[0]
-              });
+              _this.assign({currentCity:cityList[0]});
               this.$router.push('/' + cityList[0].cityPinyin + '/map')
             }
             _this.loadCity()
@@ -155,10 +146,7 @@ import { setTimeout } from 'timers';
         }).then(res=>{
           console.log(res)
           if(res.data.code==0){
-            this.assign({
-              key:'banners',
-              value:res.data.data
-            })
+            this.assign({banners:res.data.data})
           }
         })
       },
@@ -174,10 +162,7 @@ import { setTimeout } from 'timers';
           if (localCity == -1) {
             this.$router.go(-1)
           } else {
-            this.assign({
-              key: "currentCity",
-              value: this.cityList[localCity]
-            });
+            this.assign({currentCity:this.cityList[localCity]});
           }
         }
 
@@ -192,10 +177,7 @@ import { setTimeout } from 'timers';
       toast(val) {
         if (val) {
           setTimeout(() => {
-            this.assign({
-              key: 'toast',
-              value: null
-            })
+            this.assign({toast:null})
           }, 3000)
         }
       }

@@ -131,10 +131,7 @@
             }
           }
           data.selected = this.selected;
-          this.assign({
-            key: 'regionTemp',
-            value: data
-          })
+          this.assign({regionTemp:data})
           this.$emit("hiddenRegion");
         }
       }

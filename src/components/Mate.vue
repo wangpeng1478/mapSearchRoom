@@ -197,13 +197,12 @@ document.body.addEventListener('touchmove', function (e) {
                 });
 
                 _this.assign({
-                    key:"pointSearch",
-                    value:{
+                    pointSearch:{
                         lat:point.lat,
                         lng:point.lng,
-                        name:address,
-                    }
-                })
+                        name:address
+                        }
+                    })
                 _this.map.addOverlay(myCompOverlay);
             }); 
         },

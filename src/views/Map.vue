@@ -153,10 +153,7 @@
         this.assignMapData({
           isOverLay:true
         })
-        this.assign({
-          key:'keywordsSearch',
-          value:{}
-        })
+        this.assign({keywordsSearch:{}})
         this.geolocationControl.setOffset(new BMap.Size(10,180))
 
         store.state.mapData.isClickZoom = true;

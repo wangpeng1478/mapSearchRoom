@@ -229,10 +229,7 @@
         };
         this.priceRecomm = null;
         this.sliderReset();
-        this.assign({
-          key: "regionTemp",
-          value: {}
-        });
+        this.assign({regionTemp:{}});
         this.screenChange();
       },
       sliderReset() {
@@ -296,10 +293,7 @@
         let query = this.screenCondition();
         if (!this.isOverLay) {
           if (Object.keys(this.regionTemp).length != 0 && Object.keys(this.keywordsSearch).length != 0) {
-            this.assign({
-              key: 'keywordsSearch',
-              value: {}
-            })
+            this.assign({keywordsSearch:{}})
           }
           if (Object.keys(this.regionTemp).length != 0) {
             if (this.regionTemp.latitudeAndLongitude) {
@@ -359,15 +353,13 @@
           }
         }
         this.assign({
-          key: "screen",
-          value: {
+          screen:{
             ...query,
             ...this.regionTemp.latitudeAndLongitude
           }
         });
         this.assign({
-          key: "screenTemp",
-          value: {
+          screenTemp: {
             roomCount: this.roomCount,
             regionName: this.regionName,
             customPriceValue: this.customPriceValue,
@@ -376,10 +368,7 @@
           }
         });
         if (!this.isOverLay) {
-          this.assign({
-            key: "region",
-            value: this.regionTemp
-          });
+          this.assign({region: this.regionTemp});
         }
         this.$emit('screen')
       },

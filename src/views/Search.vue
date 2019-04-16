@@ -141,7 +141,7 @@ export default {
     },
     handleAcHistory(idx){
       recordButton('搜索页面点击位置')
-      this.assign({key:'pointSearch',value:this.pointTagHistory[idx]})
+      this.assign({pointSearch:this.pointTagHistory[idx]})
       this.backMap()
     },
     clearPoint() {
@@ -162,7 +162,7 @@ export default {
             let point = res;
             point.name = _this.acResult[idx].business;
             _this.savePointStorage(point);
-            _this.assign({key:'pointSearch',value:point})
+            _this.assign({pointSearch:point})
             _this.backMap()
           }
         },
@@ -265,10 +265,7 @@ export default {
         //房间
         window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
       }else{
-        this.assign({
-        key:'keywordsSearch',
-        value:keywordsSearch
-      })
+        this.assign({keywordsSearch})
       //清空筛选条件
       this.clearScreen()
       this.searchCompelet(keywordsSearch);
