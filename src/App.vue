@@ -144,7 +144,7 @@ import { setTimeout } from 'timers';
         axios.post(API['getBanners'],{
           cityId:this.currentCity.cityId
         }).then(res=>{
-          if(res.data.code==0){
+          if(res.data.code==0&&res.data.data){
             this.assign({banners:res.data.data})
           }
         })
