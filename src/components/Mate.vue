@@ -33,7 +33,6 @@
 
 import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
-import store from '@/store'
 import {mapState,mapMutations} from 'vuex'
 import {recordButton} from '@/utils/record'
 export default {
@@ -44,7 +43,6 @@ export default {
             time:0
         }
     },
-    store,
     components:{sliderComponent},
     mounted:function(){
         
@@ -68,8 +66,7 @@ document.body.addEventListener('touchmove', function (e) {
             let scale = _this.mapData.scale;
             map.centerAndZoom(point, scale);
             let circle = this.$.paintCircle(point,distance);
-            this.$store.state.circleObj = circle;
-            
+            this.assign({circleObj:circle})
             map.addOverlay(circle); //增加圆
             this.getLocation(point)
             var json = {
@@ -130,8 +127,8 @@ document.body.addEventListener('touchmove', function (e) {
             if(this.speed!=0){
                 var mp = this.map;
                 var _this = this;
-                if(store.state.circleObj){
-                    mp.removeOverlay(store.state.circleObj);
+                if(this.circleObj){
+                    mp.removeOverlay(this.circleObj);
                 }
                 
                  mp.getOverlays().map((val)=>{
@@ -209,9 +206,9 @@ document.body.addEventListener('touchmove', function (e) {
         checkTime : function (params) {
             
             if(this.time !== (20+10*params)){
-                this.$store.state.mapData.time = (20+10*params);
                 this.time = (20+10*params);
                 this.assignMapData({
+                    time:20+10*params,
                     radius:(20+10*params)*this.speed
                 })
                 this.filter();
@@ -233,7 +230,7 @@ document.body.addEventListener('touchmove', function (e) {
                 scale:11,
                 isOverLay:false,
             })
-            this.$store.state.pointSearch = null;
+            this.assign({pointSearch:null})
             this.$emit("hiddenMate",hiddenMate)
         },
         mateScreen:function(){
@@ -251,18 +248,14 @@ document.body.addEventListener('touchmove', function (e) {
             })
             this.trafficSpeedList.map((val)=>{
                 if(val.type == res){
-                    // store.state.mapData.speed = val.speed;
                     _this.speed = val.speed;
                 }
             })
-            // this.speed =  _this.speed;
-            // this.$store.state.mapScreen.radius = this.mapData.speed*this.mapData.time;
-            // this.$store.state.mapData.radius = this.mapData.speed*this.mapData.time;
-            this.$store.state.mapData.radius = this.speed*this.time;
+            this.assignMapData({radius:this.speed*this.time})
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen','trafficSpeedList'])
+    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen','trafficSpeedList','circleObj'])
 }
 </script>
 
