@@ -6,7 +6,7 @@
         <button class="retract"></button>
         <p class="village-info" v-if="roomList.length!=0">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
       </div>
-      <div class="banner swiper-container">
+      <div class="banner swiper-container" v-if="banners.length != 0">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
             <a :href="banner.href" target="_blank">

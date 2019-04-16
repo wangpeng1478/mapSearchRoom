@@ -58,7 +58,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','map','circleObj']),
       showRoomList(){
         return this.mapData.showRoomList;
       },
