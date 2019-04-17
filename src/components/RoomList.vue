@@ -47,7 +47,7 @@
           </div>
         </div>
       </a>
-      <p class="tips">没有更多啦~</p>
+      <p class="tips">—— 已加载完成 ——</p>
     </div>
   </div>
 </template>
@@ -362,7 +362,7 @@
 
   .tips {
     color: #999;
-    font-size: 4vw;
+    font-size: 3vw;
     text-align: center;
     margin: 2vw 0 10vw;
   }
