@@ -103,6 +103,10 @@
           .then(res => {
             if (res.data.code == 0) {
               this.roomList = res.data.data;
+              let oRoomList = document.getElementsByClassName("roomlist");
+              if(oRoomList.item(0)){
+                oRoomList.item(0).scrollTop=0;
+              }
             }
           })
       },
