@@ -446,13 +446,6 @@ export default{ //很关键
                 if (res.data.code == 0) {
                     res = res.data.data;
                     store.state.coverDataList = res;
-
-                    var json = [];
-                    res.map((val,index)=>{
-                        json[index] = null
-                        return;
-                    })
-                    storage["showCoverDataList"]=JSON.stringify(json);
                     this.showCoverByCoordinate(json);
                 }
             });
@@ -722,8 +715,6 @@ export default{ //很关键
         let map = store.state.map;
         let _state = store.state;
         let that = this;
-
-        
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
                map.removeOverlay(val)
@@ -772,6 +763,7 @@ export default{ //很关键
                         case 2:
                             myCompOverlay._div.addEventListener("click", 
                             function (e) {
+                                console.log("2")
                                 fuzhi(e,3);
                                 store.state.mapData.scale = 14;
                             }
