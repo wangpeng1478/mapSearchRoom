@@ -300,7 +300,7 @@
   }
 
   .roon-info-line2 p {
-    width: 32vw;
+    width: 36vw;
     color: #767676;
     font-size: 3.2vw;
     line-height: 6vw;
