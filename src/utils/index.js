@@ -148,11 +148,11 @@ export default{ //很关键
     movingEvent:function(obj){
         var that = this;
         obj.addEventListener("moving", function(){
-            console.log("moving")
             isMovingEvent = true;
             let map = store.state.map;
             let mapData = store.state.mapData;
             var json = {};
+            console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -160,6 +160,7 @@ export default{ //很关键
                 store.state.mapData.scale = store.state.map.getZoom();
                 json.cityId = store.state.currentCity.cityId;
                 json.levelType = that.toLevelType(store.state.mapData.scale);
+                console.log(json)
                 switch (json.levelType) {
                     case 1:
                     case 2:
@@ -167,15 +168,12 @@ export default{ //很关键
                     case 4:
                     case 6:
                     case 7:
-                    
                         that.showAreaHouse(json);
                         break;
                     case 5:
                         that.showMetroHouse(json);
                         break;
                 }
-                
-                
             }else{
                 var cp = obj.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -187,6 +185,7 @@ export default{ //很关键
                 store.state.mapData.levelType = json.levelType;
                 json.radius = store.state.mapData.radius;
                 Object.assign(json,store.state.screen)
+                
                 that.showCoverByCoordinate(json);
             }
             
@@ -399,7 +398,6 @@ export default{ //很关键
                             return;
                         })
                         storage["showCoverDataList"]=JSON.stringify(json);
-                        console.log("showCoverDataList",storage["showCoverDataList"])
                         this.showAreaHouse(mpdata);
                         break;
                     case 5:
@@ -411,8 +409,6 @@ export default{ //很关键
                             return;
                         })
                         storage["showCoverDataList"]=JSON.stringify(json);
-                        console.log("showCoverDataList",storage["showCoverDataList"])
-
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -431,8 +427,6 @@ export default{ //很关键
                             return;
                         })
                         storage["showCoverDataList"]=JSON.stringify(json);
-                        console.log("showCoverDataList",storage["showCoverDataList"])
-
                         var metroPoint = this.getMapPoint('mapData')
                         var metroCircle = this.paintCircle(metroPoint,distance)
                         store.state.circleObj = metroCircle;
@@ -593,18 +587,21 @@ export default{ //很关键
                 case 7:
                 case 8:
                 case 9: 
-                case 10:
                 levelType = 1;
                     break;
+                case 10:
+                
                 case 11:
                 case 12:
+                levelType = 2;
+                    break;
                 case 13:
+                
                 case 14:
-                    levelType = 2;
-                    break;
-                case 15:
                 levelType = 3;
-                    break;
+                break;
+                case 15:
+                
                 default:
                 if(store.state.mapData.levelType==7){
                     levelType = 7;
