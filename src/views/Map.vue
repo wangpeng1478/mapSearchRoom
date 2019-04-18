@@ -211,7 +211,7 @@
                 break;
               case 2:
                 json.levelType = 6;
-                json.metroId  = this.keywordsSearch.parentId;
+                json.metroId  = this.keywordsSearch.metroId;
                 json.stationId = this.keywordsSearch.tableId;
                 break;
               case 3:

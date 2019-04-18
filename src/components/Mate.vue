@@ -255,7 +255,7 @@ export default {
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData','pointSearch','map','mapScreen','trafficSpeedList','circleObj'])
+    computed:mapState(['currentCity','mapData','pointSearch','map','trafficSpeedList','circleObj'])
 }
 </script>
 

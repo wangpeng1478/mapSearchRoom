@@ -111,6 +111,11 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             json.levelType = levelType;
             if(!flag){
+                // let bounds = map.getBounds();
+                // json.topLeftLongitude = bounds.hl.lng;
+                // json.topLeftLatitude = bounds.hl.lat;
+                // json.bottomRightLongitude = bounds.wl.lng;showHouse
+                // json.bottomRightLatitude = bounds.wl.lat;
                 that.showHouse(json);
                 store.state.mapData.isClickZoom = true;
             }
@@ -152,6 +157,7 @@ export default{ //很关键
             let map = store.state.map;
             let mapData = store.state.mapData;
             var json = {};
+            
             console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
@@ -159,16 +165,29 @@ export default{ //很关键
                 store.state.mapData.longitude = cp.lng;
                 store.state.mapData.scale = store.state.map.getZoom();
                 json.cityId = store.state.currentCity.cityId;
+                
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                console.log(json)
                 switch (json.levelType) {
                     case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 6:
-                    case 7:
                         that.showAreaHouse(json);
+                        break;
+                    case 2:
+                        that.showAreaHouse(json);
+                        break;
+                    case 3:
+                        that.showAreaHouse(json);
+                        break;
+                    
+                    case 6:
+                        var scrJson = {};
+                        Object.assign(scrJson,store.state.keywordsSearch,store.state.screen)
+                        json.metroId = scrJson.metroId;
+                        that.showHouse(json)
+                        break;
+                    case 4:
+                    case 7:
+                        // that.showAreaHouse(json);
+                        that.showHouse(json)
                         break;
                     case 5:
                         that.showMetroHouse(json);
@@ -268,6 +287,7 @@ export default{ //很关键
     },
     //显示房源
     showHouse:function(mpdata){
+        console.log(store.state.keywordsSearch)
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
         
@@ -275,9 +295,20 @@ export default{ //很关键
         for (const key in mpdata) {
             mJson[key] = mpdata[key];
         }
-        if(mJson.levelType == 7){
-            mJson.levelType = 4;
+        // if(mJson.levelType == 7){
+        //     mJson.levelType = 4;
+        // }
+        let point = this.getMapPoint('mapData')
+        // 创建点坐标 
+        let mapData = store.state.mapData;
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
         }
+        let bounds = map.getBounds();
+        mJson.topLeftLongitude = bounds.wl.lng;
+        mJson.topLeftLatitude = bounds.hl.lat;  //左上
+        mJson.bottomRightLongitude = bounds.hl.lng;
+        mJson.bottomRightLatitude = bounds.wl.lat;  //右下
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -378,13 +409,26 @@ export default{ //很关键
         for (const key in mpdata) {
             mJson[key] = mpdata[key];
         }
-        if(mJson.levelType == 7){
-            mJson.levelType = 4;
+        // if(mJson.levelType == 7){
+        //     mJson.levelType = 4;
+        // }
+
+        store.state.mapData.scale=this.toScale(mpdata.levelType);
+        let point = this.getMapPoint('mapData')
+        // 创建点坐标 
+        let mapData = store.state.mapData;
+        if(!mapData.isOverLay){
+            map.centerAndZoom(point,store.state.mapData.scale);
         }
+        let bounds = map.getBounds();
+        mJson.topLeftLongitude = bounds.wl.lng;
+        mJson.topLeftLatitude = bounds.hl.lat;  //左上
+        mJson.bottomRightLongitude = bounds.hl.lng;
+        mJson.bottomRightLatitude = bounds.wl.lat;  //右下
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
-                store.state.mapData.scale=this.toScale(mpdata.levelType);
+                
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -467,12 +511,7 @@ export default{ //很关键
             return;
         })
         
-        let point = this.getMapPoint('mapData')
-        // 创建点坐标 
-        let mapData = store.state.mapData;
-        if(!mapData.isOverLay){
-            map.centerAndZoom(point,store.state.mapData.scale);
-        }
+        
         
         let bounds = map.getBounds();
         if(_state.coverDataList){
@@ -653,9 +692,9 @@ export default{ //很关键
             }
             return;
         })
-        let point = this.getMapPoint('mapData')
-        // store.state.mapData.scale = 12;
-        map.centerAndZoom(point,store.state.mapData.scale);
+        // let point = this.getMapPoint('mapData')
+        // // store.state.mapData.scale = 12;
+        // map.centerAndZoom(point,store.state.mapData.scale);
 
         //标出 地铁线路
         // var transit = new BMap.TransitRoute(map, { 
