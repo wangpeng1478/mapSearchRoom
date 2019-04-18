@@ -504,9 +504,7 @@ export default{ //很关键
         map.getOverlays().map((val)=>{
             
             if(val._type=="ComplexOverlay"){
-                if(!isMovingEvent){
                     map.removeOverlay(val)
-                }
             }
             return;
         })
@@ -688,9 +686,9 @@ export default{ //很关键
         let that = this;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
-                if(!isMovingEvent){
+                // if(!isMovingEvent){
                     map.removeOverlay(val)
-                }
+                // }
             }
             return;
         })
