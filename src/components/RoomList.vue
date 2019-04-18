@@ -352,11 +352,10 @@
     height: 4.8vw;
     padding: 0 2vw;
     color: #00ac84;
-    border: solid 0.133vw #00ac84;
+    border: solid 1px #00ac84;
     text-align: center;
     float: left;
-    margin-right: 2vw;
-    margin-bottom: 1vw;
+    margin: 0 1.9vw 1vw 0.5vw;
     font-size: 2.667vw;
     line-height: 4.8vw;
   }
