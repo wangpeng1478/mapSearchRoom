@@ -2,7 +2,7 @@ import axios from 'axios'
 import API from '@/utils/api'
 import store from '@/store'
 import  ComplexOverlay  from '@/utils/prototype.js'
-var storage=window.localStorage;
+// var storage=window.localStorage;
 var isMovingEvent =false;
 export default{ //很关键
     
@@ -18,24 +18,27 @@ export default{ //很关键
             case 1:
                 obj.addEventListener("click", 
                 function (e) {
-                    fuzhi(e,2);
                     store.state.mapData.scale = 10;
+                    fuzhi(e,2);
+                    
                 }
                 ,false);
                 break;
             case 2:
                 obj.addEventListener("click", 
                 function (e) {
-                    fuzhi(e,3);
                     store.state.mapData.scale = 14;
+                    fuzhi(e,3);
+                    
                 }
                 ,false);
                 break;
             case 3:
                 obj.addEventListener("click", 
                 function (e) {
-                    fuzhi(e,4);
                     store.state.mapData.scale = 15;
+                    fuzhi(e,4);
+                    
                 }
                 ,false);
                 break;
@@ -43,12 +46,13 @@ export default{ //很关键
             
                 obj.addEventListener("click", 
                 function (e) {
+                    store.state.mapData.scale = 16;
                     fuzhi(e,4,true);
                     var target = e.target;
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    store.state.mapData.scale = 16;
+                    
                     store.state.mapData.villageId = target.getAttribute("key");
                     store.state.mapData.showRoomList = true;
                 }
@@ -57,8 +61,9 @@ export default{ //很关键
             case 5:
                 obj.addEventListener("click", 
                 function (e) {
-                    fuzhi(e,6);
                     store.state.mapData.scale = 12;
+                    fuzhi(e,6);
+                   
                 }
                 ,false);
                 break;
@@ -66,12 +71,13 @@ export default{ //很关键
                  
                 obj.addEventListener("click", 
                 function (e) {
+                    store.state.mapData.scale = 14;
                     fuzhi(e,6);
                     var target = e.target;
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    store.state.mapData.scale = 14;
+                    
                     store.state.mapData.villageId = target.getAttribute("key");
                     store.state.mapData.showRoomList = true;
 
@@ -82,12 +88,13 @@ export default{ //很关键
             case 7:
                 obj.addEventListener("click", 
                 function (e) {
+                    store.state.mapData.scale = 16;
                     fuzhi(e,7,true);
                     var target = e.target;
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    store.state.mapData.scale = 16;
+                    
                     store.state.mapData.villageId = target.getAttribute("key");
                     store.state.mapData.showRoomList = true;
                 }
@@ -111,11 +118,6 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             json.levelType = levelType;
             if(!flag){
-                // let bounds = map.getBounds();
-                // json.topLeftLongitude = bounds.hl.lng;
-                // json.topLeftLatitude = bounds.hl.lat;
-                // json.bottomRightLongitude = bounds.wl.lng;showHouse
-                // json.bottomRightLatitude = bounds.wl.lat;
                 that.showHouse(json);
                 store.state.mapData.isClickZoom = true;
             }
@@ -158,7 +160,6 @@ export default{ //很关键
             let mapData = store.state.mapData;
             var json = {};
             
-            console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -287,7 +288,6 @@ export default{ //很关键
     },
     //显示房源
     showHouse:function(mpdata){
-        console.log(store.state.keywordsSearch)
         let map = store.state.map;
         let isClickZoom = store.state.mapData.isClickZoom;
         
@@ -338,7 +338,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showAreaHouse(mpdata);
                         break;
                     case 5:
@@ -348,7 +348,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -360,7 +360,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showAreaHouse(mpdata);
                         let metroPoint;
                         var distance ;
@@ -441,7 +441,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showAreaHouse(mpdata);
                         break;
                     case 5:
@@ -452,7 +452,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -470,7 +470,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        storage["showCoverDataList"]=JSON.stringify(json);
+                        // storage["showCoverDataList"]=JSON.stringify(json);
                         var metroPoint = this.getMapPoint('mapData')
                         var metroCircle = this.paintCircle(metroPoint,distance)
                         store.state.circleObj = metroCircle;
@@ -515,7 +515,7 @@ export default{ //很关键
         
         let bounds = map.getBounds();
         if(_state.coverDataList){
-            var showCoverDataList = JSON.parse(localStorage.getItem('showCoverDataList'))
+            // var showCoverDataList = JSON.parse(localStorage.getItem('showCoverDataList'))
             _state.coverDataList.map((val,index)=>{
                 if(
                     (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
@@ -531,17 +531,19 @@ export default{ //很关键
                         price = val.minPrice;txt = val.value;mouseoverTxt = val.count + "间";
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                     }
-                    if(isMovingEvent){
-                        if(!showCoverDataList[index]){
-                            showCoverDataList[index] = val;
-                            localStorage["showCoverDataList"] = JSON.stringify(showCoverDataList);
-                            map.addOverlay(myCompOverlay);
-                            that.addClickEvent(myCompOverlay._div,data);
-                        }
-                    }else{
-                        map.addOverlay(myCompOverlay);
-                        that.addClickEvent(myCompOverlay._div,data)
-                    }
+                    map.addOverlay(myCompOverlay);
+                    that.addClickEvent(myCompOverlay._div,data);
+                    // if(isMovingEvent){
+                    //     if(!showCoverDataList[index]){
+                    //         showCoverDataList[index] = val;
+                    //         localStorage["showCoverDataList"] = JSON.stringify(showCoverDataList);
+                    //         map.addOverlay(myCompOverlay);
+                    //         that.addClickEvent(myCompOverlay._div,data);
+                    //     }
+                    // }else{
+                    //     map.addOverlay(myCompOverlay);
+                    //     that.addClickEvent(myCompOverlay._div,data)
+                    // }
                     
                     
                 }
