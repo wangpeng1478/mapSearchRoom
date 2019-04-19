@@ -52,7 +52,8 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    
+                    console.log(target)
+                    target.className = target.className+ " location_label_active";
                     store.state.mapData.villageId = target.getAttribute("key");
                     store.state.mapData.showRoomList = true;
                 }
@@ -72,7 +73,7 @@ export default{ //很关键
                 obj.addEventListener("click", 
                 function (e) {
                     store.state.mapData.scale = 14;
-                    fuzhi(e,6);
+                    fuzhi(e,6,true);
                     var target = e.target;
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
@@ -130,7 +131,7 @@ export default{ //很关键
     getMapPoint(stateName){
         return new BMap.Point(store.state[stateName].longitude,store.state[[stateName]].latitude);
     },
-    locationSuccess:function(obj){
+    locationSuccess:function(obj,_this){
         var that = this;
         
         obj.addEventListener("locationSuccess", function(e){
@@ -147,8 +148,36 @@ export default{ //很关键
             that.showHouse(json)
 
             let metroPoint = that.getMapPoint('mapData')
-            let metroCircle = that.paintCircle(metroPoint,2000)
-            map.addOverlay(metroCircle); //增加圆
+            if(store.state.mapData.isOverLay){
+                map.getOverlays().map((val)=>{
+            
+                    if(val._type=="ComplexCoverOverlay"){
+                            map.removeOverlay(val)
+                    }
+                    return;
+                })
+                var geoc = new BMap.Geocoder();
+                
+                geoc.getLocation(metroPoint, function(rs){
+                    var address =  rs.addressComponents.street==""?rs.addressComponents.district:rs.addressComponents.street;
+                    
+                    var myCompOverlay = new ComplexOverlay.ComplexSiteOverlay(metroPoint,address,"ComplexCoverOverlay",
+                    function(){
+                        _this.$router.push('/'+store.state.currentCity.cityPinyin+"/map/search");
+                    });
+                    store.state.pointSearch.lat = metroPoint.lat;
+                    store.state.pointSearch.lng = metroPoint.lng;
+                    store.state.pointSearch.name = address;
+                    // console.log(store.state.mapData)
+                    store.state.map.addOverlay(myCompOverlay);
+                    let metroCircle = that.paintCircle(metroPoint,store.state.mapData.radius);
+                    map.addOverlay(metroCircle); //增加圆
+                }); 
+            }else{
+                let metroCircle = that.paintCircle(metroPoint,2000);
+                map.addOverlay(metroCircle); //增加圆
+            }
+            
         });
     },
     //拖动事件
@@ -295,9 +324,9 @@ export default{ //很关键
         for (const key in mpdata) {
             mJson[key] = mpdata[key];
         }
-        // if(mJson.levelType == 7){
-        //     mJson.levelType = 4;
-        // }
+        if(mJson.levelType == 7){
+            mJson.levelType = 4;
+        }
         let point = this.getMapPoint('mapData')
         // 创建点坐标 
         let mapData = store.state.mapData;
@@ -370,31 +399,54 @@ export default{ //很关键
                             distance = 1000;
                         }
                         //重新画圆
-                        if(isClickZoom){
+                        console.log(store.state.screen)
+                        // if(isClickZoom){
                             
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
-                                metroPoint = this.getMapPoint('keywordsSearch')
+                                metroPoint = this.getMapPoint('keywordsSearch');
+                                var metroCircle = this.paintCircle(metroPoint,distance);
+                                store.state.circleObj = metroCircle;
+                                map.addOverlay(metroCircle); //增加圆
                             }else if(store.state.screen && store.state.screen.levelType == 6){
-                                metroPoint = this.getMapPoint('screen')
+                                metroPoint = this.getMapPoint('screen');
+                                var metroCircle = this.paintCircle(metroPoint,distance);
+                                store.state.circleObj = metroCircle;
+                                map.addOverlay(metroCircle); //增加圆
+                            }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
+                                if(store.state.fixSite.lat){
+                                    metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
+                                    var metroCircle = this.paintCircle(metroPoint,distance);
+                                    store.state.circleObj = metroCircle;
+                                    map.addOverlay(metroCircle); //增加圆
+                                }
                             }else{
                                 metroPoint = this.getMapPoint('mapData')
                             }
-                            let metroCircle = this.paintCircle(metroPoint,distance)
-                            store.state.circleObj = metroCircle;
-                            map.addOverlay(metroCircle); //增加圆
-                        }else{
-                            if( store.state.keywordsSearch.tableId && (store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4)){
-                                metroPoint = this.getMapPoint('keywordsSearch')
-                            }else if(store.state.screen &&(store.state.screen.levelType == 6 || store.state.screen.levelType == 7)){
-                                metroPoint = this.getMapPoint('screen')
-                            }else{
-                                metroPoint = this.getMapPoint('mapData')
-                            }
-                            let metroCircle = this.paintCircle(metroPoint,distance)
                             
-                            store.state.circleObj = metroCircle;
-                            map.addOverlay(metroCircle); //增加圆
-                        }
+                            
+                        // }else{
+                        //     if( store.state.keywordsSearch.tableId && (store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4)){
+                        //         metroPoint = this.getMapPoint('keywordsSearch')
+                        //         var metroCircle = this.paintCircle(metroPoint,distance)
+                        //         store.state.circleObj = metroCircle;
+                        //         map.addOverlay(metroCircle); //增加圆
+                        //     }else if(store.state.screen &&(store.state.screen.levelType == 6 || store.state.screen.levelType == 7)){
+                        //         metroPoint = this.getMapPoint('screen')
+                        //         var metroCircle = this.paintCircle(metroPoint,distance);
+                        //         store.state.circleObj = metroCircle;
+                        //         map.addOverlay(metroCircle); //增加圆
+                        //     }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
+                        //         if(store.state.fixSite.lat){
+                        //             metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
+                        //             var metroCircle = this.paintCircle(metroPoint,distance);
+                        //             store.state.circleObj = metroCircle;
+                        //             map.addOverlay(metroCircle); //增加圆
+                        //         }
+                        //     }else{
+                        //         metroPoint = this.getMapPoint('mapData')
+                        //     }
+                            
+                        // }
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -409,10 +461,9 @@ export default{ //很关键
         for (const key in mpdata) {
             mJson[key] = mpdata[key];
         }
-        // if(mJson.levelType == 7){
-        //     mJson.levelType = 4;
-        // }
-
+        if(mJson.levelType == 7){
+            mJson.levelType = 4;
+        }
         store.state.mapData.scale=this.toScale(mpdata.levelType);
         let point = this.getMapPoint('mapData')
         // 创建点坐标 
@@ -428,7 +479,6 @@ export default{ //很关键
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
-                
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -473,6 +523,7 @@ export default{ //很关键
                         // storage["showCoverDataList"]=JSON.stringify(json);
                         var metroPoint = this.getMapPoint('mapData')
                         var metroCircle = this.paintCircle(metroPoint,distance)
+                        console.log(metroPoint)
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
                         this.showAreaHouse(mpdata);
@@ -728,6 +779,8 @@ export default{ //很关键
               store.state.mapData.latitude = target.getAttribute("lat");
               store.state.mapData.longitude = target.getAttribute("lng");
               store.state.mapData.scale = 14;
+              store.state.fixSite.lat = target.getAttribute("lat");
+              store.state.fixSite.lng = target.getAttribute("lng");
               Object.assign(json,store.state.screen);
 
               json.stationId = target.getAttribute("key");

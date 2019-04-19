@@ -45,7 +45,7 @@ export default {
     },
     components:{sliderComponent},
     mounted:function(){
-        
+        //阻止浏览器页面滑动
         document.getElementById("iMate").addEventListener('touchmove', function (e) {
             e.preventDefault(); 
         }, {passive: false}); 
@@ -145,7 +145,6 @@ export default {
                     latitude:pointSearch.lat
                 })
                 let point = new BMap.Point(mapData.longitude,mapData.latitude);
-                // let distance = this.mapScreen.radius;
                 let distance = this.mapData.radius;
                 let scale = mapData.scale;
                 if(mapData.isInvFind){

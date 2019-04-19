@@ -51,7 +51,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj','fixSite']),
       showRoomList(){
         return this.mapData.showRoomList;
       },
@@ -122,6 +122,7 @@
             delete json["prcId"];
           }
           this.$.showHouse(json);
+         this.assign({fixSite:{}})
         }
       },
       handleClearSearh(){
@@ -133,6 +134,7 @@
         };
         Object.assign(json,this.screen)
         this.$.showHouse(json);
+        this.assign({fixSite:{}})
       },
       showMateFun:function(){
         //个性找房
@@ -145,6 +147,7 @@
         })
         this.assign({keywordsSearch:{}})
         this.geolocationControl.setOffset(new BMap.Size(10,180))
+        this.assign({fixSite:{}})
       },
       hiddenMateFun: function(msg){
         this.assignMapData({
@@ -179,7 +182,7 @@
         this.geolocationControl = geolocationControl;
         map.addControl(geolocationControl); 
         //监听定位控件
-        this.$.locationSuccess(geolocationControl);
+        this.$.locationSuccess(geolocationControl,this);
         //监听拖拽事件
         this.$.movingEvent(map);
         //监听缩放事件
@@ -198,7 +201,6 @@
         console.log(map.getOverlays())
         if(this.mapData.isOverLay){
           map.clearOverlays();
-          console.log(map.getOverlays())
             this.mapData.latitude = this.pointSearch.lat;
             this.mapData.longitude = this.pointSearch.lng;
           this.showMateFun();
@@ -610,6 +612,10 @@ html,body,#app{
     margin-top: 2vw;
   }
 
+
+.location_label_active{
+  background: red
+}
 </style>
 
 

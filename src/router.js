@@ -23,7 +23,6 @@ Vue.use(Meta)
     },
     { 
       path: '*', 
-      name: 'Map',
       redirect:'/sh/map',
     }
   ]

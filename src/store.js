@@ -17,11 +17,10 @@ export default new Vuex.Store({
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
+    fixSite:{},
     mapData:{
       type:1,
       cityId:2,
-      // speed:800,
-      // time:30,
       radius:0,
       villageId:null,
       showRoomList:false,
@@ -37,8 +36,6 @@ export default new Vuex.Store({
     
     circleObj:null,     //阴影圆对象
     cityList:null,
-    mapScreen:{},
-    // submitScreen:null,   //点击确定筛选条件
     screen:null, //筛选条件
     screenTemp:null,//筛选条件缓存
     mapBaseDataReady:false,
