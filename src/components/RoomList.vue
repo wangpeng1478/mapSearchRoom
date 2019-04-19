@@ -30,7 +30,7 @@
         <div class="room-list-info">
           <p class="room-list-tit">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
-            <i class="iconfont icon-dingwei"></i>
+            <i v-if="room.busStationName!=''&&room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=''&&room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">
               距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
             </p>
