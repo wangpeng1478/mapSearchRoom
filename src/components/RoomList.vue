@@ -1,12 +1,13 @@
 <template>
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}">
-    <div class="village" :class="banners.length!=0 ? 'village-b' : ''">
-      <div class="village-tit" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
+    <div class="village" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
         <button class="retract"></button>
         <p class="village-info" v-if="roomList.length!=0">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
-      </div>
-      <div class="banner swiper-container" v-if="banners.lengh!=0">
+    </div>
+
+    <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
+      <div class="banner swiper-container" v-if="banners.length!=0">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
             <a :href="banner.href" target="_blank">
@@ -15,9 +16,6 @@
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
       <a :href="currentCity.url+'/room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if=" room.roomSpecialOffer!=0 && room.roomSpecialOffer !=null">特价</em>
@@ -110,20 +108,20 @@
       handleRoomlistStart(e) {
         e.preventDefault();
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
-        this.roomListTransition = false
+        this.roomListTransition=false
       },
       handleRoomlistScroll(e) {
         e.preventDefault();
         let translateY = e.changedTouches[0].clientY - this.touchStartY;
-        if (translateY > -this.vh * 30) {
+        if (translateY > -this.vh * 40) {
           this.translateY = translateY;
         } else {
-          this.translateY = -this.vh * 30;
+          this.translateY = -this.vh * 40;
         }
       },
       handleRoomlistEnd() {
-        this.roomListTransition = true
-        let _top = 30 * this.vh - this.translateY;
+        this.roomListTransition=true
+        let _top = 40 * this.vh - this.translateY;
         if (_top <= 20 * this.vh) {
           this.translateState = -1;
           this.$emit('roomListDestroy')
@@ -132,13 +130,13 @@
           this.translateState = 0;
         } else {
           this.translateState = 1;
-          this.translateY = -30 * this.vh;
+          this.translateY = -40 * this.vh;
         }
       }
     },
-    computed: mapState(['screen', 'currentCity', 'banners']),
-    watch: {
-      villageId() {
+    computed: mapState(['screen','currentCity', 'banners']),
+    watch:{
+      villageId(){
         this.loadRoomList();
       }
     }
@@ -150,9 +148,9 @@
     background: #fff;
     position: absolute;
     z-index: 5;
-    bottom: -30vh;
+    bottom: -40vh;
     width: 100%;
-    height: 60vh;
+    height: 70vh;
   }
 
   .roomlist-transition {
@@ -168,11 +166,6 @@
     width: 100%;
     z-index: 5;
     background: #fff;
-  }
-
-  .village-b {
-    top: -44vw;
-    height: 44vw;
   }
 
   .retract {
@@ -204,7 +197,7 @@
   }
 
   .height80 {
-    height: 60vh;
+    height: 70vh;
   }
 
   .roomlist a {
@@ -371,6 +364,7 @@
     width: 94.67vw;
     height: 22.67vw;
     background: #eaeaea;
+    margin-top: 3vw;
   }
   .banner img{
     display: block;
