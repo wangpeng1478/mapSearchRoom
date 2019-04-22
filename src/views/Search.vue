@@ -137,7 +137,7 @@ export default {
     ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen","showToast"]),
     handleCancle(){
       recordButton('搜索页面点击取消');
-      this.$router.go(-1);
+      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
     },
     handleAcHistory(idx){
       recordButton('搜索页面点击位置')
@@ -296,7 +296,7 @@ export default {
       this.backMap()
     },
     backMap(){
-      this.$router.go(-1);
+      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
     }
   },
   computed: mapState(["currentCity", "keywordsSearch", "mapData", "map","pointSearch"])

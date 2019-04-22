@@ -34,14 +34,14 @@ export default {
     ...mapMutations(['assign','currentCityChange']),
     handleClose(){
       recordButton('城市切换页面关闭按钮')
-      this.$router.go(-1);
+      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
     },
     chooseCity(idx){
       recordButton('城市切换页面点击城市')
       if(this.cityList[idx].cityId!=this.currentCity.cityId){
         this.currentCityChange(idx);
       }else{
-        this.$router.go(-1);
+        this.$router.push('/' + this.currentCity.cityPinyin + '/map')
       }
     },
     //获取当前城市

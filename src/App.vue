@@ -159,7 +159,7 @@ import { setTimeout } from 'timers';
             return city.cityPinyin == cityPY;
           });
           if (localCity == -1) {
-            this.$router.go(-1)
+            this.$router.push('/' + this.currentCity.cityPinyin + '/map')
           } else {
             this.assign({currentCity:this.cityList[localCity]});
           }
