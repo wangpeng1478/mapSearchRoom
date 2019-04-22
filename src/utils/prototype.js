@@ -28,7 +28,7 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     p.style.margin = "0px";
     p.style.textAlign = "center";
     p.style.overflow = "hidden";
-    p.style.width = "10vw";
+    p.style.width = "11vw";
     p.style.height = "4vw";
     p.style.background = "#0fb896";
     p.style.padding = ".5vw .5vw 0vw";
@@ -37,7 +37,7 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     var p2 = this._p = document.createElement("p");
     p2.style.margin = "0px";
     p2.style.textAlign = "center";
-    p2.style.width = "10vw";
+    p2.style.width = "11vw";
     p2.style.height = "4vw";
     p2.style.padding = "0vw .5vw"
     p2.style.background = "#0fb896";
@@ -47,7 +47,7 @@ ComplexAreaOverlay.prototype.initialize = function(map){
 
     var arrow = this._arrow = document.createElement("div");
     arrow.className = "label_arrow";
-    arrow.style.border = "5.5vw solid transparent";
+    arrow.style.border = "6vw solid transparent";
     arrow.style.borderBottom = "0";
     arrow.style.borderTop = "2vw solid #0fb896";
     arrow.style.marginTop = "0px";

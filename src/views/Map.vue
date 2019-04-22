@@ -520,7 +520,7 @@ html,body,#app{
     line-height : 4vw;
     white-space : nowrap;
     -moz-user-select : none;
-    font-size : 2.5vw;
+    font-size : 2.8vw;
 }
 
 .label_arrow{
