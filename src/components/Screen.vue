@@ -82,6 +82,10 @@
       Slider
     },
     mounted() {
+      if(this.keywordsSearch.keyWords){
+        this.assign({regionTemp:{}})
+      }
+
       this.isOverLay = this.mapData.isOverLay;
       let screenTemp = JSON.parse(JSON.stringify(this.screenTemp));
       if (this.screenTemp) {
