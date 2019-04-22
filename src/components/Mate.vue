@@ -3,7 +3,7 @@
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate" @click="mateScreen"></div>
-        <div class="individuality_mate" @touchmove.stop="moveStop">
+        <div v-show="!showScreen" class="individuality_mate" @touchmove.stop="moveStop">
             <div class="mate_icon">
                 <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
                 <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
@@ -43,6 +43,7 @@ export default {
             time:0
         }
     },
+    props:["showScreen"],
     components:{sliderComponent},
     mounted:function(){
         //阻止浏览器页面滑动

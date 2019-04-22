@@ -12,7 +12,7 @@
     </div>
     </transition>
     <div class="mate" v-if="!mapData.isOverLay" @click="showMateFun">个性找房</div>
-    <Mate v-if="mapData.isOverLay" @mateScreen="mateScreenFun" @hiddenMate="hiddenMateFun"/>
+    <Mate :showScreen="showView.showScreen"  v-if="mapData.isOverLay" @mateScreen="mateScreenFun" @hiddenMate="hiddenMateFun"/>
     <transition name="roomlist">
     <RoomList @roomListDestroy ='roomListDestroy' :villageId="mapData.villageId" v-if="showRoomList"/>
     </transition>
@@ -262,9 +262,11 @@
         if(component=='showScreen') recordButton('地图页面点击筛选')
         this.showView[component] = true;
         this.showView.showMask=true;
-        this.roomListDestroy()
+        this.roomListDestroy();
+        document.getElementsByClassName("individuality_mate")[0].style.display = "none";
       },
       viewSetDefault(){
+        // document.getElementsByClassName("individuality_mate")[0].style.display = "block";
           if(this.mapData.isOverLay){
             this.showView = {
               showScreen:false,
@@ -283,6 +285,7 @@
       },
       selectionArea(){
         this.showView.showRegionAndMetro=true;
+        // 
       },
       hiddenRegion(){
         this.showView.showRegionAndMetro=false;
@@ -614,7 +617,11 @@ html,body,#app{
 
 
 .location_label_active{
-  background: red
+  background: red !important;
+}
+
+.location_label_arrow_active{
+  border-top-color: red !important;
 }
 </style>
 

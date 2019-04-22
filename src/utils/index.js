@@ -5,7 +5,34 @@ import  ComplexOverlay  from '@/utils/prototype.js'
 // var storage=window.localStorage;
 var isMovingEvent =false;
 export default{ //很关键
-    
+    //通过自定义属性获取dom对象
+    getElementByAttr(tag,attr,value){
+        var aElements=document.getElementsByTagName(tag);
+        var aEle=[];
+        for(var i=0;i<aElements.length;i++)
+        {
+            if(aElements[i].getAttribute(attr)==value)
+                aEle.push( aElements[i] );
+        }
+        return aEle;
+    },
+    //移除class
+    removeClass(obj, sClassName) {
+        var arr = obj.className.split(" ");
+        if (this.arrIndexOf(arr, sClassName) != -1) {
+            arr.splice(this.arrIndexOf(arr, sClassName), 1);
+            obj.className=arr.join(" ");
+            //删除这个类名并将整个类名组重新转为字符串
+        }
+    },
+    arrIndexOf(arr,aValue){
+        for(var i=0;i<arr.length;i++){
+            if(arr[i]==aValue){
+                return i;
+            }
+        }
+        return -1;
+    },
     addClickEvent(obj,data){
         let map = store.state.map;
         let that = this;
@@ -52,9 +79,36 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    console.log(target)
-                    target.className = target.className+ " location_label_active";
+                    for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
+                        that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
+                    }
+                    for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
+                        that.removeClass(document.getElementsByClassName("location_label_arrow_active")[j],"location_label_arrow_active");
+                    }
+                    // target.getElementsByTagName("p")[0].className += " location_label_active";
+                    // target.getElementsByTagName("p")[1].className += " location_label_active";
+                    // target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+
                     store.state.mapData.villageId = target.getAttribute("key");
+
+
+                    if(store.state.keywordsSearch.tableId){
+                        var ele = that.getElementByAttr("div","key",store.state.keywordsSearch.tableId)[0];
+                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        
+                    }
+
+                    if(store.state.mapData.villageId){
+                        // target.getElementsByTagName("p")[0].className += " location_label_active";
+                        // target.getElementsByTagName("p")[1].className += " location_label_active";
+                        // target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        var ele = that.getElementByAttr("div","key",store.state.mapData.villageId)[0];
+                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                    }
                     store.state.mapData.showRoomList = true;
                 }
                 ,false);
@@ -78,8 +132,36 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
+
+                    for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
+                        that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
+                    }
+                    for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
+                        that.removeClass(document.getElementsByClassName("location_label_arrow_active")[j],"location_label_arrow_active");
+                    }
+                    // target.getElementsByTagName("p")[0].className += " location_label_active";
+                    // target.getElementsByTagName("p")[1].className += " location_label_active";
+                    // target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
                     
                     store.state.mapData.villageId = target.getAttribute("key");
+
+                    if(store.state.keywordsSearch.tableId){
+                        var ele = that.getElementByAttr("div","key",store.state.keywordsSearch.tableId)[0];
+                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        
+                    }
+
+                    if(store.state.mapData.villageId){
+                        target.getElementsByTagName("p")[0].className += " location_label_active";
+                        target.getElementsByTagName("p")[1].className += " location_label_active";
+                        target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        // var ele = that.getElementByAttr("div","key",store.state.mapData.villageId)[0];
+                        // ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        // ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        // ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                    }
                     store.state.mapData.showRoomList = true;
 
                    
@@ -197,6 +279,7 @@ export default{ //很关键
                 json.cityId = store.state.currentCity.cityId;
                 
                 json.levelType = that.toLevelType(store.state.mapData.scale);
+                console.log("json.levelType",json.levelType)
                 switch (json.levelType) {
                     case 1:
                         that.showAreaHouse(json);
@@ -400,8 +483,6 @@ export default{ //很关键
                         }
                         //重新画圆
                         console.log(store.state.screen)
-                        // if(isClickZoom){
-                            
                             if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
                                 metroPoint = this.getMapPoint('keywordsSearch');
                                 var metroCircle = this.paintCircle(metroPoint,distance);
@@ -423,30 +504,6 @@ export default{ //很关键
                                 metroPoint = this.getMapPoint('mapData')
                             }
                             
-                            
-                        // }else{
-                        //     if( store.state.keywordsSearch.tableId && (store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4)){
-                        //         metroPoint = this.getMapPoint('keywordsSearch')
-                        //         var metroCircle = this.paintCircle(metroPoint,distance)
-                        //         store.state.circleObj = metroCircle;
-                        //         map.addOverlay(metroCircle); //增加圆
-                        //     }else if(store.state.screen &&(store.state.screen.levelType == 6 || store.state.screen.levelType == 7)){
-                        //         metroPoint = this.getMapPoint('screen')
-                        //         var metroCircle = this.paintCircle(metroPoint,distance);
-                        //         store.state.circleObj = metroCircle;
-                        //         map.addOverlay(metroCircle); //增加圆
-                        //     }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
-                        //         if(store.state.fixSite.lat){
-                        //             metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
-                        //             var metroCircle = this.paintCircle(metroPoint,distance);
-                        //             store.state.circleObj = metroCircle;
-                        //             map.addOverlay(metroCircle); //增加圆
-                        //         }
-                        //     }else{
-                        //         metroPoint = this.getMapPoint('mapData')
-                        //     }
-                            
-                        // }
                         this.showAreaHouse(mpdata);
                         break;
                 }
@@ -581,6 +638,22 @@ export default{ //很关键
                         var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                     }
                     map.addOverlay(myCompOverlay);
+
+                    if(parseInt(store.state.keywordsSearch.tableId) == val.key){
+                        // store.state.mapData.
+                        var ele = that.getElementByAttr("div","key",val.key)[0];
+                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                    }
+
+                    if(parseInt(store.state.mapData.villageId) == val.key){
+                        // store.state.mapData.
+                        var ele = that.getElementByAttr("div","key",val.key)[0];
+                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                    }
                     that.addClickEvent(myCompOverlay._div,data);
                     // if(isMovingEvent){
                     //     if(!showCoverDataList[index]){

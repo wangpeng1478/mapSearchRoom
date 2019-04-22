@@ -329,6 +329,7 @@
               case 2:
                 query.levelType = 6
                 query.metroStationId=tableId
+                query.metroId = this.keywordsSearch.metroId;
                 break;
               case 3:
                 query.levelType = 5

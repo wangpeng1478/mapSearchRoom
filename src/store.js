@@ -33,7 +33,6 @@ export default new Vuex.Store({
       isClickZoom:false,      //是否点击缩放
     },
     map:"",     //map对象
-    
     circleObj:null,     //阴影圆对象
     cityList:null,
     screen:null, //筛选条件
@@ -147,6 +146,15 @@ export default new Vuex.Store({
       state.screen = null;
       state.screenTemp = null;
       state.mapData.isOverLay=false;
+      state.mapData.type = 1;
+      state.mapData.radius = 0;
+      state.mapData.villageId = null;
+      state.mapData.scale = 11;
+      state.mapData.levelType = 2;
+      state.mapData.showRoomList = false;
+      state.mapData.isInvFind = false;
+      state.mapData.isClickZoom = false;
+      state.fixSite = {};
     }
   },
   actions: {
