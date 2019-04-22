@@ -132,6 +132,7 @@
           }
           data.selected = this.selected;
           this.assign({regionTemp:data})
+          this.assign({keywordsSearch:{}})
           this.$emit("hiddenRegion");
         }
       }
