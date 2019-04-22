@@ -373,6 +373,9 @@
         if (!this.isOverLay) {
           this.assign({region: this.regionTemp});
         }
+        if(this.roomCount==0){
+          this.assign({toast:'暂未找到符合条件的房源'})
+        }
         this.$emit('screen')
       },
       showRegion() {
