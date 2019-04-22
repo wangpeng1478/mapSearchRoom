@@ -25,6 +25,7 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     div.style.height = "8vw";
 
     var p = this._p = document.createElement("p");
+    p.className = "location_label_p";
     p.style.margin = "0px";
     p.style.textAlign = "center";
     p.style.overflow = "hidden";
@@ -35,6 +36,7 @@ ComplexAreaOverlay.prototype.initialize = function(map){
     div.appendChild(p);
     p.appendChild(document.createTextNode("¥"+this._price+"+"));
     var p2 = this._p = document.createElement("p");
+    p2.className = "location_label_p";
     p2.style.margin = "0px";
     p2.style.textAlign = "center";
     p2.style.width = "11vw";

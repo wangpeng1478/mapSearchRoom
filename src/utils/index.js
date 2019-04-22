@@ -7,7 +7,7 @@ var isMovingEvent =false;
 export default{ //很关键
     //通过自定义属性获取dom对象
     getElementByAttr(tag,attr,value){
-        var aElements=document.getElementsByTagName(tag);
+        var aElements=document.getElementsByClassName(tag);
         var aEle=[];
         for(var i=0;i<aElements.length;i++)
         {
@@ -18,7 +18,6 @@ export default{ //很关键
     },
     //移除class
     removeClass(obj, sClassName) {
-        console.log(obj.className)
         if(obj.className){
             var arr = obj.className.split(" ");
             if (this.arrIndexOf(arr, sClassName) != -1) {
@@ -93,19 +92,22 @@ export default{ //很关键
                     store.state.mapData.villageId = target.getAttribute("key");
 
 
-                    if(store.state.keywordsSearch.tableId){
-                        var ele = that.getElementByAttr("div","key",store.state.keywordsSearch.tableId)[0];
-                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                        
+                    if(store.state.keywordsSearch.tableId || store.state.mapData.villageId){
+                        var ele = that.getElementByAttr("location_label","key",store.state.keywordsSearch.tableId)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
                     }
 
                     if(store.state.mapData.villageId){
-                        var ele = that.getElementByAttr("div","key",store.state.mapData.villageId)[0];
-                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        var ele = that.getElementByAttr("location_label","key",store.state.mapData.villageId)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
                     }
                     store.state.mapData.showRoomList = true;
                 }
@@ -141,10 +143,12 @@ export default{ //很关键
                     store.state.mapData.villageId = target.getAttribute("key");
 
                     if(store.state.keywordsSearch.tableId){
-                        var ele = that.getElementByAttr("div","key",store.state.keywordsSearch.tableId)[0];
-                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        var ele = that.getElementByAttr("location_label","key",store.state.keywordsSearch.tableId)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
                         
                     }
 
@@ -632,18 +636,22 @@ export default{ //很关键
 
                     if(parseInt(store.state.keywordsSearch.tableId) == val.key){
                         // store.state.mapData.
-                        var ele = that.getElementByAttr("div","key",val.key)[0];
-                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
                     }
 
                     if(parseInt(store.state.mapData.villageId) == val.key){
                         // store.state.mapData.
-                        var ele = that.getElementByAttr("div","key",val.key)[0];
-                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
                     }
                     that.addClickEvent(myCompOverlay._div,data);
                     // if(isMovingEvent){
