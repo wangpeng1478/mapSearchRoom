@@ -892,22 +892,24 @@ export default{ //很关键
                         map.disableDragging(); //禁用地图拖拽功能
                     });
 
-                    // if(parseInt(store.state.keywordsSearch.tableId) == val.key){
-                    //     // store.state.mapData.
-                    //     var ele = that.getElementByAttr("location_label","key",val.key)[0];
-                    //     if(ele){
-                    //         ele.getElementsByTagName("p")[0].className += " location_label_active";
-                    //         ele.getElementsByTagName("p")[1].className += " location_label_active";
-                    //         ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                    //     }
-                    // }
-
-                    if(parseInt(store.state.mapData.villageId) == val.key){
-                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                    //选中房间
+                    if(store.state.houseState[0] == val.key||store.state.houseState[0] == val.villageId){
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0] ||
+                        that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                            ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
+                            ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
+                        }
+                    }
+                    //选中过的房间
+                    if(store.state.houseState[1].indexOf(val.key) > -1||store.state.houseState[1].indexOf(val.villageId) > -1){
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0]||
+                        that.getElementByAttr("location_label","key",val.villageId)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
+                            ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
+                            ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_rest";
                         }
                     }
                     // that.addClickEvent(myCompOverlay._div,data);
