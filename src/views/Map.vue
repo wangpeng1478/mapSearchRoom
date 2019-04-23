@@ -94,7 +94,7 @@
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
-        if(this.screen.levelType==4&&this.screen.villageId){
+        if(this.screen.villageId){
           this.assign({houseState:[this.screen.villageId,[]]})
         }
         if(this.mapData.isOverLay){
@@ -137,7 +137,6 @@
           levelType:2
         };
         Object.assign(json,this.screen)
-        console.log("screen",this.screen)
         this.$.showHouse(json);
         this.assign({fixSite:{}})
       },

@@ -61,9 +61,7 @@ export default new Vuex.Store({
     },
     clearSearh(state){
       state.keywordsSearch={};
-      state.screen.levelType = 2;
-      state.screen.metroId = null;
-      state.screen.metroStationId = null;
+      state.screen= null;
       let mapDataAss = {
         latitude:state.currentCity.latitude,
         longitude:state.currentCity.longitude,

@@ -47,10 +47,11 @@ export default{ //很关键
                 ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
                 ele.getElementsByClassName("label_arrow")[0].className += "label_arrow location_label_arrow_rest";
             }
+            store.state.houseState[1].push(parseInt(store.state.houseState[0]));
         }
         if(villageId){
-            store.state.houseState[1].push(parseInt(store.state.houseState[0]));
-            store.state.houseState[0] = villageId;
+            // store.state.houseState[1].push(parseInt(store.state.houseState[0]));
+            store.state.houseState[0] = parseInt(villageId);
             var indexOf = store.state.houseState[1].indexOf(parseInt(villageId));
             if(indexOf>-1){
                 store.state.houseState[1].splice(indexOf,1);
@@ -445,7 +446,7 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        this.showAreaHouse(mpdata);
+                        // this.showAreaHouse(mpdata);
                         let metroPoint;
                         var distance ;
                         if(mpdata.levelType==6){
@@ -610,9 +611,12 @@ export default{ //很关键
                     }
                     map.addOverlay(myCompOverlay);
 
+                    console.log(store.state.houseState)
+                    console.log("val",val)
                     //选中房间
-                    if(parseInt(store.state.houseState[0]) == val.key){
-                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                    if(store.state.houseState[0] == val.key||store.state.houseState[0] == val.villageId){
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0] ||
+                        that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
@@ -620,8 +624,9 @@ export default{ //很关键
                         }
                     }
                     //选中过的房间
-                    if(store.state.houseState[1].indexOf(val.key) > -1){
-                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                    if(store.state.houseState[1].indexOf(val.key) > -1||store.state.houseState[1].indexOf(val.villageId) > -1){
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0]||
+                        that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
