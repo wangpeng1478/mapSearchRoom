@@ -100,33 +100,23 @@ export default {
         foldMate:function(params) {
             var cn = document.getElementsByClassName("individuality_mate")[0].className;
             if(cn.indexOf("mate-stye1")>-1){
-                document.getElementsByClassName("individuality_mate")[0].style.opacity = "1";
                 document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate";
                 document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op0"
                 
             }else{
                 document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate mate-stye1";
                 document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op1";
-                setTimeout(function() {
-                    document.getElementsByClassName("individuality_mate")[0].style.opacity = "0";
-                },3000)
-                
             }
             
         },
         closedFoldMate:function(){
             var cn = document.getElementsByClassName("individuality_mate")[0].className;
             if(cn.indexOf("mate-stye1")>-1){
-               document.getElementsByClassName("individuality_mate")[0].style.opacity = "1";
                 document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate";
                  document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op0";
             }else{
                 document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate mate-stye1";
                 document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op1";
-                setTimeout(function() {
-                    document.getElementsByClassName("individuality_mate")[0].style.opacity = "0";
-                },2200)
-                
             }
         },
         toLevelType:function(scale){
@@ -303,7 +293,7 @@ export default {
 <style scoped>
 
 .mate-stye1{
-    height: 1vw !important;
+    height: 0vw !important;
     transform: scaleX(0)
 }
 
@@ -377,7 +367,7 @@ export default {
 
 .individuality_mate{
     position: absolute;
-    right: 3vw;
+    right: 4vw;
     bottom: 5vh;
     width: 92vw;
 	height: 36vw;

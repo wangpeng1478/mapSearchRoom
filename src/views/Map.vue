@@ -51,7 +51,7 @@
      
     },
     computed:{
-      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj','fixSite']),
+      ...mapState(['currentCity','keywordsSearch','mapData','cityList','pointSearch','screen','mapBaseDataReady','map','circleObj','fixSite','houseState']),
       showRoomList(){
         return this.mapData.showRoomList;
       },
@@ -88,11 +88,15 @@
       },
       mapScreen(){
         //地图条件搜索
+        console.log("queding")
         let _this = this;
         let map = this.map;
         var json = {};
         this.showView.showMask=false;
         this.showView.showScreen=false;
+        if(this.screen.levelType==4&&this.screen.villageId){
+          this.assign({houseState:[this.screen.villageId,[]]})
+        }
         if(this.mapData.isOverLay){
           Object.assign(json,this.screen);
           json.longitude = this.mapData.longitude;
@@ -198,8 +202,6 @@
         json.cityId = this.currentCity.cityId;
         json.levelType = 2;
         Object.assign(json,_this.screen)
-        console.log(this.mapData)
-        console.log(map.getOverlays())
         if(this.mapData.isOverLay){
           map.clearOverlays();
             this.mapData.latitude = this.pointSearch.lat;
@@ -210,6 +212,7 @@
             
             switch(this.keywordsSearch.typeId){
               case 1:
+                this.assign({houseState:[this.keywordsSearch.tableId,[]]})
                 json.levelType = 4;
                 break;
               case 2:
@@ -621,6 +624,15 @@ html,body,#app{
 
 .location_label_arrow_active{
   border-top-color: red !important;
+}
+
+
+.location_label_rest{
+  background: #eaeaea !important;
+}
+
+.location_label_arrow_rest{
+  border-top-color: #eaeaea !important;
 }
 </style>
 

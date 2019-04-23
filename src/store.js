@@ -17,6 +17,7 @@ export default new Vuex.Store({
     region:{},//筛选区域
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
+    houseState:[-1,[]],      //房间覆盖物的状态 houseState[0]激活,houseState[1]休眠
     fixSite:{},
     mapData:{
       type:1,

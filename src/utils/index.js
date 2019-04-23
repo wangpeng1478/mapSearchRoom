@@ -36,7 +36,34 @@ export default{ //很关键
         }
         return -1;
     },
-    addClickEvent(obj,data){
+
+    //设置房间覆盖物状态
+    setHouseOverlayState:function(villageId){
+        
+        if(store.state.houseState[0]>-1){
+            var ele = this.getElementByAttr("location_label","key",store.state.houseState[0])[0];
+            if(ele){
+                ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
+                ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
+                ele.getElementsByClassName("label_arrow")[0].className += "label_arrow location_label_arrow_rest";
+            }
+        }
+        if(villageId){
+            store.state.houseState[1].push(parseInt(store.state.houseState[0]));
+            store.state.houseState[0] = villageId;
+            var indexOf = store.state.houseState[1].indexOf(parseInt(villageId));
+            if(indexOf>-1){
+                store.state.houseState[1].splice(indexOf,1);
+            }
+            var ele = this.getElementByAttr("location_label","key",villageId)[0];
+            if(ele){
+                ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
+                ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
+                ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
+            }
+        }
+    },
+    addClickEvent:function(obj,data){
         let map = store.state.map;
         let that = this;
          //覆盖物添加点击事件+
@@ -82,33 +109,11 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
-                        that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
-                    }
-                    for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
-                        that.removeClass(document.getElementsByClassName("location_label_arrow_active")[0],"location_label_arrow_active");
-                    }
 
                     store.state.mapData.villageId = target.getAttribute("key");
 
 
-                    if(store.state.keywordsSearch.tableId || store.state.mapData.villageId){
-                        var ele = that.getElementByAttr("location_label","key",store.state.keywordsSearch.tableId)[0];
-                        if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                        }
-                    }
-
-                    if(store.state.mapData.villageId){
-                        var ele = that.getElementByAttr("location_label","key",store.state.mapData.villageId)[0];
-                        if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                        }
-                    }
+                    that.setHouseOverlayState(store.state.mapData.villageId);
                     store.state.mapData.showRoomList = true;
                 }
                 ,false);
@@ -132,30 +137,9 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-
-                    for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
-                        that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
-                    }
-                    for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
-                        that.removeClass(document.getElementsByClassName("location_label_arrow_active")[j],"location_label_arrow_active");
-                    }
-                    
                     store.state.mapData.villageId = target.getAttribute("key");
 
-                    if(store.state.keywordsSearch.tableId){
-                        var ele = that.getElementByAttr("location_label","key",store.state.keywordsSearch.tableId)[0];
-                        if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                        }
-                    }
-
-                    if(store.state.mapData.villageId){
-                        target.getElementsByTagName("p")[0].className += " location_label_active";
-                        target.getElementsByTagName("p")[1].className += " location_label_active";
-                        target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                    }
+                    that.setHouseOverlayState(store.state.mapData.villageId);
                     store.state.mapData.showRoomList = true;
                 }
                 ,false);
@@ -171,6 +155,7 @@ export default{ //很关键
                     }
                     
                     store.state.mapData.villageId = target.getAttribute("key");
+                    that.setHouseOverlayState(store.state.mapData.villageId);
                     store.state.mapData.showRoomList = true;
                 }
                 ,false);
@@ -625,23 +610,25 @@ export default{ //很关键
                     }
                     map.addOverlay(myCompOverlay);
 
-                    if(parseInt(store.state.keywordsSearch.tableId) == val.key){
+                    //选中房间
+                    if(parseInt(store.state.houseState[0]) == val.key){
                         var ele = that.getElementByAttr("location_label","key",val.key)[0];
                         if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                            ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
+                            ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
                         }
                     }
-
-                    if(parseInt(store.state.mapData.villageId) == val.key){
+                    //选中过的房间
+                    if(store.state.houseState[1].indexOf(val.key) > -1){
                         var ele = that.getElementByAttr("location_label","key",val.key)[0];
                         if(ele){
-                            ele.getElementsByTagName("p")[0].className += " location_label_active";
-                            ele.getElementsByTagName("p")[1].className += " location_label_active";
-                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                            ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
+                            ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
+                            ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_rest";
                         }
                     }
+                    
                     that.addClickEvent(myCompOverlay._div,data);
                     // if(isMovingEvent){
                     //     if(!showCoverDataList[index]){
@@ -957,21 +944,7 @@ export default{ //很关键
                                 store.state.mapData.villageId = target.getAttribute("key");
                                 store.state.mapData.showRoomList = true;
 
-                                for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
-                                    that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
-                                }
-                                for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
-                                    that.removeClass(document.getElementsByClassName("location_label_arrow_active")[j],"location_label_arrow_active");
-                                }
-
-                                if(parseInt(store.state.mapData.villageId) == val.key){
-                                    var ele = that.getElementByAttr("location_label","key",val.key)[0];
-                                    if(ele){
-                                        ele.getElementsByTagName("p")[0].className += " location_label_active";
-                                        ele.getElementsByTagName("p")[1].className += " location_label_active";
-                                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
-                                    }
-                                }
+                               that.setHouseOverlayState(store.state.mapData.villageId);
                             }
                             ,false);
                             break;
