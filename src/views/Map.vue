@@ -133,6 +133,7 @@
           levelType:2
         };
         Object.assign(json,this.screen)
+        console.log("screen",this.screen)
         this.$.showHouse(json);
         this.assign({fixSite:{}})
       },
@@ -263,10 +264,8 @@
         this.showView[component] = true;
         this.showView.showMask=true;
         this.roomListDestroy();
-        document.getElementsByClassName("individuality_mate")[0].style.display = "none";
       },
       viewSetDefault(){
-        // document.getElementsByClassName("individuality_mate")[0].style.display = "block";
           if(this.mapData.isOverLay){
             this.showView = {
               showScreen:false,

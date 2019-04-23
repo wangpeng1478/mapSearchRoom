@@ -3,28 +3,36 @@
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate" @click="mateScreen"></div>
-        <div v-show="!showScreen" class="individuality_mate" @touchmove.stop="moveStop">
-            <div class="mate_icon">
-                <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
-                <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
-                <span class="iconfont icon-paobuqihang" :class="mapData.type == 3?'active':''" @click="choose(3)"></span>
-                <span class="iconfont icon-buhang" :class="mapData.type == 4?'active':''" @click="choose(4)"></span>
+        <div class="iconfont icon-fold" @click="foldMate"></div>
+        
+        <div v-show="!showScreen" v-if="foldMate" class="individuality_mate" @touchmove.stop="moveStop">
+            <div class="mate-top" @click="closedFoldMate">
+                <div class="iconfont icon-you"></div>
+            </div>
+            <div class="mate-bottom">
+                <div class="mate_icon">
+                    <span class="iconfont icon-gongjiao" :class="mapData.type == 1?'active':''" @click="choose(1)"></span>
+                    <span class="iconfont icon-chuzuche" :class="mapData.type == 2?'active':''" @click="choose(2)"></span>
+                    <span class="iconfont icon-paobuqihang" :class="mapData.type == 3?'active':''" @click="choose(3)"></span>
+                    <span class="iconfont icon-buhang" :class="mapData.type == 4?'active':''" @click="choose(4)"></span>
+                </div>
+                
+                <sliderComponent
+                    sliderMin='0'  
+                    sliderMax='4' 
+                    step='4'
+                    value=1
+                    @moveStep = "checkTime"
+                ></sliderComponent>
+                <div class="mate_time">
+                    <span>20分</span>
+                    <span>30分</span>
+                    <span>40分</span>
+                    <span>50分</span>
+                    <span>60分</span>
+                </div>
             </div>
             
-            <sliderComponent
-                sliderMin='0'  
-                sliderMax='4' 
-                step='4'
-                value=1
-                @moveStep = "checkTime"
-            ></sliderComponent>
-            <div class="mate_time">
-                <span>20分</span>
-                <span>30分</span>
-                <span>40分</span>
-                <span>50分</span>
-                <span>60分</span>
-            </div>
         </div>
     </div>
 </template>
@@ -35,6 +43,7 @@ import sliderComponent from '@/components/sliderComponent.vue'
 import  ComplexOverlay  from '@/utils/prototype.js'
 import {mapState,mapMutations} from 'vuex'
 import {recordButton} from '@/utils/record'
+import { setTimeout } from 'timers';
 export default {
     name: 'iMate',
     data () {
@@ -88,6 +97,38 @@ export default {
     },
     methods:{
         ...mapMutations(['assign','assignMapData','clearScreen']),
+        foldMate:function(params) {
+            var cn = document.getElementsByClassName("individuality_mate")[0].className;
+            if(cn.indexOf("mate-stye1")>-1){
+                document.getElementsByClassName("individuality_mate")[0].style.opacity = "1";
+                document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate";
+                document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op0"
+                
+            }else{
+                document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate mate-stye1";
+                document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op1";
+                setTimeout(function() {
+                    document.getElementsByClassName("individuality_mate")[0].style.opacity = "0";
+                },3000)
+                
+            }
+            
+        },
+        closedFoldMate:function(){
+            var cn = document.getElementsByClassName("individuality_mate")[0].className;
+            if(cn.indexOf("mate-stye1")>-1){
+               document.getElementsByClassName("individuality_mate")[0].style.opacity = "1";
+                document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate";
+                 document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op0";
+            }else{
+                document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate mate-stye1";
+                document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op1";
+                setTimeout(function() {
+                    document.getElementsByClassName("individuality_mate")[0].style.opacity = "0";
+                },2200)
+                
+            }
+        },
         toLevelType:function(scale){
             var levelType;
             switch (scale) {
@@ -260,6 +301,57 @@ export default {
 </script>
 
 <style scoped>
+
+.mate-stye1{
+    height: 1vw !important;
+    transform: scaleX(0)
+}
+
+
+.op0{
+    opacity: 0!important;
+}
+
+.op1{
+    opacity: 1!important;
+}
+
+.icon-fold{
+    position: absolute;
+    left: 50%;
+    bottom: 2vh;
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    text-align: center;
+    line-height: 32px;
+    z-index: 1000;
+    color: #ffffff;
+    background: rgb(15, 184, 150);
+    box-shadow: 0vw 0vw 1vw 0vw rgba(0, 11, 10, 0.2);
+    border-radius: 1vw;
+    transform: rotate(90deg);
+    opacity: 0;
+    transition:all 3s ease;
+}
+
+.mate-top{
+    position: relative;
+    width: 92vw;
+    height: 5vw;
+    text-align: center;
+    line-height: 5vw;
+    background: rgb(15, 184, 150);
+    
+}
+
+.icon-you{
+    color: #ffffff;
+    transform: rotate(90deg);
+}
+
+
+
 .back{
     position: fixed;
     top: 4vw;
@@ -285,21 +377,22 @@ export default {
 
 .individuality_mate{
     position: absolute;
-    left: 5vw;
-    right: auto;
-    bottom: 5vw;
+    right: 3vw;
+    bottom: 5vh;
     width: 92vw;
 	height: 36vw;
 	background-color: #ffffff;
 	box-shadow: 0vw 0vw 1vw 0vw 
 		rgba(0, 11, 10, 0.2);
 	border-radius: 1vw;
+    overflow: hidden;
+    transition:transform 1s ease, height 1s ease;
 }
 
 
 .mate_icon{
     display: flex;
-    padding-top: 7vw;
+    padding-top: 5vw;
     padding-bottom: 6vw;
 }
 
@@ -314,7 +407,7 @@ export default {
 }
 
 .mate_time{
-    width: 95vw;
+    width: 92vw;
     margin: 5vw 7vw 5vw 5vw;
     display:flex;
 }
@@ -324,7 +417,6 @@ export default {
     font-size: 3vw;
 	letter-spacing: 0vw;
 	color: #000000;
-    margin-left: -2.5vw;
 }
 </style>
 

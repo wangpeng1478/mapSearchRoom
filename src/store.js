@@ -60,6 +60,9 @@ export default new Vuex.Store({
     },
     clearSearh(state){
       state.keywordsSearch={};
+      state.screen.levelType = 2;
+      state.screen.metroId = null;
+      state.screen.metroStationId = null;
       let mapDataAss = {
         latitude:state.currentCity.latitude,
         longitude:state.currentCity.longitude,
@@ -67,6 +70,7 @@ export default new Vuex.Store({
         scale:11,
         showRoomList:false
       }
+
       Object.assign(state.mapData,mapDataAss)
     },
     clearScreen(state){ //搜索后青客筛选条件

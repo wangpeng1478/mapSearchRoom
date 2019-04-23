@@ -149,7 +149,6 @@ export default{ //很关键
                             ele.getElementsByTagName("p")[1].className += " location_label_active";
                             ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
                         }
-                        
                     }
 
                     if(store.state.mapData.villageId){
@@ -158,8 +157,6 @@ export default{ //很关键
                         target.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
                     }
                     store.state.mapData.showRoomList = true;
-
-                   
                 }
                 ,false);
                 break;
@@ -265,7 +262,7 @@ export default{ //很关键
             let map = store.state.map;
             let mapData = store.state.mapData;
             var json = {};
-            
+            console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -274,7 +271,6 @@ export default{ //很关键
                 json.cityId = store.state.currentCity.cityId;
                 
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                console.log("json.levelType",json.levelType)
                 switch (json.levelType) {
                     case 1:
                         that.showAreaHouse(json);
@@ -294,7 +290,6 @@ export default{ //很关键
                         break;
                     case 4:
                     case 7:
-                        // that.showAreaHouse(json);
                         that.showHouse(json)
                         break;
                     case 5:
@@ -445,7 +440,6 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showAreaHouse(mpdata);
                         break;
                     case 5:
@@ -455,7 +449,6 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showMetroHouse(mpdata);
                         break;
                     case 6:
@@ -467,7 +460,6 @@ export default{ //很关键
                             json[index] = null
                             return;
                         })
-                        // // storage["showCoverDataList"]=JSON.stringify(json);
                         this.showAreaHouse(mpdata);
                         let metroPoint;
                         var distance ;
@@ -477,27 +469,26 @@ export default{ //很关键
                             distance = 1000;
                         }
                         //重新画圆
-                        console.log(store.state.screen)
-                            if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
-                                metroPoint = this.getMapPoint('keywordsSearch');
-                                var metroCircle = this.paintCircle(metroPoint,distance);
+                        if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+                            metroPoint = this.getMapPoint('keywordsSearch');
+                            var metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.screen && store.state.screen.levelType == 6){
+                            metroPoint = this.getMapPoint('screen');
+                            metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
+                            if(store.state.fixSite.lat){
+                                metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
+                                metroCircle = this.paintCircle(metroPoint,distance);
                                 store.state.circleObj = metroCircle;
                                 map.addOverlay(metroCircle); //增加圆
-                            }else if(store.state.screen && store.state.screen.levelType == 6){
-                                metroPoint = this.getMapPoint('screen');
-                                var metroCircle = this.paintCircle(metroPoint,distance);
-                                store.state.circleObj = metroCircle;
-                                map.addOverlay(metroCircle); //增加圆
-                            }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
-                                if(store.state.fixSite.lat){
-                                    metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
-                                    var metroCircle = this.paintCircle(metroPoint,distance);
-                                    store.state.circleObj = metroCircle;
-                                    map.addOverlay(metroCircle); //增加圆
-                                }
-                            }else{
-                                metroPoint = this.getMapPoint('mapData')
                             }
+                        }else{
+                            metroPoint = this.getMapPoint('mapData')
+                        }
                             
                         this.showAreaHouse(mpdata);
                         break;
@@ -617,7 +608,7 @@ export default{ //很关键
         let bounds = map.getBounds();
         if(_state.coverDataList){
             // var showCoverDataList = JSON.parse(localStorage.getItem('showCoverDataList'))
-            _state.coverDataList.map((val,index)=>{
+            _state.coverDataList.map((val)=>{
                 if(
                     (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
                     (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
@@ -635,7 +626,6 @@ export default{ //很关键
                     map.addOverlay(myCompOverlay);
 
                     if(parseInt(store.state.keywordsSearch.tableId) == val.key){
-                        // store.state.mapData.
                         var ele = that.getElementByAttr("location_label","key",val.key)[0];
                         if(ele){
                             ele.getElementsByTagName("p")[0].className += " location_label_active";
@@ -645,7 +635,6 @@ export default{ //很关键
                     }
 
                     if(parseInt(store.state.mapData.villageId) == val.key){
-                        // store.state.mapData.
                         var ele = that.getElementByAttr("location_label","key",val.key)[0];
                         if(ele){
                             ele.getElementsByTagName("p")[0].className += " location_label_active";
@@ -745,18 +734,14 @@ export default{ //很关键
                 levelType = 1;
                     break;
                 case 10:
-                
                 case 11:
                 case 12:
                 levelType = 2;
                     break;
                 case 13:
-                
                 case 14:
-                levelType = 3;
-                break;
-                case 15:
-                
+                    levelType = 3;
+                    break;
                 default:
                 if(store.state.mapData.levelType==7){
                     levelType = 7;
@@ -914,6 +899,26 @@ export default{ //很关键
                     myCompOverlay._div.addEventListener('touchstart',function(){
                         map.disableDragging(); //禁用地图拖拽功能
                     });
+
+                    // if(parseInt(store.state.keywordsSearch.tableId) == val.key){
+                    //     // store.state.mapData.
+                    //     var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                    //     if(ele){
+                    //         ele.getElementsByTagName("p")[0].className += " location_label_active";
+                    //         ele.getElementsByTagName("p")[1].className += " location_label_active";
+                    //         ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                    //     }
+                    // }
+
+                    if(parseInt(store.state.mapData.villageId) == val.key){
+                        var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                        if(ele){
+                            ele.getElementsByTagName("p")[0].className += " location_label_active";
+                            ele.getElementsByTagName("p")[1].className += " location_label_active";
+                            ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                        }
+                    }
+                    // that.addClickEvent(myCompOverlay._div,data);
     
                     switch (data.levelType) {
                         case 1:
@@ -927,7 +932,6 @@ export default{ //很关键
                         case 2:
                             myCompOverlay._div.addEventListener("click", 
                             function (e) {
-                                console.log("2")
                                 fuzhi(e,3);
                                 store.state.mapData.scale = 14;
                             }
@@ -952,6 +956,22 @@ export default{ //很关键
                                 store.state.mapData.scale = 16;
                                 store.state.mapData.villageId = target.getAttribute("key");
                                 store.state.mapData.showRoomList = true;
+
+                                for(var i = 0,length = document.getElementsByClassName("location_label_active").length;i < length;i++){
+                                    that.removeClass(document.getElementsByClassName("location_label_active")[0],"location_label_active");
+                                }
+                                for(var j = 0,length2 = document.getElementsByClassName("location_label_arrow_active").length;j < length2;j++){
+                                    that.removeClass(document.getElementsByClassName("location_label_arrow_active")[j],"location_label_arrow_active");
+                                }
+
+                                if(parseInt(store.state.mapData.villageId) == val.key){
+                                    var ele = that.getElementByAttr("location_label","key",val.key)[0];
+                                    if(ele){
+                                        ele.getElementsByTagName("p")[0].className += " location_label_active";
+                                        ele.getElementsByTagName("p")[1].className += " location_label_active";
+                                        ele.getElementsByClassName("label_arrow")[0].className += " location_label_arrow_active";
+                                    }
+                                }
                             }
                             ,false);
                             break;

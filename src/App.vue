@@ -170,8 +170,9 @@ import { setTimeout } from 'timers';
         this.getBanner()
         this.cityName = this.currentCity.cityName;
         this.httpQueryMapBaseData();
-        this.$router.push('/' + this.currentCity.cityPinyin + '/map')
         this.resetAllState();
+        this.$router.push('/' + this.currentCity.cityPinyin + '/map')
+        
       },
       toast(val) {
         if (val) {
