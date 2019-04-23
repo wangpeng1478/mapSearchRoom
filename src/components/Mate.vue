@@ -3,7 +3,7 @@
         <div class="back" @click="backFun"></div>
         <div class="mapShadow"></div>
         <div class="imate" @click="mateScreen"></div>
-        <div class="iconfont icon-fold" @click="foldMate"></div>
+        <div v-show="!showScreen" class="iconfont icon-fold" @click="foldMate"></div>
         
         <div v-show="!showScreen" v-if="foldMate" class="individuality_mate" @touchmove.stop="moveStop">
             <div class="mate-top" @click="closedFoldMate">
