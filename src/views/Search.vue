@@ -68,7 +68,6 @@
     <ul class="local-result" v-if="searchValue!='' && !isRegion">
       <li v-for="(result,index) in acResult" :key="index" @click="handleAcResult(index)">
         <p>{{result.title}}</p>
-        <!-- <span>{{result.province}} | {{result.district}}</span> -->
         <span>{{result.address}}</span>
       </li>
     </ul>
@@ -133,13 +132,14 @@ export default {
         this.pointTagHistory = [];
       }
       this.myGeo = new BMap.Geocoder();
+      this.map.centerAndZoom(new BMap.Point(_this.currentCity.longitude, _this.currentCity.latitude), 11);
       this.local = new BMap.LocalSearch(_this.map, {
         onSearchComplete(res) {
           if (_this.local.getStatus() == BMAP_STATUS_SUCCESS) {
             let acResult = res.Qq;
             for (let i = 0; i < acResult.length; i++) {
               if (
-                acResult[i].province.indexOf(_this.currentCity.cityName) == -1
+                acResult[i].city && acResult[i].city.indexOf(_this.currentCity.cityName) == -1
               ) {
                 acResult.splice(i, 1);
                 i--;
@@ -148,7 +148,6 @@ export default {
             if (acResult.length == 0) {
               _this.showToast("对不起，暂未匹配到相关数据");
             }
-            console.log(acResult);
             _this.acResult = acResult;
           }
         }
@@ -250,7 +249,7 @@ export default {
             }
           });
       } else {
-        this.local.search(_this.searchValue);
+        this.local.search(_this.currentCity.cityName+_this.searchValue);
       }
     },
     handleSearchTag(idx, name) {
@@ -484,6 +483,9 @@ export default {
   color: #a8a8a8;
   font-size: 3.733vw;
   line-height: 1;
+  display:block;
+  height:3.733vw;
+  overflow:hidden;
 }
 
 .local-result li p span {
