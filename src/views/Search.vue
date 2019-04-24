@@ -228,9 +228,6 @@ export default {
         console.log("cityName",this.searchValue)
         let acResult = this.ac.getResults().Lq;
         console.log(acResult)
-        acResult.forEach((item,index)=>{
-          
-        })
         for(let i=0;i<acResult.length;i++){
           if(acResult[i].city.indexOf(this.currentCity.cityName)==-1){
             acResult.splice(i,1)
