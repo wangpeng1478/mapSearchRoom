@@ -2,7 +2,7 @@
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}">
     <div class="village">
-        <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll"></button>
+        <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll" @click="roomListDestroy"></button>
         <template v-if="roomList.length!=0">
         <a :href="'https://i.qk365.com/sh/xiaoqu/gk_v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
         </template>
@@ -108,7 +108,6 @@
           })
       },
       handleRoomlistStart(e) {
-        e.preventDefault();
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
         this.roomListTransition=false
       },
@@ -134,6 +133,10 @@
           this.translateState = 1;
           this.translateY = -40 * this.vh;
         }
+      },
+      roomListDestroy(){
+        console.log("fdsf")
+        this.$emit('roomListDestroy')
       }
     },
     computed: mapState(['screen','currentCity', 'banners']),
