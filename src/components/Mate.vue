@@ -107,7 +107,6 @@ export default {
                 document.getElementsByClassName("individuality_mate")[0].className = "individuality_mate mate-stye1";
                 document.getElementsByClassName("icon-fold")[0].className = "iconfont icon-fold op1";
             }
-            
         },
         closedFoldMate:function(){
             var cn = document.getElementsByClassName("individuality_mate")[0].className;

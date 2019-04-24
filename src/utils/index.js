@@ -393,11 +393,12 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
-        mJson.topLeftLongitude = bounds.wl.lng;
-        mJson.topLeftLatitude = bounds.hl.lat;  //左上
-        mJson.bottomRightLongitude = bounds.hl.lng;
-        mJson.bottomRightLatitude = bounds.wl.lat;  //右下
-        axios.post(API["queryMapCoverData"], mJson).then(res => {
+        console.log("showHouse bounds",bounds)
+        mJson.topLeftLongitude = bounds.Le;
+        mJson.topLeftLatitude = bounds.Ud;  //左上
+        mJson.bottomRightLongitude = bounds.Ge;
+        mJson.bottomRightLatitude = bounds.Wd;  //右下
+        axios.post(API["queryMapCoverData"],mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
                 //去掉圆

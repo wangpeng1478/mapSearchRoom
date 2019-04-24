@@ -88,7 +88,6 @@
       },
       mapScreen(){
         //地图条件搜索
-        console.log("queding")
         let _this = this;
         let map = this.map;
         var json = {};
@@ -618,20 +617,20 @@ html,body,#app{
 
 
 .location_label_active{
-  background: red !important;
+  background: #005947 !important;
 }
 
 .location_label_arrow_active{
-  border-top-color: red !important;
+  border-top-color: #005947 !important;
 }
 
 
 .location_label_rest{
-  background: #eaeaea !important;
+  background: #2cdeba !important;
 }
 
 .location_label_arrow_rest{
-  border-top-color: #eaeaea !important;
+  border-top-color: #2cdeba !important;
 }
 </style>
 
