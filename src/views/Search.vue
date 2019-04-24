@@ -227,6 +227,7 @@ export default {
       } else {
         console.log("cityName",this.searchValue)
         let acResult = this.ac.getResults().Lq;
+        console.log(acResult)
         acResult.forEach((item,index)=>{
           
         })

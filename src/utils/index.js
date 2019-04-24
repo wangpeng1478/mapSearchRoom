@@ -228,7 +228,6 @@ export default{ //很关键
                     store.state.pointSearch.lat = metroPoint.lat;
                     store.state.pointSearch.lng = metroPoint.lng;
                     store.state.pointSearch.name = address;
-                    // console.log(store.state.mapData)
                     store.state.map.addOverlay(myCompOverlay);
                     let metroCircle = that.paintCircle(metroPoint,store.state.mapData.radius);
                     map.addOverlay(metroCircle); //增加圆
@@ -393,7 +392,6 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
-        console.log("showHouse bounds",bounds)
         mJson.topLeftLongitude = bounds.Le;
         mJson.topLeftLatitude = bounds.Ud;  //左上
         mJson.bottomRightLongitude = bounds.Ge;
@@ -481,6 +479,8 @@ export default{ //很关键
                         break;
                 }
             }
+        }).catch(error=>{
+            console.log("error",error)
         });
     },
     //搜索后显示房源
@@ -502,10 +502,10 @@ export default{ //很关键
             map.centerAndZoom(point,store.state.mapData.scale);
         }
         let bounds = map.getBounds();
-        mJson.topLeftLongitude = bounds.wl.lng;
-        mJson.topLeftLatitude = bounds.hl.lat;  //左上
-        mJson.bottomRightLongitude = bounds.hl.lng;
-        mJson.bottomRightLatitude = bounds.wl.lat;  //右下
+        mJson.topLeftLongitude = bounds.Le;
+        mJson.topLeftLatitude = bounds.Ud;  //左上
+        mJson.bottomRightLongitude = bounds.Ge;
+        mJson.bottomRightLatitude = bounds.Wd;  //右下
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -553,7 +553,6 @@ export default{ //很关键
                         // storage["showCoverDataList"]=JSON.stringify(json);
                         var metroPoint = this.getMapPoint('mapData')
                         var metroCircle = this.paintCircle(metroPoint,distance)
-                        console.log(metroPoint)
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
                         this.showAreaHouse(mpdata);
@@ -597,18 +596,18 @@ export default{ //很关键
             // var showCoverDataList = JSON.parse(localStorage.getItem('showCoverDataList'))
             _state.coverDataList.map((val)=>{
                 if(
-                    (bounds.He < val.lng||bounds.He < val.villageLongitude)&&
-                    (val.lng < bounds.Ce||val.villageLongitude < bounds.Ce) &&
-                    (bounds.Rd < val.lat)||(bounds.Rd < val.villageLatitude)&&
-                    (val.lat < bounds.Pd)||(val.villageLatitude < bounds.Pd)
+                    (bounds.Le < val.lng||bounds.Le < val.villageLongitude)&&
+                    (val.lng < bounds.Ge||val.villageLongitude < bounds.Ge) &&
+                    (bounds.Wd < val.lat)||(bounds.Wd < val.villageLatitude)&&
+                    (val.lat < bounds.Ud)||(val.villageLatitude < bounds.Ud)
                 ){
-                    var price,txt,mouseoverTxt;
+                    var price,txt,mouseoverTxt,myCompOverlay;
                     if(data.levelType==6){
                         price = val.minShowPrice;txt = val.villageName;mouseoverTxt = val.roomCount + "间";
                         myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.villageLongitude,val.villageLatitude),val.villageId,price, txt,mouseoverTxt,"ComplexOverlay");
                     }else{
                         price = val.minPrice;txt = val.value;mouseoverTxt = val.count + "间";
-                        var myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
+                        myCompOverlay = new ComplexOverlay.ComplexAreaOverlay(new BMap.Point(val.lng,val.lat),val.key,price, txt,mouseoverTxt,"ComplexOverlay");
                     }
                     map.addOverlay(myCompOverlay);
 
@@ -871,10 +870,10 @@ export default{ //很关键
 
             _state.coverDataList.map((val)=>{
                 if(
-                    (bounds.He < parseFloat(val.lng)||bounds.He < parseFloat(val.villageLongitude)||bounds.He < parseFloat(val.longitude))&&
-                    (parseFloat(val.lng) < bounds.Ce||parseFloat(val.villageLongitude) < bounds.Ce||parseFloat(val.longitude) < bounds.Ce) &&
-                    (bounds.Rd < parseFloat(val.lat)||bounds.Rd < parseFloat(val.villageLatitude)||bounds.Rd < parseFloat(val.latitude))&&
-                    (parseFloat(val.lat) < bounds.Pd||parseFloat(val.villageLatitude) < bounds.Pd||parseFloat(val.latitude) < bounds.Pd)
+                    (bounds.Le < parseFloat(val.lng)||bounds.Le < parseFloat(val.villageLongitude)||bounds.Le < parseFloat(val.longitude))&&
+                    (parseFloat(val.lng) < bounds.Ge||parseFloat(val.villageLongitude) < bounds.Ge||parseFloat(val.longitude) < bounds.Ge) &&
+                    (bounds.Wd < parseFloat(val.lat)||bounds.Wd < parseFloat(val.villageLatitude)||bounds.Wd < parseFloat(val.latitude))&&
+                    (parseFloat(val.lat) < bounds.Ud||parseFloat(val.villageLatitude) < bounds.Ud||parseFloat(val.latitude) < bounds.Ud)
                 ){
                     var price,myCompOverlay,txt,mouseoverTxt;
                     if(data.levelType==6){

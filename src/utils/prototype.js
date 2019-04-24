@@ -3,6 +3,7 @@
 
 //区域覆盖物
 function ComplexAreaOverlay(point,key,price, text, mouseoverText,type){
+    console.log("ComplexAreaOverlay")
     this._point = point;
     this._price = price;
     this._key = key;
