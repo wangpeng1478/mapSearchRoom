@@ -36,7 +36,24 @@ export default{ //很关键
         }
         return -1;
     },
-
+    //过滤地图层级接口data
+    filterMapCoverData:function(jsonData){
+        return {
+            cityId:jsonData.cityId || null,
+            prcId:jsonData.prcId || null,
+            ceaId:jsonData.ceaId || null,
+            villageId:jsonData.villageId || null,
+            metroId:jsonData.metroId || null,
+            metroStationId:jsonData.metroStationId || null,
+            busStationId:jsonData.busStationId || null,
+            rentDays:jsonData.rentDays || null,
+            priceFrom:jsonData.priceFrom || null,
+            priceTo:jsonData.priceTo || null,
+            roomType:jsonData.roomType || null,
+            roomFeatureIds:jsonData.roomFeatureIds || [],
+            levelType:jsonData.levelType || null,
+        }
+    },
     //设置房间覆盖物状态
     setHouseOverlayState:function(villageId){
         
@@ -256,6 +273,7 @@ export default{ //很关键
                 json.cityId = store.state.currentCity.cityId;
                 
                 json.levelType = that.toLevelType(store.state.mapData.scale);
+                console.log("json",json)
                 switch (json.levelType) {
                     case 1:
                         that.showAreaHouse(json);
@@ -268,14 +286,21 @@ export default{ //很关键
                         break;
                     
                     case 6:
+                        // var scrJson = {};
+                        // Object.assign(scrJson,store.state.keywordsSearch,store.state.screen)
+                        // json.metroId = scrJson.metroId;
                         var scrJson = {};
-                        Object.assign(scrJson,store.state.keywordsSearch,store.state.screen)
-                        json.metroId = scrJson.metroId;
-                        that.showHouse(json)
+                        Object.assign(scrJson,store.state.keywordsSearch,store.state.screen,json);
+                        scrJson = that.filterMapCoverData(scrJson);
+                        // scrJson.stationId = null;
+                        that.showHouse(scrJson)
                         break;
                     case 4:
                     case 7:
-                        that.showHouse(json)
+                        var scrJson = {};
+                        Object.assign(scrJson,store.state.keywordsSearch,store.state.screen,json);
+                        scrJson = that.filterMapCoverData(scrJson);
+                        that.showHouse(scrJson)
                         break;
                     case 5:
                         that.showMetroHouse(json);
@@ -404,7 +429,7 @@ export default{ //很关键
                     map.removeOverlay(store.state.circleObj);
                     store.state.circleObj = null;
                 }
-
+                
                 //公交站 缩放 显示圈
                 if(mpdata.levelType!=7&&store.state.keywordsSearch.levelType==7){
                     let busPoint;
@@ -439,7 +464,6 @@ export default{ //很关键
                     case 6:
                     case 7:
                         store.state.coverDataList = res;
-
                         var json = [];
                         res.map((val,index)=>{
                             json[index] = null
@@ -453,6 +477,7 @@ export default{ //很关键
                         }else{
                             distance = 1000;
                         }
+                        
                         //重新画圆
                         if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
                             metroPoint = this.getMapPoint('keywordsSearch');
@@ -476,6 +501,41 @@ export default{ //很关键
                         }
                             
                         this.showAreaHouse(mpdata);
+                        break;
+                }
+            }else{
+                switch (mpdata.levelType) {
+                    case 6:
+                    case 7:
+                        let metroPoint;
+                        var distance ;
+                        if(mpdata.levelType==6){
+                            distance = 2000;
+                        }else{
+                            distance = 1000;
+                        }
+                        
+                        //重新画圆
+                        if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+                            metroPoint = this.getMapPoint('keywordsSearch');
+                            var metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.screen && store.state.screen.levelType == 6){
+                            metroPoint = this.getMapPoint('screen');
+                            metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
+                            if(store.state.fixSite.lat){
+                                metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
+                                metroCircle = this.paintCircle(metroPoint,distance);
+                                store.state.circleObj = metroCircle;
+                                map.addOverlay(metroCircle); //增加圆
+                            }
+                        }else{
+                            metroPoint = this.getMapPoint('mapData')
+                        }
                         break;
                 }
             }
@@ -556,6 +616,41 @@ export default{ //很关键
                         store.state.circleObj = metroCircle;
                         map.addOverlay(metroCircle); //增加圆
                         this.showAreaHouse(mpdata);
+                        break;
+                }
+            }else{
+                switch (mpdata.levelType) {
+                    case 6:
+                    case 7:
+                        let metroPoint;
+                        var distance ;
+                        if(mpdata.levelType==6){
+                            distance = 2000;
+                        }else{
+                            distance = 1000;
+                        }
+                        
+                        //重新画圆
+                        if(store.state.keywordsSearch.typeId == 2 || store.state.keywordsSearch.typeId == 4){
+                            metroPoint = this.getMapPoint('keywordsSearch');
+                            var metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.screen && store.state.screen.levelType == 6){
+                            metroPoint = this.getMapPoint('screen');
+                            metroCircle = this.paintCircle(metroPoint,distance);
+                            store.state.circleObj = metroCircle;
+                            map.addOverlay(metroCircle); //增加圆
+                        }else if(store.state.keywordsSearch.typeId == 3 || store.state.screen.levelType == 5){
+                            if(store.state.fixSite.lat){
+                                metroPoint = new BMap.Point(store.state.fixSite.lng,store.state.fixSite.lat);
+                                metroCircle = this.paintCircle(metroPoint,distance);
+                                store.state.circleObj = metroCircle;
+                                map.addOverlay(metroCircle); //增加圆
+                            }
+                        }else{
+                            metroPoint = this.getMapPoint('mapData')
+                        }
                         break;
                 }
             }
@@ -777,16 +872,14 @@ export default{ //很关键
         return scale;
     },
     // 地铁线路房源
-    showMetroHouse:function(){
+    showMetroHouse:function(data){
         //地铁房源
         let map = store.state.map;
         let _state = store.state;
         let that = this;
         map.getOverlays().map((val)=>{
             if(val._type=="ComplexOverlay"){
-                // if(!isMovingEvent){
-                    map.removeOverlay(val)
-                // }
+                map.removeOverlay(val)
             }
             return;
         })
@@ -812,6 +905,15 @@ export default{ //很关键
           var myCompOverlay = new ComplexOverlay.ComplexMetroStationOverlay(new BMap.Point(val.lng,val.lat),val.key, txt,mouseoverTxt,"ComplexOverlay");
           map.addOverlay(myCompOverlay);
           //覆盖物添加点击事件+
+
+          if(val.key == store.state.metroState){
+            //选中地铁站
+            var ele = that.getElementByAttr("location_metro_label","key",val.key)[0];
+            if(ele){
+                ele.className = "location_metro_label location_metro_label_active";
+                ele.getElementsByClassName("label_metro_arrow")[0].className = "label_metro_arrow location_metro_label_arrow_active";
+            }
+          }
           
           myCompOverlay._div.addEventListener('touchstart',function(){
            map.disableDragging() //禁用地图拖拽功能
@@ -842,6 +944,7 @@ export default{ //很关键
                   }
               }
               store.state.mapData.isClickZoom = true;
+              store.state.metroState = parseInt(json.stationId);
               that.showHouse(json);
               
             

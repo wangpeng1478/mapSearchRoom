@@ -57,7 +57,7 @@
   import 'swiper/dist/css/swiper.css';
   import API from '@/utils/api'
   import {
-    mapState
+    mapState,mapMutations
   } from 'vuex'
   export default {
     name: "RoomList",
@@ -84,6 +84,7 @@
       this.loadRoomList();
     },
     methods: {
+      ...mapMutations(['assignMapData']),
       loadRoomList() {
         let params = {};
         if (this.screen) {

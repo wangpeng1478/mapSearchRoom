@@ -96,6 +96,9 @@
         if(this.screen.villageId){
           this.assign({houseState:[this.screen.villageId,[]]})
         }
+        if(this.screen.stationId){
+          this.assign({metroState:this.screen.stationId})
+        }
         if(this.mapData.isOverLay){
           Object.assign(json,this.screen);
           json.longitude = this.mapData.longitude;
@@ -217,6 +220,7 @@
                 json.levelType = 6;
                 json.metroId  = this.keywordsSearch.metroId;
                 json.stationId = this.keywordsSearch.tableId;
+                this.assign({metroState:this.keywordsSearch.stationId})
                 break;
               case 3:
                 json.levelType = 5;
@@ -621,6 +625,15 @@ html,body,#app{
 }
 
 .location_label_arrow_active{
+  border-top-color: #005947 !important;
+}
+
+.location_metro_label_active{
+  background: #005947 !important;
+  z-index: 10 !important;
+}
+
+.location_metro_label_arrow_active{
   border-top-color: #005947 !important;
 }
 
