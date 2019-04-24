@@ -612,8 +612,6 @@ export default{ //很关键
                     }
                     map.addOverlay(myCompOverlay);
 
-                    console.log(store.state.houseState)
-                    console.log("val",val)
                     //选中房间
                     if(store.state.houseState[0] == val.key||store.state.houseState[0] == val.villageId){
                         var ele = that.getElementByAttr("location_label","key",val.key)[0] ||

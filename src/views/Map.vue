@@ -626,11 +626,11 @@ html,body,#app{
 
 
 .location_label_rest{
-  background: #2cdeba !important;
+  background: rgb(18, 153, 126) !important;
 }
 
 .location_label_arrow_rest{
-  border-top-color: #2cdeba !important;
+  border-top-color: rgb(18, 153, 126) !important;
 }
 </style>
 

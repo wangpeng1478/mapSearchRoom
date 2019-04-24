@@ -201,6 +201,7 @@ export default {
           limit: 9,
           keyword: this.searchValue
         });
+        
         axios
           .post(API["keywordsSearch"], params, {
             headers: {
@@ -224,6 +225,7 @@ export default {
             }
           });
       } else {
+        console.log("cityName",this.searchValue)
         let acResult = this.ac.getResults().Lq;
         acResult.forEach((item,index)=>{
           
