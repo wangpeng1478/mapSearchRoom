@@ -314,7 +314,7 @@ export default {
     margin-left: -16px;
     text-align: center;
     line-height: 32px;
-    z-index: 1000;
+    z-index: 2;
     color: #ffffff;
     background: rgb(15, 184, 150);
     box-shadow: 0vw 0vw 1vw 0vw rgba(0, 11, 10, 0.2);

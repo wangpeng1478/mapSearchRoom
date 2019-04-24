@@ -18,6 +18,7 @@ export default new Vuex.Store({
     regionTemp:{},//筛选区域缓存
     pointSearch:null,
     houseState:[-1,[]],      //房间覆盖物的状态 houseState[0]激活,houseState[1]休眠
+    metroState:-1,          //地铁站点状态
     fixSite:{},
     mapData:{
       type:1,
@@ -62,6 +63,7 @@ export default new Vuex.Store({
     clearSearh(state){
       state.keywordsSearch={};
       state.screen= null;
+      state.metroState = -1;
       let mapDataAss = {
         latitude:state.currentCity.latitude,
         longitude:state.currentCity.longitude,
@@ -75,6 +77,7 @@ export default new Vuex.Store({
     clearScreen(state){ //搜索后青客筛选条件
       state.screen = null;
       state.screenTemp = null;
+      state.metroState = -1;
       state.region = {};
       state.regionTemp = {};
     },
