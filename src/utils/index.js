@@ -424,6 +424,9 @@ export default{ //很关键
         axios.post(API["queryMapCoverData"],mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
+                if(res==null){
+                    res = [];
+                }
                 //去掉圆
                 if(store.state.circleObj){
                     map.removeOverlay(store.state.circleObj);
@@ -504,6 +507,7 @@ export default{ //很关键
                         break;
                 }
             }else{
+                store.state.toast = res.data.msg;
                 switch (mpdata.levelType) {
                     case 6:
                     case 7:
@@ -569,6 +573,9 @@ export default{ //很关键
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
+                if(res==null){
+                    res = [];
+                }
                 switch (mpdata.levelType) {
                     case 1:
                     case 2:
@@ -619,6 +626,7 @@ export default{ //很关键
                         break;
                 }
             }else{
+                store.state.toast = res.data.msg;
                 switch (mpdata.levelType) {
                     case 6:
                     case 7:

@@ -225,6 +225,8 @@ export default {
             }
           });
       } else {
+        console.log("cityName",this.currentCity.cityName)
+        console.log("getResults",this.ac.getResults().keyword)
         let acResult = this.ac.getResults().Qq;
         for(let i=0;i<acResult.length;i++){
           if(acResult[i].city.indexOf(this.currentCity.cityName)==-1){

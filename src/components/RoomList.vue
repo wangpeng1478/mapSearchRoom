@@ -110,7 +110,7 @@
       },
       handleRoomlistStart(e) {
         this.touchStartY = e.changedTouches[0].clientY - this.translateY;
-        this.roomListTransition=false
+        this.roomListTransition=false;
       },
       handleRoomlistScroll(e) {
         e.preventDefault();
@@ -136,7 +136,6 @@
         }
       },
       roomListDestroy(){
-        console.log("fdsf")
         this.$emit('roomListDestroy')
       }
     },
