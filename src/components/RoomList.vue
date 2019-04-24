@@ -4,7 +4,7 @@
     <div class="village">
         <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll"></button>
         <template v-if="roomList.length!=0">
-        <a :href="'https://i.qk365.com/sh/xiaoqu/v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
+        <a :href="'https://i.qk365.com/sh/xiaoqu/gk_v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
         </template>
     </div>
 
