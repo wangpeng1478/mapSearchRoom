@@ -2,7 +2,6 @@
   <div>
     <div class="input-row">
       <input
-        id="suggestId"
         type="text"
         placeholder="请输入您想入住的地址或区域"
         maxlength="20"
@@ -39,7 +38,11 @@
           </p>
         </div>
         <ul class="tag-list">
-          <li v-for="(pointTag,index) in pointTagHistory" :key="index" @click="handleAcHistory(index)">{{pointTag.name}}</li>
+          <li
+            v-for="(pointTag,index) in pointTagHistory"
+            :key="index"
+            @click="handleAcHistory(index)"
+          >{{pointTag.name}}</li>
         </ul>
       </div>
       <div class="search-tag-list" v-if="isRegion && hotSearch.length!=0">
@@ -64,8 +67,9 @@
     </ul>
     <ul class="local-result" v-if="searchValue!='' && !isRegion">
       <li v-for="(result,index) in acResult" :key="index" @click="handleAcResult(index)">
-        <p>{{result.business}}</p>
-        <span>{{result.city}} | {{result.district}}</span>
+        <p>{{result.title}}</p>
+        <!-- <span>{{result.province}} | {{result.district}}</span> -->
+        <span>{{result.address}}</span>
       </li>
     </ul>
   </div>
@@ -74,7 +78,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
-import {recordButton,recordSearch} from '@/utils/record'
+import { recordButton, recordSearch } from "@/utils/record";
 export default {
   name: "Search",
   data() {
@@ -88,10 +92,12 @@ export default {
       acResult: [],
       myGeo: null,
       pointTagHistory: [], //位置搜索历史
-      storageName: null //缓存的名字
+      storageName: null, //缓存的名字
+      local: null
     };
   },
   mounted() {
+    let _this = this;
     this.isRegion = !this.mapData.isOverLay;
     if (this.isRegion) {
       this.storageName = "searchTagHistory" + this.currentCity.cityId;
@@ -111,7 +117,7 @@ export default {
           if (res.data.code == 0) {
             this.hotSearch = res.data.data;
           }
-        })
+        });
 
       if (localStorage[this.storageName]) {
         this.searchTagHistory = JSON.parse(localStorage[this.storageName]);
@@ -126,49 +132,67 @@ export default {
       } else {
         this.pointTagHistory = [];
       }
-      this.ac = new BMap.Autocomplete({
-        input: "suggestId"
-      });
-      this.ac.setLocation(this.currentCity.cityName + "市");
       this.myGeo = new BMap.Geocoder();
+      this.local = new BMap.LocalSearch(_this.map, {
+        onSearchComplete(res) {
+          if (_this.local.getStatus() == BMAP_STATUS_SUCCESS) {
+            let acResult = res.Qq;
+            for (let i = 0; i < acResult.length; i++) {
+              if (
+                acResult[i].province.indexOf(_this.currentCity.cityName) == -1
+              ) {
+                acResult.splice(i, 1);
+                i--;
+              }
+            }
+            if (acResult.length == 0) {
+              _this.showToast("对不起，暂未匹配到相关数据");
+            }
+            console.log(acResult);
+            _this.acResult = acResult;
+          }
+        }
+      });
     }
   },
   methods: {
-    ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen","showToast"]),
-    handleCancle(){
-      recordButton('搜索页面点击取消');
-      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
+    ...mapMutations([
+      "assign",
+      "searchCompelet",
+      "assignMapData",
+      "clearScreen",
+      "showToast"
+    ]),
+    handleCancle() {
+      recordButton("搜索页面点击取消");
+      this.$router.push("/" + this.currentCity.cityPinyin + "/map");
     },
-    handleAcHistory(idx){
-      recordButton('搜索页面点击位置')
-      this.assign({pointSearch:this.pointTagHistory[idx]})
-      this.backMap()
+    handleAcHistory(idx) {
+      recordButton("搜索页面点击位置");
+      this.assign({ pointSearch: this.pointTagHistory[idx] });
+      this.backMap();
     },
     clearPoint() {
-      recordButton('搜索页面清空坐标历史');
+      recordButton("搜索页面清空坐标历史");
       localStorage.removeItem(this.storageName);
       this.pointTagHistory = [];
     },
     handleAcResult(idx) {
       let _this = this;
-      let myValue =
-        this.acResult[idx].city +
-        this.acResult[idx].district +
-        this.acResult[idx].business;
       this.myGeo.getPoint(
-        myValue,
+        _this.acResult[idx].address,
         function(res) {
           if (res) {
+            console.log(res);
             let point = res;
-            point.name = _this.acResult[idx].business;
+            point.name = _this.acResult[idx].title;
             _this.savePointStorage(point);
-            _this.assign({pointSearch:point})
-            _this.backMap()
+            _this.assign({ pointSearch: point });
+            _this.backMap();
           }
         },
         this.currentCity.cityName + "市"
       );
-      
     },
     savePointStorage(point) {
       let pointTagHistory = JSON.parse(JSON.stringify(this.pointTagHistory));
@@ -184,11 +208,12 @@ export default {
       localStorage.setItem(this.storageName, pointTagHistory);
     },
     clearHistory() {
-      recordButton('搜索页面清空搜索历史')
+      recordButton("搜索页面清空搜索历史");
       localStorage.removeItem(this.storageName);
       this.searchTagHistory = [];
     },
     handleInput(e) {
+      let _this = this;
       if (this.searchValue.length == 0) {
         this.searchResult = [];
         this.acResult = [];
@@ -201,7 +226,7 @@ export default {
           limit: 9,
           keyword: this.searchValue
         });
-        
+
         axios
           .post(API["keywordsSearch"], params, {
             headers: {
@@ -211,43 +236,31 @@ export default {
           .then(res => {
             if (res.data.code == 0) {
               let searchResult = res.data.data;
-              if(searchResult.length==0){
-                this.showToast('对不起，暂未匹配到相关数据')
+              if (searchResult.length == 0) {
+                this.showToast("对不起，暂未匹配到相关数据");
               }
               searchResult.map(result => {
                 result.showKeyWords = result.keyWords.replace(
                   this.searchValue,
                   "<span>" + this.searchValue + "</span>"
                 );
-                result.showKeyWords+="<em> ("+result.roomCount+"间)</em>"
+                result.showKeyWords += "<em> (" + result.roomCount + "间)</em>";
               });
               this.searchResult = searchResult;
             }
           });
       } else {
-        let acResult = this.ac.getResults().Qq;
-        for(let i=0;i<acResult.length;i++){
-          if(acResult[i].city.indexOf(this.currentCity.cityName)==-1){
-            acResult.splice(i,1)
-            i--;
-          }
-        }
-        console.log(acResult)
-        if(acResult.length==0){
-          this.showToast('对不起，暂未匹配到相关数据')
-        }
-        this.acResult = acResult;
+        this.local.search(_this.searchValue);
       }
     },
     handleSearchTag(idx, name) {
-      recordButton('搜索页面点击标签')
+      recordButton("搜索页面点击标签");
       //点击历史或者热门的tag
       let tag = this[name][idx];
       this.saveHistory(tag);
-      
     },
-    saveHistory(tag){
-      this.assignMapData({isClickZoom:true})
+    saveHistory(tag) {
+      this.assignMapData({ isClickZoom: true });
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;
@@ -263,41 +276,55 @@ export default {
     },
     handleSearchResult(idx) {
       this.saveHistory(this.searchResult[idx]);
-      this.assignMapData({isClickZoom:true})
+      this.assignMapData({ isClickZoom: true });
     },
-     handleClearinput() {
-       recordButton('搜索页面清空输入框')
+    handleClearinput() {
+      recordButton("搜索页面清空输入框");
       this.searchValue = "";
     },
     hotWordsCount(keywordsSearch) {
-      if(keywordsSearch.typeId==0){
+      if (keywordsSearch.typeId == 0) {
         //房间
-        window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
-      }else{
-        this.assign({keywordsSearch})
-      //清空筛选条件
-      this.clearScreen()
-      this.searchCompelet(keywordsSearch);
+        window.open(
+          `https://www.qk365.com/room/${keywordsSearch.tableId}`,
+          "_blank"
+        );
+      } else {
+        this.assign({ keywordsSearch });
+        //清空筛选条件
+        this.clearScreen();
+        this.searchCompelet(keywordsSearch);
       }
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
         id: keywordsSearch.id,
         keyWords: keywordsSearch.keyWords,
-        typeId:keywordsSearch.typeId,
-        tableId:keywordsSearch.tableId
+        typeId: keywordsSearch.typeId,
+        tableId: keywordsSearch.tableId
       });
       recordSearch({
-          keyType:2,
-          keyWords:this.currentCity.cityName+'-'+keywordsSearch.keyWords+'-'+keywordsSearch.typeName
-        })
-      axios.post(API["hotWordsCount"], params)
-      this.backMap()
+        keyType: 2,
+        keyWords:
+          this.currentCity.cityName +
+          "-" +
+          keywordsSearch.keyWords +
+          "-" +
+          keywordsSearch.typeName
+      });
+      axios.post(API["hotWordsCount"], params);
+      this.backMap();
     },
-    backMap(){
-      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
+    backMap() {
+      this.$router.push("/" + this.currentCity.cityPinyin + "/map");
     }
   },
-  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map","pointSearch"])
+  computed: mapState([
+    "currentCity",
+    "keywordsSearch",
+    "mapData",
+    "map",
+    "pointSearch"
+  ])
 };
 </script>
 <style scoped>
@@ -340,7 +367,9 @@ export default {
   text-align: center;
 }
 
-.search-tag,.search-result,.local-result{
+.search-tag,
+.search-result,
+.local-result {
   box-sizing: border-box;
   padding-top: 17vw;
   height: 100vh;
@@ -418,7 +447,7 @@ export default {
   letter-spacing: 1px;
   line-height: 12vw;
   overflow: hidden;
-  color:#313131;
+  color: #313131;
 }
 
 .search-result li span {
@@ -473,17 +502,12 @@ export default {
   text-align: center;
   font-weight: bold;
 }
-
 </style>
 <style>
 .search-result li p span {
   color: #ff0000;
 }
-
-.tangram-suggestion-main {
-  display: none !important;
-}
-.search-result em{
+.search-result em {
   font-style: normal;
 }
 </style>
