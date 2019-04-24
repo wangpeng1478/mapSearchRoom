@@ -1,9 +1,11 @@
 <template>
   <div class="roomlist-wrap" :class="roomListTransition ? 'roomlist-transition' : ''"
     :style="{transform: 'translateY('+translateY+'px)'}">
-    <div class="village" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll">
-        <button class="retract"></button>
-        <p class="village-info" v-if="roomList.length!=0">{{roomList[0].villageName}}（{{roomList.length}}间）</p>
+    <div class="village">
+        <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll"></button>
+        <template v-if="roomList.length!=0">
+        <a :href="'https://i.qk365.com/sh/xiaoqu/v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
+        </template>
     </div>
 
     <div class="roomlist" :class="{'height80' : translateState==1}" v-if="roomList.length!=0">
@@ -169,19 +171,19 @@
   }
 
   .retract {
-    width: 10vw;
-    height: 2vw;
-    color: #999999;
-    background: #999;
+    width:100%;
+    height: 4vw;
+    background:url("../assets/images/ling-ico.png") no-repeat center 3vw;
     display: block;
-    margin: 3vw auto 1vw;
-    border-radius: 1.5vw;
+    padding-top: 7vw;
   }
 
   .village-info {
     overflow: hidden;
+    display:block;
     height: 6vw;
-    padding: 4vw 4vw;
+    padding: 4vw 0;
+    margin:0 4vw;
     top: 7vw;
     width: 92vw;
     color: #101010;
