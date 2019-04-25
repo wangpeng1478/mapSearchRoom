@@ -1,7 +1,11 @@
+
+    
 <template>
   <div>
+   
     <div class="input-row">
       <input
+        id="suggestId"
         type="text"
         placeholder="请输入您想入住的地址或区域"
         maxlength="20"
@@ -38,11 +42,7 @@
           </p>
         </div>
         <ul class="tag-list">
-          <li
-            v-for="(pointTag,index) in pointTagHistory"
-            :key="index"
-            @click="handleAcHistory(index)"
-          >{{pointTag.name}}</li>
+          <li v-for="(pointTag,index) in pointTagHistory" :key="index" @click="handleAcHistory(index)">{{pointTag.name}}</li>
         </ul>
       </div>
       <div class="search-tag-list" v-if="isRegion && hotSearch.length!=0">
@@ -67,8 +67,8 @@
     </ul>
     <ul class="local-result" v-if="searchValue!='' && !isRegion">
       <li v-for="(result,index) in acResult" :key="index" @click="handleAcResult(index)">
-        <p>{{result.title}}</p>
-        <span>{{result.address}}</span>
+        <p>{{result.business}}</p>
+        <span>{{result.city}} | {{result.district}}</span>
       </li>
     </ul>
   </div>
@@ -77,7 +77,7 @@
 import axios from "axios";
 import API from "@/utils/api";
 import { mapState, mapMutations } from "vuex";
-import { recordButton, recordSearch } from "@/utils/record";
+import {recordButton,recordSearch} from '@/utils/record'
 export default {
   name: "Search",
   data() {
@@ -92,11 +92,11 @@ export default {
       myGeo: null,
       pointTagHistory: [], //位置搜索历史
       storageName: null, //缓存的名字
-      local: null
+      rac:null
     };
   },
   mounted() {
-    let _this = this;
+    var that = this;
     this.isRegion = !this.mapData.isOverLay;
     if (this.isRegion) {
       this.storageName = "searchTagHistory" + this.currentCity.cityId;
@@ -116,8 +116,7 @@ export default {
           if (res.data.code == 0) {
             this.hotSearch = res.data.data;
           }
-        });
-
+        })
       if (localStorage[this.storageName]) {
         this.searchTagHistory = JSON.parse(localStorage[this.storageName]);
       } else {
@@ -131,74 +130,62 @@ export default {
       } else {
         this.pointTagHistory = [];
       }
-      this.myGeo = new BMap.Geocoder();
-      this.map.centerAndZoom(
-        new BMap.Point(_this.currentCity.longitude, _this.currentCity.latitude),
-        11
-      );
-      this.local = new BMap.LocalSearch(_this.map, {
-        onSearchComplete(res) {
-          if (_this.local.getStatus() == BMAP_STATUS_SUCCESS) {
-            let acResult = res.Qq;
-            _this.getPoint(acResult,acResult.length-1)
-
-            if (acResult.length == 0) {
-              _this.showToast("对不起，暂未匹配到相关数据");
+      this.ac = new BMap.Autocomplete({
+        input: "suggestId",
+        onSearchComplete:function(result){
+          var acResult = result.Qq;
+          for(let i=0;i<acResult.length;i++){
+            if(acResult[i].city.indexOf(that.currentCity.cityName)==-1){
+              acResult.splice(i,1)
+              i--;
             }
           }
+          if(acResult.length==0){
+            that.showToast('对不起，暂未匹配到相关数据')
+          }
+          that.acResult = acResult;
         }
       });
+      this.ac.setLocation(this.currentCity.cityName + "市");
+      this.myGeo = new BMap.Geocoder();
     }
   },
   methods: {
-    ...mapMutations([
-      "assign",
-      "searchCompelet",
-      "assignMapData",
-      "clearScreen",
-      "showToast"
-    ]),
-    getPoint(acResult,i) {
-      let _this = this;
-      this.myGeo.getPoint(
-        acResult[i].address,
-        function(res) {
-          if (res) {
-            let point = JSON.parse(JSON.stringify(res));
-            point.name = acResult[i].title;
-            acResult[i].point = point;
-          } else {
-            acResult.splice(i, 1);
-          }
-          if(i>0){
-            _this.getPoint(acResult,i-1)
-          }else{
-            _this.acResult = acResult;
-          }
-        },
-        _this.currentCity.cityName + "市"
-      );
+    ...mapMutations(["assign","searchCompelet","assignMapData","clearScreen","showToast"]),
+    handleCancle(){
+      recordButton('搜索页面点击取消');
+      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
     },
-    handleCancle() {
-      recordButton("搜索页面点击取消");
-      this.$router.push("/" + this.currentCity.cityPinyin + "/map");
-    },
-    handleAcHistory(idx) {
-      recordButton("搜索页面点击位置");
-      this.assign({ pointSearch: this.pointTagHistory[idx] });
-      this.backMap();
+    handleAcHistory(idx){
+      recordButton('搜索页面点击位置')
+      this.assign({pointSearch:this.pointTagHistory[idx]})
+      this.backMap()
     },
     clearPoint() {
-      recordButton("搜索页面清空坐标历史");
+      recordButton('搜索页面清空坐标历史');
       localStorage.removeItem(this.storageName);
       this.pointTagHistory = [];
     },
     handleAcResult(idx) {
-      recordButton("搜索位置联想列表");
-      let point = this.acResult[idx].point;
-      this.savePointStorage(point)
-      this.assign({ pointSearch: point });
-      this.backMap();
+      let _this = this;
+      let myValue =
+        this.acResult[idx].city +
+        this.acResult[idx].district +
+        this.acResult[idx].business;
+      this.myGeo.getPoint(
+        myValue,
+        function(res) {
+          if (res) {
+            let point = res;
+            point.name = _this.acResult[idx].business;
+            _this.savePointStorage(point);
+            _this.assign({pointSearch:point})
+            _this.backMap()
+          }
+        },
+        this.currentCity.cityName + "市"
+      );
+      
     },
     savePointStorage(point) {
       let pointTagHistory = JSON.parse(JSON.stringify(this.pointTagHistory));
@@ -210,16 +197,14 @@ export default {
       }
       pointTagHistory.unshift(point);
       pointTagHistory = JSON.stringify(pointTagHistory.slice(0, 9));
-
       localStorage.setItem(this.storageName, pointTagHistory);
     },
     clearHistory() {
-      recordButton("搜索页面清空搜索历史");
+      recordButton('搜索页面清空搜索历史')
       localStorage.removeItem(this.storageName);
       this.searchTagHistory = [];
     },
     handleInput(e) {
-      let _this = this;
       if (this.searchValue.length == 0) {
         this.searchResult = [];
         this.acResult = [];
@@ -232,7 +217,7 @@ export default {
           limit: 9,
           keyword: this.searchValue
         });
-
+        
         axios
           .post(API["keywordsSearch"], params, {
             headers: {
@@ -242,31 +227,45 @@ export default {
           .then(res => {
             if (res.data.code == 0) {
               let searchResult = res.data.data;
-              if (searchResult.length == 0) {
-                this.showToast("对不起，暂未匹配到相关数据");
+              if(searchResult.length==0){
+                this.showToast('对不起，暂未匹配到相关数据')
               }
               searchResult.map(result => {
                 result.showKeyWords = result.keyWords.replace(
                   this.searchValue,
                   "<span>" + this.searchValue + "</span>"
                 );
-                result.showKeyWords += "<em> (" + result.roomCount + "间)</em>";
+                result.showKeyWords+="<em> ("+result.roomCount+"间)</em>"
               });
               this.searchResult = searchResult;
             }
           });
       } else {
-        this.local.search(_this.currentCity.cityName + _this.searchValue);
+        // console.log("cityName",this.currentCity.cityName)
+        // console.log("getResults",this.ac.getResults().keyword)
+        // let acResult = this.ac.getResults().Qq;
+        // for(let i=0;i<acResult.length;i++){
+        //   if(acResult[i].city.indexOf(this.currentCity.cityName)==-1){
+        //     acResult.splice(i,1)
+        //     i--;
+        //   }
+        // }
+        // console.log(acResult)
+        // if(acResult.length==0){
+        //   this.showToast('对不起，暂未匹配到相关数据')
+        // }
+        // this.acResult = acResult;
       }
     },
     handleSearchTag(idx, name) {
-      recordButton("搜索页面点击标签");
+      recordButton('搜索页面点击标签')
       //点击历史或者热门的tag
       let tag = this[name][idx];
       this.saveHistory(tag);
+      
     },
-    saveHistory(tag) {
-      this.assignMapData({ isClickZoom: true });
+    saveHistory(tag){
+      this.assignMapData({isClickZoom:true})
       let searchTagHistory = JSON.parse(JSON.stringify(this.searchTagHistory));
       let _index = searchTagHistory.findIndex(item => {
         return item.id == tag.id;
@@ -277,60 +276,45 @@ export default {
       searchTagHistory.unshift(tag);
       searchTagHistory = JSON.stringify(searchTagHistory.slice(0, 9));
       localStorage.setItem(this.storageName, searchTagHistory);
-
       this.hotWordsCount(tag);
     },
     handleSearchResult(idx) {
       this.saveHistory(this.searchResult[idx]);
-      this.assignMapData({ isClickZoom: true });
+      this.assignMapData({isClickZoom:true})
     },
-    handleClearinput() {
-      recordButton("搜索页面清空输入框");
+     handleClearinput() {
+       recordButton('搜索页面清空输入框')
       this.searchValue = "";
     },
     hotWordsCount(keywordsSearch) {
-      if (keywordsSearch.typeId == 0) {
+      if(keywordsSearch.typeId==0){
         //房间
-        window.open(
-          `https://www.qk365.com/room/${keywordsSearch.tableId}`,
-          "_blank"
-        );
-      } else {
-        this.assign({ keywordsSearch });
-        //清空筛选条件
-        this.clearScreen();
-        this.searchCompelet(keywordsSearch);
+        window.open(`https://www.qk365.com/room/${keywordsSearch.tableId}`,'_blank');
+      }else{
+        this.assign({keywordsSearch})
+      //清空筛选条件
+      this.clearScreen()
+      this.searchCompelet(keywordsSearch);
       }
       let params = new URLSearchParams({
         cityId: this.currentCity.cityId,
         id: keywordsSearch.id,
         keyWords: keywordsSearch.keyWords,
-        typeId: keywordsSearch.typeId,
-        tableId: keywordsSearch.tableId
+        typeId:keywordsSearch.typeId,
+        tableId:keywordsSearch.tableId
       });
       recordSearch({
-        keyType: 2,
-        keyWords:
-          this.currentCity.cityName +
-          "-" +
-          keywordsSearch.keyWords +
-          "-" +
-          keywordsSearch.typeName
-      });
-      axios.post(API["hotWordsCount"], params);
-      this.backMap();
+          keyType:2,
+          keyWords:this.currentCity.cityName+'-'+keywordsSearch.keyWords+'-'+keywordsSearch.typeName
+        })
+      axios.post(API["hotWordsCount"], params)
+      this.backMap()
     },
-    backMap() {
-      this.$router.push("/" + this.currentCity.cityPinyin + "/map");
+    backMap(){
+      this.$router.push('/' + this.currentCity.cityPinyin + '/map')
     }
   },
-  computed: mapState([
-    "currentCity",
-    "keywordsSearch",
-    "mapData",
-    "map",
-    "pointSearch"
-  ])
+  computed: mapState(["currentCity", "keywordsSearch", "mapData", "map","pointSearch"])
 };
 </script>
 <style scoped>
@@ -345,7 +329,6 @@ export default {
   left: 0;
   right: 0;
 }
-
 .input-row input {
   display: block;
   border: none;
@@ -361,7 +344,6 @@ export default {
   font-size: 3.2vw;
   line-height: 10.6vw;
 }
-
 .input-row p {
   display: block;
   width: 15.5vw;
@@ -372,25 +354,19 @@ export default {
   line-height: 10.6vw;
   text-align: center;
 }
-
-.search-tag,
-.search-result,
-.local-result {
+.search-tag,.search-result,.local-result{
   box-sizing: border-box;
   padding-top: 17vw;
   height: 100vh;
 }
-
 .tag-top {
   overflow: hidden;
   height: 12.66vw;
   border-bottom: 1px solid #e5e5e5;
 }
-
 .tag-top p {
   height: 12.66vw;
 }
-
 .tag-tit {
   margin-left: 4vw;
   line-height: 12.66vw;
@@ -398,7 +374,6 @@ export default {
   font-weight: 700;
   font-size: 4vw;
 }
-
 .clear {
   font-size: 3.2vw;
   color: #666666;
@@ -406,18 +381,15 @@ export default {
   float: right;
   margin-right: 4vw;
 }
-
 .clear i {
   margin-left: 1.33vw;
   font-size: 3.4vw;
 }
-
 .tag-list {
   width: 83.2vw;
   margin: 4vw 4.4vw 0 8.4vw;
   overflow: hidden;
 }
-
 .tag-list li {
   float: left;
   height: 8vw;
@@ -429,22 +401,18 @@ export default {
   line-height: 8vw;
   overflow: hidden;
 }
-
 .search-tag-list {
   min-height: 50vw;
 }
-
 .search-tag-list:nth-of-type(1) {
   border-bottom: 4vw #f4f4f4 solid;
 }
-
 .search-result li {
   width: 87vw;
   height: 12vw;
   border-bottom: 1px solid #e5e5e5;
   padding: 0 6.5vw;
 }
-
 .search-result li p {
   width: 57vw;
   height: 12vw;
@@ -453,9 +421,8 @@ export default {
   letter-spacing: 1px;
   line-height: 12vw;
   overflow: hidden;
-  color: #313131;
+  color:#313131;
 }
-
 .search-result li span {
   display: block;
   width: 30vw;
@@ -466,18 +433,15 @@ export default {
   float: right;
   line-height: 12vw;
 }
-
 .search-result li p span {
   color: #ff0000;
 }
-
 .local-result li {
   width: 87vw;
   height: 12vw;
   border-bottom: 1px solid #e5e5e5;
   padding: 4vw 6.5vw 0;
 }
-
 .local-result li p {
   font-size: 4vw;
   color: #313131;
@@ -485,20 +449,14 @@ export default {
   line-height: 1;
   margin-bottom: 1vw;
 }
-
 .local-result li span {
   color: #a8a8a8;
   font-size: 3.733vw;
   line-height: 1;
-  display: block;
-  height: 3.733vw;
-  overflow: hidden;
 }
-
 .local-result li p span {
   color: #ff0000;
 }
-
 .clearinput {
   display: block;
   color: #666;
@@ -516,7 +474,10 @@ export default {
 .search-result li p span {
   color: #ff0000;
 }
-.search-result em {
+.tangram-suggestion-main {
+  display: none !important;
+}
+.search-result em{
   font-style: normal;
 }
 </style>
