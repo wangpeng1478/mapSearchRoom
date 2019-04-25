@@ -53,7 +53,9 @@ export default {
         }
     },
     props:["showScreen"],
-    components:{sliderComponent},
+    components:{
+        sliderComponent
+    },
     mounted:function(){
         //阻止浏览器页面滑动
         document.getElementById("iMate").addEventListener('touchmove', function (e) {
@@ -285,7 +287,7 @@ export default {
             this.filter();
         }
     },
-    computed:mapState(['currentCity','mapData','pointSearch','map','trafficSpeedList','circleObj'])
+    computed:mapState(['currentCity','mapData','pointSearch','map','trafficSpeedList','circleObj','screen'])
 }
 </script>
 

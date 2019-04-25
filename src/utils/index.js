@@ -60,6 +60,7 @@ export default{ //很关键
         if(store.state.houseState[0]>-1){
             var ele = this.getElementByAttr("location_label","key",store.state.houseState[0])[0];
             if(ele){
+                ele.className = "location_label";
                 ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
                 ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
                 ele.getElementsByClassName("label_arrow")[0].className += "label_arrow location_label_arrow_rest";
@@ -75,6 +76,7 @@ export default{ //很关键
             }
             var ele = this.getElementByAttr("location_label","key",villageId)[0];
             if(ele){
+                ele.className = "location_label location_label_active";
                 ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
                 ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
                 ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
@@ -196,8 +198,10 @@ export default{ //很关键
             Object.assign(json,store.state.screen);
             json.levelType = levelType;
             if(!flag){
-                that.showHouse(json);
                 store.state.mapData.isClickZoom = true;
+                that.showHouse(json);
+                
+                
             }
             return json;
         }
@@ -273,7 +277,6 @@ export default{ //很关键
                 json.cityId = store.state.currentCity.cityId;
                 
                 json.levelType = that.toLevelType(store.state.mapData.scale);
-                console.log("json",json)
                 switch (json.levelType) {
                     case 1:
                         that.showAreaHouse(json);
@@ -327,7 +330,6 @@ export default{ //很关键
     zoomendEvent:function(obj){
         var that = this;
         obj.addEventListener("zoomend", function(e){
-            
             let zoom = e.currentTarget.getZoom();
             store.state.mapData.scale =  zoom;
             let mapData = store.state.mapData;
@@ -719,6 +721,7 @@ export default{ //很关键
                         var ele = that.getElementByAttr("location_label","key",val.key)[0] ||
                         that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
+                            ele.className = "location_label location_label_active";
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
                             ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
@@ -729,6 +732,7 @@ export default{ //很关键
                         var ele = that.getElementByAttr("location_label","key",val.key)[0]||
                         that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
+                            ele.className = "location_label";
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
                             ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_rest";
@@ -1006,6 +1010,7 @@ export default{ //很关键
                         var ele = that.getElementByAttr("location_label","key",val.key)[0] ||
                         that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
+                            ele.className = "location_label location_label_active";
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_active";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_active";
                             ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_active";
@@ -1016,6 +1021,7 @@ export default{ //很关键
                         var ele = that.getElementByAttr("location_label","key",val.key)[0]||
                         that.getElementByAttr("location_label","key",val.villageId)[0];
                         if(ele){
+                            ele.className = "location_label";
                             ele.getElementsByTagName("p")[0].className = "location_label_p location_label_rest";
                             ele.getElementsByTagName("p")[1].className = "location_label_p location_label_rest";
                             ele.getElementsByClassName("label_arrow")[0].className = "label_arrow location_label_arrow_rest";

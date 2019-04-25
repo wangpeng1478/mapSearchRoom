@@ -4,7 +4,7 @@
     <div class="village">
         <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll" @click="roomListDestroy"></button>
         <template v-if="roomList.length!=0">
-        <a :href="'https://i.qk365.com/sh/xiaoqu/gk_v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
+        <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/xiaoqu/gk_v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
         </template>
     </div>
 
@@ -18,7 +18,7 @@
           </div>
         </div>
       </div>
-      <a :href="currentCity.url+'/room/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
+      <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/easy/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if=" room.roomSpecialOffer!=0 && room.roomSpecialOffer !=null">特价</em>
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>

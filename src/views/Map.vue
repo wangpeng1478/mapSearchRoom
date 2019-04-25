@@ -622,6 +622,7 @@ html,body,#app{
 
 .location_label_active{
   background: #005947 !important;
+   z-index: 10 !important;
 }
 
 .location_label_arrow_active{
