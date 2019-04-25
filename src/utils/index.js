@@ -227,16 +227,10 @@ export default{ //很关键
             json.levelType = 4;
             Object.assign(json,store.state.screen);
             that.showHouse(json)
-
             let metroPoint = that.getMapPoint('mapData')
             if(store.state.mapData.isOverLay){
-                map.getOverlays().map((val)=>{
-            
-                    if(val._type=="ComplexCoverOverlay"){
-                            map.removeOverlay(val)
-                    }
-                    return;
-                })
+                console.log(map.getOverlays())
+                map.clearOverlays();
                 var geoc = new BMap.Geocoder();
                 
                 geoc.getLocation(metroPoint, function(rs){
