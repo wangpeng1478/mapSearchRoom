@@ -229,7 +229,6 @@ export default{ //很关键
             that.showHouse(json)
             let metroPoint = that.getMapPoint('mapData')
             if(store.state.mapData.isOverLay){
-                console.log(map.getOverlays())
                 map.clearOverlays();
                 var geoc = new BMap.Geocoder();
                 
