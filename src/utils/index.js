@@ -224,6 +224,12 @@ export default{ //很关键
         var that = this;
         
         obj.addEventListener("locationSuccess", function(e){
+            var num = store.state.cityList.findIndex(city => {
+                return city.cityName + "市" == e.addressComponent.city;
+            });
+            store.state.currentCity = store.state.cityList[num];
+
+
             let map = store.state.map;
             // 定位成功事件
             store.state.mapData.latitude = e.point.lat;
