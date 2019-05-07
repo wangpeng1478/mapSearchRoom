@@ -99,37 +99,10 @@ export default{ //很关键
                     if(!target.getAttribute("key")){
                         target = target.parentNode;
                     }
-                    store.state.currentCity.latitude = target.getAttribute("lat");
-                    store.state.currentCity.longitude = target.getAttribute("lng");
-                    store.state.currentCity.cityId = target.getAttribute("key");
-                    switch (parseInt(target.getAttribute("key"))) {
-                        case 2:
-                            store.state.currentCity.cityName = "上海";
-                            store.state.currentCity.cityPinyin = "sh";
-                            break;
-                        case 28:
-                            store.state.currentCity.cityName = "苏州";
-                            store.state.currentCity.cityPinyin = "su";
-                            break;
-                        case 44:
-                            store.state.currentCity.cityName = "杭州";
-                            store.state.currentCity.cityPinyin = "hz";
-                            break;
-                        case 62:
-                            store.state.currentCity.cityName = "北京";
-                            store.state.currentCity.cityPinyin = "bj";
-                            break;
-                        case 125:
-                            store.state.currentCity.cityName = "南京";
-                            store.state.currentCity.cityPinyin = "nj";
-                            break;
-                        case 154:
-                            store.state.currentCity.cityName = "武汉";
-                            store.state.currentCity.cityPinyin = "wh";
-                            break;
-                        default:
-                            break;
-                    }
+                    var num = store.state.cityList.findIndex(city => {
+                        return city.cityId == parseInt(target.getAttribute("key"));
+                    });
+                    store.state.currentCity = store.state.cityList[num];
                     store.state.mapData.scale = 10;
                     fuzhi(e,2);
                     
