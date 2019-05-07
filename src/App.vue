@@ -90,6 +90,7 @@ import { setTimeout } from 'timers';
               val.url = window.location.host;
               return;
             })
+            cityList[localCity].url = window.location.host;
             if (localCity != -1) {
               _this.assign({currentCity:cityList[localCity]});
             } else {
@@ -160,6 +161,7 @@ import { setTimeout } from 'timers';
         let cityPY = this.$route.params.cityPY;
         if (this.cityList) {
           let localCity = this.cityList.findIndex(city => {
+            
             return city.cityPinyin == cityPY;
           });
           if (localCity == -1) {

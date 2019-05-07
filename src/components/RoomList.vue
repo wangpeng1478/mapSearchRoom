@@ -73,6 +73,7 @@
     },
     props: ['villageId'],
     mounted() {
+      console.log(this.currentCity)
       if (this.banners.length != 0) {
         new Swiper('.swiper-container', {
           observer: true,
