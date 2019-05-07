@@ -552,6 +552,19 @@ export default{ //很关键
     //搜索后显示房源
     showSearchHouse:function(mpdata){
         let map = store.state.map;
+        switch (mpdata.levelType) {
+            case 1:
+            mpdata.levelType =2;
+                break;
+            case 2:
+            mpdata.levelType =3;
+                break;
+            case 3:
+            mpdata.levelType =4;
+                break;
+            default:
+                break;
+        }
         store.state.mapData.levelType = mpdata.levelType;
         var mJson = {};
         for (const key in mpdata) {
@@ -560,6 +573,7 @@ export default{ //很关键
         if(mJson.levelType == 7){
             mJson.levelType = 4;
         }
+        
         store.state.mapData.scale=this.toScale(mpdata.levelType);
         let point = this.getMapPoint('mapData')
         // 创建点坐标 
