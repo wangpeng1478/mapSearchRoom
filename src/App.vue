@@ -86,7 +86,10 @@ import { setTimeout } from 'timers';
             let localCity = cityList.findIndex(city => {
               return city.cityPinyin == cityPY;
             });
-            cityList[localCity].url = window.location.host;
+            cityList.map((val)=>{
+              val.url = window.location.host;
+              return;
+            })
             if (localCity != -1) {
               _this.assign({currentCity:cityList[localCity]});
             } else {

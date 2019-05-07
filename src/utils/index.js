@@ -101,7 +101,6 @@ export default{ //很关键
                     }
                     store.state.currentCity.latitude = target.getAttribute("lat");
                     store.state.currentCity.longitude = target.getAttribute("lng");
-                   
                     store.state.currentCity.cityId = target.getAttribute("key");
                     switch (parseInt(target.getAttribute("key"))) {
                         case 2:
