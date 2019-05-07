@@ -12,7 +12,7 @@
       <div class="banner swiper-container" v-if="banners.length!=0">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
-            <a :href="banner.href" target="_blank">
+            <a :href="'https://'+banner.href" target="_blank">
               <img :src="banner.imgUrl">
             </a>
           </div>
