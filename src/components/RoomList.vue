@@ -96,11 +96,19 @@
             roomFeatureIds: this.screen.roomFeatureIds
           }
         }
-        params.villageId = this.villageId
+        params.villageId = this.villageId;
         axios.post(API['queryRoomByVillage'], params)
           .then(res => {
+            console.log(res)
             if (res.data.code == 0) {
               this.roomList = res.data.data;
+              this.roomList.map((item)=>{
+                if(item.roomCoverPhotoSmall){
+                  item.roomCoverPhotoSmall = item.roomCoverPhotoSmall.replace(/http/g, "https");
+                }else{
+                  item.roomCoverPhotoSmall ='https://www.qk365.com/images/noPic_Big0.jpg'
+                }
+              })
               let oRoomList = document.getElementsByClassName("roomlist");
               if(oRoomList.item(0)){
                 oRoomList.item(0).scrollTop=0;
