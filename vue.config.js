@@ -17,7 +17,7 @@ module.exports = {
     }
   },
 
-  publicPath: '/map',
+  publicPath: '',
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: undefined,
