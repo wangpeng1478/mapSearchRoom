@@ -261,7 +261,6 @@ export default{ //很关键
             let map = store.state.map;
             let mapData = store.state.mapData;
             var json = {};
-            console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
