@@ -12,7 +12,7 @@
       <div class="banner swiper-container" v-if="banners.length!=0">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
-            <a :href="banner.href" target="_blank">
+            <a :href="'https://'+banner.href" target="_blank">
               <img :src="banner.imgUrl">
             </a>
           </div>
@@ -73,6 +73,7 @@
     },
     props: ['villageId'],
     mounted() {
+      console.log(this.currentCity)
       if (this.banners.length != 0) {
         new Swiper('.swiper-container', {
           observer: true,
@@ -96,11 +97,19 @@
             roomFeatureIds: this.screen.roomFeatureIds
           }
         }
-        params.villageId = this.villageId
+        params.villageId = this.villageId;
         axios.post(API['queryRoomByVillage'], params)
           .then(res => {
+            console.log(res)
             if (res.data.code == 0) {
               this.roomList = res.data.data;
+              this.roomList.map((item)=>{
+                if(item.roomCoverPhotoSmall){
+                  item.roomCoverPhotoSmall = item.roomCoverPhotoSmall.replace(/http/g, "https");
+                }else{
+                  item.roomCoverPhotoSmall ='https://www.qk365.com/images/noPic_Big0.jpg'
+                }
+              })
               let oRoomList = document.getElementsByClassName("roomlist");
               if(oRoomList.item(0)){
                 oRoomList.item(0).scrollTop=0;

@@ -129,6 +129,7 @@ export default new Vuex.Store({
         levelType = 6
         break;
         case 3:
+        data.metroId=data.tableId;
         levelType = 5
         break;
         case 4:

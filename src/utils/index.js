@@ -95,6 +95,14 @@ export default{ //很关键
             case 1:
                 obj.addEventListener("click", 
                 function (e) {
+                    var target = e.target;
+                    if(!target.getAttribute("key")){
+                        target = target.parentNode;
+                    }
+                    var num = store.state.cityList.findIndex(city => {
+                        return city.cityId == parseInt(target.getAttribute("key"));
+                    });
+                    store.state.currentCity = store.state.cityList[num];
                     store.state.mapData.scale = 10;
                     fuzhi(e,2);
                     
@@ -216,6 +224,12 @@ export default{ //很关键
         var that = this;
         
         obj.addEventListener("locationSuccess", function(e){
+            var num = store.state.cityList.findIndex(city => {
+                return city.cityName + "市" == e.addressComponent.city;
+            });
+            store.state.currentCity = store.state.cityList[num];
+
+
             let map = store.state.map;
             // 定位成功事件
             store.state.mapData.latitude = e.point.lat;
@@ -261,7 +275,6 @@ export default{ //很关键
             let map = store.state.map;
             let mapData = store.state.mapData;
             var json = {};
-            console.log("moving")
             if(!mapData.isOverLay){
                 var cp = map.getCenter();
                 store.state.mapData.latitude = cp.lat;
@@ -545,6 +558,19 @@ export default{ //很关键
     //搜索后显示房源
     showSearchHouse:function(mpdata){
         let map = store.state.map;
+        switch (mpdata.levelType) {
+            case 1:
+            mpdata.levelType =2;
+                break;
+            case 2:
+            mpdata.levelType =3;
+                break;
+            case 3:
+            mpdata.levelType =4;
+                break;
+            default:
+                break;
+        }
         store.state.mapData.levelType = mpdata.levelType;
         var mJson = {};
         for (const key in mpdata) {
@@ -553,6 +579,7 @@ export default{ //很关键
         if(mJson.levelType == 7){
             mJson.levelType = 4;
         }
+        
         store.state.mapData.scale=this.toScale(mpdata.levelType);
         let point = this.getMapPoint('mapData')
         // 创建点坐标 
