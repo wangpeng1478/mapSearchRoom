@@ -625,9 +625,9 @@ html,body,#app{
    z-index: 10 !important;
 }
 
-.location_label_arrow_active{
-  border-top-color: #005947 !important;
-}
+  .location_label_arrow_active{
+    border-top-color: #005947 !important;
+  }
 
 .location_metro_label_active{
   background: #005947 !important;

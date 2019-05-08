@@ -44,7 +44,7 @@ export default{ //很关键
             ceaId:jsonData.ceaId || null,
             villageId:jsonData.villageId || null,
             metroId:jsonData.metroId || null,
-            metroStationId:jsonData.metroStationId || null,
+            // metroStationId:jsonData.metroStationId || null,
             busStationId:jsonData.busStationId || null,
             rentDays:jsonData.rentDays || null,
             priceFrom:jsonData.priceFrom || null,
