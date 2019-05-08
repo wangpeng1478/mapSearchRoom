@@ -691,6 +691,7 @@ export default{ //很关键
         let _state = store.state;
         if(_state.mapData.isOverLay){
             var json = data;
+            json.cityId = _state.currentCity.cityId;
             axios.post(API["queryMapCoverByCoordinate"], json).then(res => {
                 if (res.data.code == 0) {
                     res = res.data.data;
