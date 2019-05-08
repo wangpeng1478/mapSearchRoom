@@ -10,14 +10,14 @@ module.exports = {
   devServer: {
     proxy: {
       '/': {
-          target: 'http://192.168.1.72/',
+          target: 'https://i.qk365.com/',
           changeOrigin: true,
           ws:false
         }
     }
   },
 
-  publicPath: '',
+  publicPath: '/map',
   outputDir: undefined,
   assetsDir: undefined,
   runtimeCompiler: undefined,
