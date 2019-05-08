@@ -270,7 +270,8 @@ export default{ //很关键
     //拖动事件
     movingEvent:function(obj){
         var that = this;
-        obj.addEventListener("moving", function(){
+        obj.addEventListener("moving", function(e){
+            console.log(e)
             isMovingEvent = true;
             let map = store.state.map;
             let mapData = store.state.mapData;
