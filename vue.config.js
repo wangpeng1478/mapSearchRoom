@@ -10,7 +10,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/': {
-          target: 'https://i.qk365.com/',
+          target: 'http://192.168.1.72/',
           changeOrigin: true,
           ws:false
         }
