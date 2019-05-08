@@ -31,9 +31,7 @@
           <p class="room-list-tit">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
-            <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">
-              距{{roomList[0].metroStationName}}约{{room.metroDistance }}米
-            </p>
+            <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
             <span v-if="room.activityName!=''">{{room.activityName}}</span>
           </div>
           <div class="price">
@@ -102,7 +100,19 @@
           .then(res => {
             console.log(res)
             if (res.data.code == 0) {
-              this.roomList = res.data.data;
+              let roomList = res.data.data;            
+
+                let distance = '';
+                if(roomList[0].metroStationName && roomList[0].metroDistance<1500){
+                  if(roomList[0].metroDistance<6) roomList[0].metroDistance=6;
+                  distance=`距${roomList[0].metroStationName}约${roomList[0].metroDistance}米`
+                }else if(roomList[0].busStationName && roomList[0].busDistance<1500){
+                  if(roomList[0].busDistance<6) roomList[0].busDistance=6
+                  distance=`距${roomList[0].busStationName}约${roomList[0].busDistance}米`
+                }
+                roomList[0].distance=distance;
+
+              this.roomList = roomList;
               this.roomList.map((item)=>{
                 if(item.roomCoverPhotoSmall){
                   item.roomCoverPhotoSmall = item.roomCoverPhotoSmall.replace(/http/g, "https");
@@ -379,6 +389,9 @@
     height: 22.67vw;
     background: #eaeaea;
     margin-top: 3vw;
+  }
+  .banner a{
+    margin: 0;
   }
   .banner img{
     display: block;
