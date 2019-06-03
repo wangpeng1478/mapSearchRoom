@@ -28,7 +28,7 @@
           <i></i>
         </div>
         <div class="room-list-info">
-          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle == '' ? '' : 'active-'+room.activityLabelStyle">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
+          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle != '' ? 'active active-'+room.activityLabelStyle : ''">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
