@@ -28,7 +28,7 @@
           <i></i>
         </div>
         <div class="room-list-info">
-          <p class="room-list-tit">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
+          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle == '' ? '' : 'active-'+room.activityLabelStyle">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
@@ -98,7 +98,6 @@
         params.villageId = this.villageId;
         axios.post(API['queryRoomByVillage'], params)
           .then(res => {
-            console.log(res)
             if (res.data.code == 0) {
               let roomList = res.data.data;            
 
@@ -401,5 +400,43 @@
   .village-tit{
     height: 20vw;
     overflow: hidden;
+  }
+  .active{
+    padding-left: 5.5vw;
+    position: relative;
+  }
+  .active::before{
+    position: absolute;
+    display: block;
+    left: 0;
+    top: 0.4vw;
+    width: 5vw;
+    height: 4.8vw;
+    text-align: center;
+    line-height: 4.8vw;
+    color: #fff;
+    font-size: 3.5vw;
+    border-radius: 0.5vw;
+    
+  }
+  .active-A::before{
+    content: "惠";
+    background: #efae50;
+  }
+  .active-B::before{
+    content: "返";
+    background: #3bcdf2;
+  }
+  .active-C::before{
+    content: "减";
+    background: #03d1a1;
+  }
+  .active-D::before{
+    content: "折";
+    background: #fd7c69;
+  }
+  .active-E::before{
+    content: "赠";
+    background: #fcab36;
   }
 </style>
