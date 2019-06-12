@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "js-yaml": "^3.13.1",
     "swiper": "^4.5.0",
     "url-search-params-polyfill": "^5.1.0",
     "vue": "^2.6.6",
