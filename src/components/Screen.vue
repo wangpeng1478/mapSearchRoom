@@ -454,6 +454,7 @@
     left: 0;
     bottom: 14vw;
     overflow: auto;
+    width: 84vw;
   }
 
   .bottom-button {

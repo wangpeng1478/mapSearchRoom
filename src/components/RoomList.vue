@@ -86,13 +86,7 @@
       loadRoomList() {
         let params = {};
         if (this.screen) {
-          params = {
-            rentDays: this.screen.rentDays,
-            priceFrom: this.screen.priceFrom,
-            priceTo: this.screen.priceTo,
-            roomType: this.screen.roomType,
-            roomFeatureIds: this.screen.roomFeatureIds
-          }
+          params = this.screen
         }
         params.villageId = this.villageId;
         axios.post(API['queryRoomByVillage'], params)
