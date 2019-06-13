@@ -27,8 +27,8 @@
             :src="room.roomCoverPhotoSmall!='' && room.roomCoverPhotoSmall!=null ? room.roomCoverPhotoSmall : 'https://www.qk365.com/images/noPic_Big0.jpg'">
           <i></i>
         </div>
-        <div class="room-list-info">
-          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle != '' ? 'active active-'+room.activityLabelStyle : ''">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
+        <div class="room-list-info"  :class="room.activityLabelPosition==0||room.activityLabelPosition==1? 'active':''">
+          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle != '' ? 'active-'+room.activityLabelStyle : ''">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
@@ -394,11 +394,11 @@
     height: 20vw;
     overflow: hidden;
   }
-  .active{
+  .active .room-list-tit{
     padding-left: 5.5vw;
     position: relative;
   }
-  .active::before{
+  .active .room-list-tit::before{
     position: absolute;
     display: block;
     left: 0;
@@ -410,25 +410,24 @@
     color: #fff;
     font-size: 3.5vw;
     border-radius: 0.5vw;
-    
   }
-  .active-A::before{
+  .active .active-A::before{
     content: "惠";
     background: #efae50;
   }
-  .active-B::before{
+  .active .active-B::before{
     content: "返";
     background: #3bcdf2;
   }
-  .active-C::before{
+  .active .active-C::before{
     content: "减";
     background: #03d1a1;
   }
-  .active-D::before{
+  .active .active-D::before{
     content: "折";
     background: #fd7c69;
   }
-  .active-E::before{
+  .active .active-E::before{
     content: "赠";
     background: #fcab36;
   }
