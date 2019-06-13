@@ -46,6 +46,14 @@
             :class="query.rentDays==roomRent.roomRentDays ? 'select' : ''">{{roomRent.roomRentName}}</li>
         </ul>
       </div>
+      <div class="screen-item">
+        <h4>青客活动</h4>
+        <ul>
+          <li v-for="activityLabel in activityLabelList" :key="activityLabel.activityId"
+            @click="handleactivityLabel(activityLabel.activityId)"
+            :class="query.activityId==activityLabel.activityId ? 'select' : ''">{{activityLabel.activityLabelName}}</li>
+        </ul>
+      </div>
     </div>
     <div class="bottom-button">
       <button class="reset" @click="handleReset">重置</button>
@@ -73,7 +81,8 @@
         query: {
           roomFeatureIds: [],
           rentDays: null,
-          roomType: null
+          roomType: null,
+          activityId:null,
         },
         isOverLay: null
       };
@@ -206,6 +215,14 @@
           if(query.roomFeatureIds.indexOf(6)!=-1) keyWords+='房东原装-'
           if(query.roomFeatureIds.indexOf(7)!=-1) keyWords+='优选-'
         }
+        if(query.activityId){
+          console.log(11111)
+          this.activityLabelList.map((activity)=>{
+            if(activity.activityId==query.activityId){
+              keyWords+=activity.activityLabelName
+            }
+          })
+        }
         recordSearch({
           keyType:1,
           keyWords
@@ -228,7 +245,8 @@
         this.query = {
           roomFeatureIds: [],
           rentDays: null,
-          roomType: null
+          roomType: null,
+          activityId: null
         };
         this.priceRecomm = null;
         this.sliderReset();
@@ -259,6 +277,12 @@
         let rentDays = this.query.rentDays;
         this.query.rentDays =
           selectRoomRentDays == rentDays ? null : selectRoomRentDays;
+        this.screenChange();
+      },
+      handleactivityLabel(selectActivityId){
+        let activityId = this.query.activityId;
+        this.query.activityId =
+          selectActivityId == activityId ? null : selectActivityId;
         this.screenChange();
       },
       handlePriceRecomm(priceContent) {
@@ -391,6 +415,7 @@
     computed: mapState([
       "priceList",
       "roomFeatureList",
+      "activityLabelList",
       "roomRentList",
       "region",
       "regionTemp",
@@ -408,6 +433,7 @@
       }
     }
   };
+  //TODO : [0,27]
 </script>
 <style scoped>
   .screen {

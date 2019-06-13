@@ -52,6 +52,7 @@ export default{ //很关键
             roomType:jsonData.roomType || null,
             roomFeatureIds:jsonData.roomFeatureIds || [],
             levelType:jsonData.levelType || null,
+            activityId:jsonData.activityId || null
         }
     },
     //设置房间覆盖物状态
