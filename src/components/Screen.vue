@@ -46,7 +46,7 @@
             :class="query.rentDays==roomRent.roomRentDays ? 'select' : ''">{{roomRent.roomRentName}}</li>
         </ul>
       </div>
-      <div class="screen-item">
+      <div class="screen-item" v-if="activityLabelList">
         <h4>青客活动</h4>
         <ul>
           <li v-for="activityLabel in activityLabelList" :key="activityLabel.activityId"
