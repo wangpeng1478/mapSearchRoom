@@ -27,13 +27,8 @@
             :src="room.roomCoverPhotoSmall!='' && room.roomCoverPhotoSmall!=null ? room.roomCoverPhotoSmall : 'https://www.qk365.com/images/noPic_Big0.jpg'">
           <i></i>
         </div>
-<<<<<<< HEAD
-        <div class="room-list-info">
-          <p class="room-list-tit" :class="room.activeClass">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
-=======
         <div class="room-list-info"  :class="room.activityLabelPosition==0||room.activityLabelPosition==1? 'active':''">
           <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle != '' ? 'active-'+room.activityLabelStyle : ''">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
->>>>>>> 2be089685ba90da81bba8274ea4b0a94e955464f
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
