@@ -48,7 +48,7 @@
       </div>
       <div class="screen-item" v-if="activityLabelList">
         <h4>青客活动</h4>
-        <ul class="screen-item--wide">
+        <ul>
           <li v-for="activityLabel in activityLabelList" :key="activityLabel.activityId"
             @click="handleactivityLabel(activityLabel.activityId)"
             :class="query.activityId==activityLabel.activityId ? 'select' : ''">{{activityLabel.activityLabelName}}</li>
