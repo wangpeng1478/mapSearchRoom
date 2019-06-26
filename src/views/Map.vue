@@ -5,7 +5,7 @@
     <p class="currentcity iconfont icon-dingwei" @click="handleAddress"><i/>{{currentCity.cityName}}</p>
     <transition name="top-bar">
     <div class="top-bar" v-if="!mapData.isOverLay">
-      <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin + '/list'" target="_blank" class="iconfont icon-liebiao list" @click="handelList">列表</a>
+      <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin + '/list'" class="iconfont icon-liebiao list" @click="handelList">列表</a>
       <router-link to="search" append class="search" @click="recordButton('地图页面点击搜索')">{{keywordsSearch.keyWords ? keywordsSearch.keyWords : '请输入您想入住的地址或区域'}}</router-link>
       <i v-show="keywordsSearch.keyWords" class="iconfont icon-guanbi" @click="handleClearSearh"></i>
       <button class="screen-btn" @click="handleComponentView('showScreen')">筛选</button>

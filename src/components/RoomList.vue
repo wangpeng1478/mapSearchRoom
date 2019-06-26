@@ -4,7 +4,7 @@
     <div class="village">
         <button class="retract" @touchstart="handleRoomlistStart" @touchend="handleRoomlistEnd" @touchmove="handleRoomlistScroll" @click="roomListDestroy"></button>
         <template v-if="roomList.length!=0">
-        <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/xiaoqu/gk_v'+roomList[0].villageId" target="_blank" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
+        <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/xiaoqu/gk_v'+roomList[0].villageId" class="village-info">{{roomList[0].villageName}}（{{roomList.length}}间）</a>
         </template>
     </div>
 
@@ -12,13 +12,13 @@
       <div class="banner swiper-container" v-if="banners.length!=0">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="(banner,index) in banners" :key="index">
-            <a :href="'https://'+banner.href" target="_blank">
+            <a :href="'https://'+banner.href">
               <img :src="banner.imgUrl">
             </a>
           </div>
         </div>
       </div>
-      <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/easy/'+room.roomId" target="_blank" v-for="room in roomList" :key="room.roomId">
+      <a :href="'https://'+currentCity.url+'/'+currentCity.cityPinyin+'/easy/'+room.roomId" v-for="room in roomList" :key="room.roomId">
         <div class="roomlist-img">
           <em class="img-tag img-tag1" v-if=" room.roomSpecialOffer!=0 && room.roomSpecialOffer !=null">特价</em>
           <em class="img-tag img-tag2" v-else-if="room.roomState == 1">预租中</em>
@@ -28,7 +28,7 @@
           <i></i>
         </div>
         <div class="room-list-info">
-          <p class="room-list-tit" :class="room.activityLabelStyle || room.activityLabelStyle == '' ? '' : 'active-'+room.activityLabelStyle">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
+          <p class="room-list-tit" :class="room.activeClass">{{room.prcName}}-{{room.ceaName}}-{{room.villageName}}</p>
           <div class="roon-info-line2">
             <i v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500" class="iconfont icon-dingwei"></i>
             <p v-if="room.busStationName!=null&& room.busDistance>0 && room.busDistance  < 1500">{{roomList[0].distance}}</p>
@@ -86,20 +86,13 @@
       loadRoomList() {
         let params = {};
         if (this.screen) {
-          params = {
-            rentDays: this.screen.rentDays,
-            priceFrom: this.screen.priceFrom,
-            priceTo: this.screen.priceTo,
-            roomType: this.screen.roomType,
-            roomFeatureIds: this.screen.roomFeatureIds
-          }
+          params = this.screen
         }
         params.villageId = this.villageId;
         axios.post(API['queryRoomByVillage'], params)
           .then(res => {
             if (res.data.code == 0) {
               let roomList = res.data.data;            
-
                 let distance = '';
                 if(roomList[0].metroStationName && roomList[0].metroDistance<1500){
                   if(roomList[0].metroDistance<6) roomList[0].metroDistance=6;
@@ -112,10 +105,14 @@
 
               this.roomList = roomList;
               this.roomList.map((item)=>{
-                if(item.roomCoverPhotoSmall){
-                  item.roomCoverPhotoSmall = item.roomCoverPhotoSmall.replace(/http/g, "https");
-                }else{
+                if(!item.roomCoverPhotoSmall){
                   item.roomCoverPhotoSmall ='https://www.qk365.com/images/noPic_Big0.jpg'
+                }
+
+                if(item.activityLabelPosition==0||item.activityLabelPosition==1){
+                  if(item.activityLabelStyle && item.activityLabelStyle!=''){
+                    item.activeClass = 'active active-'+item.activityLabelStyle;
+                  }
                 }
               })
               let oRoomList = document.getElementsByClassName("roomlist");
@@ -342,7 +339,7 @@
     color: #767676;
     font-size: 2.667vw;
     float: left;
-    margin-top: 1.8vw;
+    margin-top: 1.6vw;
     line-height: 1.4;
   }
 
@@ -361,6 +358,7 @@
     width: 58vw;
     overflow: hidden;
     margin-top: 1vw;
+    height: 5.4vw;
   }
 
   .tag p {
@@ -416,7 +414,6 @@
     color: #fff;
     font-size: 3.5vw;
     border-radius: 0.5vw;
-    
   }
   .active-A::before{
     content: "惠";

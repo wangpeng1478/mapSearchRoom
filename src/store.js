@@ -48,7 +48,8 @@ export default new Vuex.Store({
     roomFeatureList:[],
     roomRentList:[],
     trafficSpeedList:[],
-    roomTypeList:[],
+    roomTypeList:[],//房间类型
+    activityLabelList:[],//活动标签
     toast:null,
     banners:[]
   },

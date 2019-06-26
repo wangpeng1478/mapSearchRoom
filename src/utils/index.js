@@ -52,6 +52,7 @@ export default{ //很关键
             roomType:jsonData.roomType || null,
             roomFeatureIds:jsonData.roomFeatureIds || [],
             levelType:jsonData.levelType || null,
+            activityId:jsonData.activityId || null
         }
     },
     //设置房间覆盖物状态
@@ -426,9 +427,9 @@ export default{ //很关键
         }
         let bounds = map.getBounds();
         mJson.topLeftLongitude = bounds.Le;
-        mJson.topLeftLatitude = bounds.Ud;  //左上
+        mJson.topLeftLatitude = bounds.Vd;  //左上
         mJson.bottomRightLongitude = bounds.Ge;
-        mJson.bottomRightLatitude = bounds.Wd;  //右下
+        mJson.bottomRightLatitude = bounds.Xd;  //右下
         axios.post(API["queryMapCoverData"],mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -589,9 +590,9 @@ export default{ //很关键
         }
         let bounds = map.getBounds();
         mJson.topLeftLongitude = bounds.Le;
-        mJson.topLeftLatitude = bounds.Ud;  //左上
+        mJson.topLeftLatitude = bounds.Vd;  //左上
         mJson.bottomRightLongitude = bounds.Ge;
-        mJson.bottomRightLatitude = bounds.Wd;  //右下
+        mJson.bottomRightLatitude = bounds.Xd;  //右下
         axios.post(API["queryMapCoverData"], mJson).then(res => {
             if (res.data.code == 0) {
                 res = res.data.data;
@@ -718,14 +719,15 @@ export default{ //很关键
         
         
         let bounds = map.getBounds();
+        console.log(bounds)
         if(_state.coverDataList){
             // var showCoverDataList = JSON.parse(localStorage.getItem('showCoverDataList'))
             _state.coverDataList.map((val)=>{
                 if(
                     (bounds.Le < val.lng||bounds.Le < val.villageLongitude)&&
                     (val.lng < bounds.Ge||val.villageLongitude < bounds.Ge) &&
-                    (bounds.Wd < val.lat)||(bounds.Wd < val.villageLatitude)&&
-                    (val.lat < bounds.Ud)||(val.villageLatitude < bounds.Ud)
+                    (bounds.Xd < val.lat)||(bounds.Xd < val.villageLatitude)&&
+                    (val.lat < bounds.Vd)||(val.villageLatitude < bounds.Vd)
                 ){
                     var price,txt,mouseoverTxt,myCompOverlay;
                     if(data.levelType==6){
@@ -1008,8 +1010,8 @@ export default{ //很关键
                 if(
                     (bounds.Le < parseFloat(val.lng)||bounds.Le < parseFloat(val.villageLongitude)||bounds.Le < parseFloat(val.longitude))&&
                     (parseFloat(val.lng) < bounds.Ge||parseFloat(val.villageLongitude) < bounds.Ge||parseFloat(val.longitude) < bounds.Ge) &&
-                    (bounds.Wd < parseFloat(val.lat)||bounds.Wd < parseFloat(val.villageLatitude)||bounds.Wd < parseFloat(val.latitude))&&
-                    (parseFloat(val.lat) < bounds.Ud||parseFloat(val.villageLatitude) < bounds.Ud||parseFloat(val.latitude) < bounds.Ud)
+                    (bounds.Xd < parseFloat(val.lat)||bounds.Xd < parseFloat(val.villageLatitude)||bounds.Xd < parseFloat(val.latitude))&&
+                    (parseFloat(val.lat) < bounds.Vd||parseFloat(val.villageLatitude) < bounds.Vd||parseFloat(val.latitude) < bounds.Vd)
                 ){
                     var price,myCompOverlay,txt,mouseoverTxt;
                     if(data.levelType==6){

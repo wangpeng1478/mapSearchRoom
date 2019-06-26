@@ -16,15 +16,13 @@ const getSystemInfo = () => {
     if (u.indexOf('Android') != -1) {
         os = 1;
         model='Android'
-        osVersion = u.split(';')[2]
     }
     if (u.indexOf('iPhone') != -1) {
         os = 2;
         model='iPhone'
-        osVersion = u.split(';')[1]
     }
     var networkStr = u.match(/NetType\/\w+/) ? u.match(/NetType\/\w+/)[0] : 'NetType/other';
-    let networkType = networkStr.toLowerCase().replace('nettype/', '')
+    var networkType = networkStr.toLowerCase().replace('nettype/', '')
     return {
         os,
         osVersion,
